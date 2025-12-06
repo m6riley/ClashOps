@@ -19,6 +19,7 @@ ClashOps/ClashOps/ClashOps.xcdatamodelId
 ClashOps/ClashOps/Model.xcdatamodelId
 ClashOps/ClashOps/Preview Content
 ClashOps/ClashOps/Config.plist
+ClashOps/ClashOps/Models.swift
 
 ############################################################
 # PYTHON IGNORE RULES
