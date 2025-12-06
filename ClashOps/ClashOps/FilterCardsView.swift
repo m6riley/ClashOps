@@ -12,7 +12,7 @@ import SwiftUI
 struct FilterCardsView: View {
     
     //MARK: Variable declatations
-    @State private var sortMode: Int = 3
+    @State private var sortMode: SortMode = .rarity
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var externalData: ExternalData
@@ -32,33 +32,11 @@ struct FilterCardsView: View {
     ]
     
     var sortedCards: [(key: String, value: Mapping)] {
-        var base = Array(externalData.cards).sorted { $0.key < $1.key }
-        switch sortMode {
-        case 1:
-            base = base.sorted { $0.value.elixirCost <= $1.value.elixirCost}
-        case 2:
-            base = base.sorted { $0.value.arena <= $1.value.arena}
-        case 3:
-            base = base.sorted { $0.value.rarity <= $1.value.rarity}
-        default:
-            break
-        }
-        return base
+        Array(externalData.cards).sorted(by: sortMode.comparator)
     }
-    
+
     var sortLabel: String {
-        var label = "Sorted by "
-        switch sortMode {
-        case 1:
-            label = label + "Elixir Cost"
-        case 2:
-            label = label + "Arena"
-        case 3:
-            label = label + "Rarity"
-        default:
-            label = label + "Name"
-        }
-        return label
+        "Sorted by \(sortMode.label)"
     }
     
     var body: some View {
@@ -103,7 +81,7 @@ struct FilterCardsView: View {
                     }
                     //Toggle sort mode button
                     Button(action: {
-                        sortMode = (sortMode + 1) % 4
+                        sortMode = sortMode.next
                     }) {
                         Text(sortLabel)
                             .foregroundColor(.customForegroundGold)
