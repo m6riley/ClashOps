@@ -20,6 +20,10 @@ ClashOps/ClashOps/Model.xcdatamodelId
 ClashOps/ClashOps/Preview Content
 ClashOps/ClashOps/Config.plist
 
+# DS Store files
+.DS_Store
+**/.DS_Store
+
 ############################################################
 # PYTHON IGNORE RULES
 ############################################################
