@@ -159,7 +159,7 @@ struct CategoryDecksView: View {
                                                                 deleteDeck(deck: deck)
                                                                 updateFavs.updateVar -= 1
                                                                 do {
-                                                                    try context.save()
+                                                                    try viewContext.save()
                                                                     print("saved to Core Data")
                                                                 } catch {
                                                                     print("Error saving: \(error.localizedDescription)")

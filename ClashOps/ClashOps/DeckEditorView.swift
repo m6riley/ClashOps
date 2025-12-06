@@ -36,6 +36,10 @@ struct DeckEditorView: View {
         Array(externalData.cards).sorted(by: sortMode.comparator)
     }
 
+    private var deckPersistenceService: DeckPersistenceService {
+        DeckPersistenceService(viewContext: viewContext)
+    }
+
     var sortLabel: String {
         "Sorted by \(sortMode.label)"
     }
@@ -114,8 +118,7 @@ struct DeckEditorView: View {
                                     print("🔎 \(key): \(String(describing: value))")
                                 }
                                 deckToEdit.category = selectedCategory
-                                let context = PersistenceController.shared.container.viewContext
-                                try context.save()  // ✅ save the actual context
+                                try deckPersistenceService.saveContext()
                                 updateFavs.updateVar += 1
                                 dismiss()
                             } catch {

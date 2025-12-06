@@ -36,6 +36,10 @@ struct DeckBuilderView: View {
         Array(externalData.cards).sorted(by: sortMode.comparator)
     }
 
+    private var deckPersistenceService: DeckPersistenceService {
+        DeckPersistenceService(viewContext: viewContext)
+    }
+
     var sortLabel: String {
         "Sorted by \(sortMode.label)"
     }
@@ -104,14 +108,12 @@ struct DeckBuilderView: View {
         }
         guard includedCards.count == 8 else { return }
 
-        let cardList = includedCards.map { nameToApi(name: $0) }
-        let fav = FavDeck(context: viewContext)
-        fav.name = newName
-        fav.cards = cardList.joined(separator: ",")
-        fav.category = selectedCategory
-
         do {
-            try viewContext.save()
+            try deckPersistenceService.saveDeck(
+                name: newName,
+                cards: includedCards.map { nameToApi(name: $0) },
+                category: selectedCategory
+            )
             print("saved to Core Data")
         } catch {
             print("Error saving: \(error.localizedDescription)")

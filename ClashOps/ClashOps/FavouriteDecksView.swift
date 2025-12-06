@@ -22,6 +22,7 @@ struct FavouriteDecksView: View {
     @ObservedObject var updateFavs: updateFavourites
     @ObservedObject var viewModel: CardSelectionViewModel
     @EnvironmentObject var popupController: PopupController
+    @Environment(\.managedObjectContext) private var viewContext
     
     var categoryNames: [String] {
         fetchCategories().compactMap { $0.name }
@@ -160,7 +161,7 @@ struct FavouriteDecksView: View {
                                                                             deleteDeck(deck: deck)
                                                                             updateFavs.updateVar -= 1
                                                                             do {
-                                                                                try context.save()
+                                                                                try viewContext.save()
                                                                                 print("saved to Core Data")
                                                                             } catch {
                                                                                 print("Error saving: \(error.localizedDescription)")
@@ -337,13 +338,13 @@ struct FavouriteDecksView: View {
                                                                             popupController.message = "Deck removed from favourites"
                                                                             popupController.showPopup = true
                                                                         }
-                                                                        deleteDeck(deck: deck)
-                                                                        updateFavs.updateVar -= 1
-                                                                        do {
-                                                                            try context.save()
-                                                                            print("saved to Core Data")
-                                                                        } catch {
-                                                                            print("Error saving: \(error.localizedDescription)")
+                                                                            deleteDeck(deck: deck)
+                                                                            updateFavs.updateVar -= 1
+                                                                            do {
+                                                                                try viewContext.save()
+                                                                                print("saved to Core Data")
+                                                                            } catch {
+                                                                                print("Error saving: \(error.localizedDescription)")
                                                                         }
                                                                     }) {
                                                                         HStack {
