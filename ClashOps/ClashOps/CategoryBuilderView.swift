@@ -75,13 +75,12 @@ struct CategoryBuilderView: View {
                             popupController.showPopup = true
                         }
                         if categoryIcon != "" {
-                            let context = PersistenceController.shared.container.viewContext
-                            let category = FavCat(context: context)
+                            let category = FavCat(context: viewContext)
                             category.name = newName
                             category.icon = categoryIcon
                             category.color = selectedColor
                             do {
-                                try context.save()
+                                try viewContext.save()
                             } catch {
                                 print("Error deleting item: \(error.localizedDescription)")
                             }

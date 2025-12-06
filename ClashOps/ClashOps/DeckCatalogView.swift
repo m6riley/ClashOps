@@ -121,12 +121,12 @@ struct DeckCatalogView: View {
                                                                 popupController.showPopup = true
                                                             }
                                                             let cardsCSV = deck.cards.joined(separator: ",")
-                                                            let fav = FavDeck(context: context)
+                                                            let fav = FavDeck(context: viewContext)
                                                             fav.name = "My Favourite Deck"
                                                             fav.cards = cardsCSV
                                                             fav.category = "none"
                                                             do {
-                                                                try context.save()
+                                                                try viewContext.save()
                                                                 print("saved to Core Data")
                                                             } catch {
                                                                 print("Error saving: \(error.localizedDescription)")
@@ -217,12 +217,12 @@ struct DeckCatalogView: View {
                                                         popupController.showPopup = true
                                                     }
                                                     let cardsCSV = deck.cards.joined(separator: ",")
-                                                    let fav = FavDeck(context: context)
+                                                    let fav = FavDeck(context: viewContext)
                                                     fav.name = "My Favourite Deck"
                                                     fav.cards = cardsCSV
                                                     fav.category = "none"
                                                     do {
-                                                        try context.save()
+                                                        try viewContext.save()
                                                         print("saved to Core Data")
                                                     } catch {
                                                         print("Error saving: \(error.localizedDescription)")
