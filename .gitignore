@@ -20,6 +20,7 @@ ClashOps/ClashOps/Model.xcdatamodelId
 ClashOps/ClashOps/Preview Content
 ClashOps/ClashOps/Config.plist
 ClashOps/ClashOps/Models.swift
+ClashOps/ClashOps/DeckAnalysisView.swift
 
 ############################################################
 # PYTHON IGNORE RULES
