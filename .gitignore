@@ -11,7 +11,15 @@ local.settings.json
 
 # Inactive or temporary folders
 inactive/
-ClashOps/
+
+# Ignore specific items inside ClashOps
+ClashOps.xcodeproj/
+ClashOps/ClashOps/Assets.xcassets
+ClashOps/ClashOps/ClashOps.xcdatamodelId
+ClashOps/ClashOps/Model.xcdatamodelId
+ClashOps/ClashOps/Preview Content
+ClashOps/ClashOps/Config.plist
+
 ############################################################
 # PYTHON IGNORE RULES
 ############################################################
