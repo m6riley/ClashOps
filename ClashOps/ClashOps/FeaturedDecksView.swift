@@ -26,12 +26,20 @@ struct FeaturedDecksView: View {
     
     @ObservedObject var updateFavs: updateFavourites
     @Environment(\.managedObjectContext) private var viewContext
-    @StateObject var deckToEdit = FavDeck()  
+    @StateObject var deckToEdit = FavDeck()
     @StateObject var categoryToEdit = FavCat()
-    
+
     var body: some View {
-        
-        
+        let includedCardsNameSet = viewModel.includedCardsName
+        let discludedCardsNameSet = viewModel.discludedCardsName
+        let filterOptionsSet = Set(filterOptions)
+        let filteredDecks = externalData.decks.filter { deck in
+            let deckCardsSet = Set(deck.cards)
+            return filterOptionsSet.isSubset(of: deckCardsSet)
+            && (includedCardsNameSet.isEmpty || includedCardsNameSet.isSubset(of: deckCardsSet))
+            && (discludedCardsNameSet.isEmpty || !discludedCardsNameSet.isSubset(of: deckCardsSet))
+        }
+
         ZStack {
             Color.customBackgroundGray.ignoresSafeArea()
             
@@ -76,7 +84,7 @@ struct FeaturedDecksView: View {
                 
                 ScrollView {
                     LazyVStack(spacing: 32) {
-                        ForEach(externalData.decks.filter({Set(filterOptions).isSubset(of: Set($0.cards)) && (viewModel.includedCardsName.isEmpty || Set(viewModel.includedCardsName).isSubset(of: $0.cards)) && (viewModel.discludedCardsName.isEmpty || !Set(viewModel.discludedCardsName).isSubset(of: $0.cards))})) { deck in
+                        ForEach(filteredDecks) { deck in
                             ZStack {
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color.customBackgroundGray)
