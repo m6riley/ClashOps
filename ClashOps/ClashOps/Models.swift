@@ -17,6 +17,60 @@ let optimizeURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forReso
 let analyzeURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["ANALYZE_URL"] as? String) ?? ""
 let createReportURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["CREATE_REPORT_URL"] as? String) ?? ""
 
+enum SortMode: CaseIterable {
+    case name
+    case elixir
+    case arena
+    case rarity
+
+    var label: String {
+        switch self {
+        case .name:
+            return "Name"
+        case .elixir:
+            return "Elixir Cost"
+        case .arena:
+            return "Arena"
+        case .rarity:
+            return "Rarity"
+        }
+    }
+
+    var comparator: ((Dictionary<String, Mapping>.Element, Dictionary<String, Mapping>.Element) -> Bool) {
+        switch self {
+        case .name:
+            return { lhs, rhs in lhs.key < rhs.key }
+        case .elixir:
+            return { lhs, rhs in
+                if lhs.value.elixirCost == rhs.value.elixirCost {
+                    return lhs.key < rhs.key
+                }
+                return lhs.value.elixirCost < rhs.value.elixirCost
+            }
+        case .arena:
+            return { lhs, rhs in
+                if lhs.value.arena == rhs.value.arena {
+                    return lhs.key < rhs.key
+                }
+                return lhs.value.arena < rhs.value.arena
+            }
+        case .rarity:
+            return { lhs, rhs in
+                if lhs.value.rarity == rhs.value.rarity {
+                    return lhs.key < rhs.key
+                }
+                return lhs.value.rarity < rhs.value.rarity
+            }
+        }
+    }
+
+    var next: SortMode {
+        guard let currentIndex = Self.allCases.firstIndex(of: self) else { return self }
+        let nextIndex = Self.allCases.index(after: currentIndex)
+        return Self.allCases.indices.contains(nextIndex) ? Self.allCases[nextIndex] : Self.allCases.first ?? self
+    }
+}
+
 
 struct createReportRequest: Codable {
     let deck: String
