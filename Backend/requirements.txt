@@ -1,0 +1,30 @@
+# ------------------------------------------------------------
+# Azure Functions Runtime
+# ------------------------------------------------------------
+azure-functions
+
+
+# ------------------------------------------------------------
+# Azure Storage Account
+# ------------------------------------------------------------
+azure-data-tables
+azure-storage-blob
+
+# ------------------------------------------------------------
+# OpenAI SDK (new unified Python client)
+# Used for all GPT + embedding calls
+# ------------------------------------------------------------
+openai
+
+# ------------------------------------------------------------
+# Pinecone vector database client
+# NOTE: THIS IS THE CORRECT PACKAGE
+# "pinecone-client" contains the modern Pinecone client that
+# provides: from pinecone import Pinecone
+# ------------------------------------------------------------
+pinecone
+
+# ------------------------------------------------------------
+# HTTP + Networking
+# ------------------------------------------------------------
+requests

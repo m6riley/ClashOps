@@ -1,0 +1,162 @@
+############################################################
+# CUSTOM (your additions)
+############################################################
+
+# VS Code settings
+.vscode/
+
+# Local development settings
+.local.settings.json
+local.settings.json
+
+# Inactive or temporary folders
+inactive/
+ClashOps/
+############################################################
+# PYTHON IGNORE RULES
+############################################################
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+############################################################
+# PACKAGING / DISTRIBUTION ARTIFACTS
+############################################################
+
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+sdist/
+wheels/
+var/
+share/python-wheels/
+pip-wheel-metadata/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+############################################################
+# PYINSTALLER
+############################################################
+
+*.manifest
+*.spec
+
+############################################################
+# LOGS / TEST / COVERAGE
+############################################################
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+############################################################
+# DJANGO / FLASK / SCRAPY
+############################################################
+
+*.log
+local_settings.py
+db.sqlite3
+
+instance/
+.webassets-cache
+.scrapy
+
+############################################################
+# DOCUMENTATION
+############################################################
+
+docs/_build/
+site/
+
+############################################################
+# ENVIRONMENTS
+############################################################
+
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+############################################################
+# JUPYTER / IPYTHON
+############################################################
+
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+############################################################
+# TYPE CHECKERS
+############################################################
+
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+.pyre/
+
+############################################################
+# EDITOR / IDE PROJECT SETTINGS
+############################################################
+
+.spyderproject
+.spyproject
+.ropeproject
+
+############################################################
+# AZURE FUNCTIONS
+############################################################
+
+# build artifacts
+bin/
+obj/
+
+# Azure Functions settings
+appsettings.json
+
+############################################################
+# AZURITE (local Azure Storage emulator)
+############################################################
+
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
+
+############################################################
+# PYTHON PACKAGE CACHE (Azure Functions)
+############################################################
+
+.python_packages/
+
+############################################################
+# OPTIONAL: If Scripts contains temp data or output files,
+# you can add something like this:
+#
+# Scripts/temp/
+# Scripts/output/
+############################################################
