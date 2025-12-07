@@ -60,8 +60,7 @@ struct DeckBuilderView: View {
                 .padding(.bottom, 16)
 
                 TextField("", text: $newName, prompt:
-                    Text("My Favourite Deck")
-                        .goldForeground())
+                    Text("My Favourite Deck"))
                     .background(Color.black.opacity(0.2))
                     .goldForeground()
                     .frame(width: 200)
