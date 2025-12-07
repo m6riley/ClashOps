@@ -14,7 +14,7 @@ struct DeckAnalysisView: View {
     @State private var synergy: Synergy? = nil
     @State private var versatility: Versatility? = nil
     @State private var optimize: Optimize? = nil
-    @State private var isLoading: String = "Analyzing Offense Potential"
+    @State private var isLoading: String = "Analyzing Deck"
     @State private var dropdowns: [Bool] = [false, false, false, false]
     @State private var isOptimized: String  = "no"
     @State private var percentLoading: Int = 0
@@ -39,29 +39,34 @@ struct DeckAnalysisView: View {
             }
         }
         .task {
-            let deckField: String = "[" + deckToAnalyze.cards.joined(separator: ",") + "]"
+            let deckField = "[" + deckToAnalyze.cards.joined(separator: ",") + "]"
 
-             do {
-                 // Create report
-                 try await createReport(deck: deckField)
-                 
-                 // Run analysis
-                 try await analyzeDeck(deckToAnalyze: deckField, category: "offense")
-                 isLoading = "Analyzing Defensive Potential"
-                 percentLoading += 25
-                 try await analyzeDeck(deckToAnalyze: deckField, category: "defense")
-                 isLoading = "Analyzing Synergy"
-                 percentLoading += 25
-                 try await analyzeDeck(deckToAnalyze: deckField, category: "synergy")
-                 isLoading = "Analyzing Versatility"
-                 percentLoading += 25
-                 try await analyzeDeck(deckToAnalyze: deckField, category: "versatility")
-                 percentLoading += 25
-                 isLoading = "None"
-                
+            do {
+                try await createReport(deck: deckField)
+
+                let tasks: [Task<Void, Error>] = [
+                    Task { try await analyzeDeck(deckToAnalyze: deckField, category: "offense") },
+                    Task { try await analyzeDeck(deckToAnalyze: deckField, category: "defense") },
+                    Task { try await analyzeDeck(deckToAnalyze: deckField, category: "synergy") },
+                    Task { try await analyzeDeck(deckToAnalyze: deckField, category: "versatility") }
+                ]
+
+                for task in tasks {
+                    try await task.value
+                    await MainActor.run {
+                        percentLoading += 25
+                    }
+                }
+
+                await MainActor.run {
+                    isLoading = "None"
+                }
+
             } catch {
                 print("❌ Deck analysis failed:", error)
             }
+
+
         }
         .navigationBarBackButtonHidden(true)
     }
