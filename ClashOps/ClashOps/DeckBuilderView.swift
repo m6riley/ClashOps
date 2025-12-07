@@ -203,9 +203,17 @@ struct DeckBuilderView: View {
                         ForEach(Array(includedCards.enumerated()), id: \.element) { index, card in
                             let cardIndex = index + 1
                             let ev1UrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(card)-ev1.png"
+                            let heroUrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(card)-hero.png"
                             let fallbackUrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(card).png"
-                            
-                            let primaryUrl = (cardIndex <= 2) ? URL(string: ev1UrlString) : URL(string: fallbackUrlString)
+
+                            let primaryUrl: URL?
+                            if cardIndex <= 2 {
+                                primaryUrl = URL(string: ev1UrlString)
+                            } else if cardIndex <= 4 {
+                                primaryUrl = URL(string: heroUrlString)
+                            } else {
+                                primaryUrl = URL(string: fallbackUrlString)
+                            }
                             let fallbackUrl = URL(string: fallbackUrlString)
                             
                             if let url = primaryUrl {
@@ -222,7 +230,11 @@ struct DeckBuilderView: View {
                                                 default:
                                                     ProgressView()
                                                 }
+                                            } placeholder: {
+                                                ProgressView()
                                             }
+                                        } else {
+                                            ProgressView()
                                         }
                                     default:
                                         ProgressView()
