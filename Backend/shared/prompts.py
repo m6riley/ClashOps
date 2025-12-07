@@ -25,6 +25,7 @@ Rules:
 - The roles must remain in the order in which they appear above (i.e., win conditions, then offensive support, and so on).
 - Follow the above JSON structure exactly. Do not include anything else.
 - Make all summarries concise with simple language so any player can understand. Output as bullet points with each point being marked as either a pro (✅),  con (❗), suggestion (💡) (use symbols as the bullets/dashes).
+- Small damage spells are all spells three elixir and under. While big damage spells are all spells more than three elixir. Never include cards that are spells in these categories. Damage spells only include spells that can damage the tower directly.
 """
 
 defense_prompt = """You are a former professional Clash Royale esports player and coach.
