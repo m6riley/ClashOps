@@ -1,11 +1,11 @@
 import json
 import logging
+import asyncio
 import azure.functions as func
 from azure.functions import Blueprint
 from shared.tables import get_report, update_report_field
 from shared.openai_utils import client as OPENAI_CLIENT
 from shared.prompts import offense_prompt, defense_prompt, synergy_prompt, versatility_prompt
-
 
 
 analyze_deck_bp = Blueprint()
@@ -14,9 +14,9 @@ analyze_deck_bp = Blueprint()
 # Category Configuration
 # ---------------------------------------------------------------------------
 CATEGORY_CONFIG = {
-    "offense":    {"field": "Offense",    "prompt": offense_prompt,    "model": "gpt-5.1"},
-    "defense":    {"field": "Defense",    "prompt": defense_prompt,    "model": "gpt-5.1"},
-    "synergy":    {"field": "Synergy",    "prompt": synergy_prompt,    "model": "gpt-5"},
+    "offense":     {"field": "Offense",     "prompt": offense_prompt,     "model": "gpt-5.1"},
+    "defense":     {"field": "Defense",     "prompt": defense_prompt,     "model": "gpt-5.1"},
+    "synergy":     {"field": "Synergy",     "prompt": synergy_prompt,     "model": "gpt-5"},
     "versatility": {"field": "Versatility", "prompt": versatility_prompt, "model": "gpt-5"},
 }
 
@@ -24,6 +24,26 @@ CATEGORY_CONFIG = {
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+async def wait_for_analysis(deck: str, field: str, timeout: int = 120, interval: int = 1):
+    """
+    Poll the table until the field is no longer 'loading'.
+    Returns the final stored value or None on timeout.
+    """
+    for _ in range(timeout):
+        await asyncio.sleep(interval)
+        updated = get_report(deck).get(field)
+
+        # Still loading → continue waiting
+        if updated == "loading":
+            continue
+
+        # When it's no longer loading, return whatever is stored
+        if updated not in ("loading", "no", None):
+            return updated
+
+    return None  # timeout expired
+
+
 async def perform_analysis(deck, category_key):
     """Run OpenAI model and update table."""
     cfg = CATEGORY_CONFIG[category_key]
@@ -51,6 +71,7 @@ async def perform_analysis(deck, category_key):
     update_report_field(deck, field, content)
 
     return content
+
 
 # ---------------------------------------------------------------------------
 # Route
@@ -84,20 +105,38 @@ async def analyze_deck(req: func.HttpRequest) -> func.HttpResponse:
 
     current_value = report.get(field)
 
-    # Already running
+    # ----------------------------------------------------------------------
+    # CASE 1 — Another request is already analyzing this category
+    # ----------------------------------------------------------------------
     if current_value == "loading":
-        return func.HttpResponse("Report already generating for this category", status_code=409)
+        logging.info(f"Analysis already running for deck '{deck}', category '{category}'. Waiting...")
 
-    # Needs to be generated
+        finished = await wait_for_analysis(deck, field)
+
+        if finished is None:
+            return func.HttpResponse("Timeout waiting for analysis", status_code=504)
+
+        return func.HttpResponse(
+            json.dumps({"category": category, "content": finished}),
+            mimetype="application/json",
+            status_code=200,
+        )
+
+    # ----------------------------------------------------------------------
+    # CASE 2 — Needs to generate analysis now
+    # ----------------------------------------------------------------------
     if current_value == "no":
         content = await perform_analysis(deck, category)
+
         return func.HttpResponse(
             json.dumps({"category": category, "content": content}),
             mimetype="application/json",
             status_code=200,
         )
 
-    # Already done — return cached result
+    # ----------------------------------------------------------------------
+    # CASE 3 — Already generated, just return cached result
+    # ----------------------------------------------------------------------
     return func.HttpResponse(
         json.dumps({"category": category, "content": current_value}),
         mimetype="application/json",
