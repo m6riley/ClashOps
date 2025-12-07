@@ -61,8 +61,30 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
     if existing_value is None:
         return func.HttpResponse("Report not found", status_code=404)
 
+    # Someone else is optimizing — wait for it to finish
     if existing_value == "loading":
-        return func.HttpResponse("Optimizations already being processed", status_code=409)
+        logging.info(f"Optimization already running for deck '{deck}'. Waiting...")
+
+        # Poll every 1 second until the value is no longer 'loading'
+        for _ in range(300):  # wait up to 5 minutes (adjust as needed)
+            await asyncio.sleep(1)
+            updated = get_existing_optimize(deck)
+
+            # If still loading → continue waiting
+            if updated == "loading":
+                continue
+
+            # If finished and now contains the optimized result → return it
+            if updated not in ("loading", "no", None):
+                return func.HttpResponse(
+                    json.dumps({"category": "optimize", "content": updated}),
+                    mimetype="application/json",
+                    status_code=200,
+                )
+
+        # Timeout safeguard
+        return func.HttpResponse("Timeout waiting for optimization", status_code=504)
+
 
     # Fresh optimization required
     if existing_value == "no":
