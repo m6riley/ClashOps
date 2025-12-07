@@ -1907,7 +1907,8 @@ func deckGrid(deck: Deck, cardMap: [String: Mapping], columns: [GridItem]) -> so
             } else if let royaleapiName = cardMap[cardName]?.apiName {
                 let ev1UrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(royaleapiName)-ev1.png"
                 let fallbackUrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(royaleapiName).png"
-                let primaryUrl = (cardIndex <= 2) ? URL(string: ev1UrlString) : URL(string: fallbackUrlString)
+                let heroUrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(royaleapiName)-hero.png"
+                let primaryUrl = (cardIndex <= 2) ? URL(string: ev1UrlString) : (cardIndex <= 4) ? URL(string: heroUrlString) : URL(string: fallbackUrlString)
                 let fallbackUrl = URL(string: fallbackUrlString)
 
                 if let url = primaryUrl {
