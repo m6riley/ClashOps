@@ -8,16 +8,17 @@ client = Pinecone(api_key=PINECONE_KEY)
 
 index = client.Index("tower-troops")
 
-async def query_vectors(query: str, top_k: int, namespace: str):
+async def query_vectors(query: str, top_k: int, namespace: str, metadata_filter: dict | None = None):
     vec = await embed(query)
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(
         None,
         lambda: index.query(
             vector = vec,
-            top_k=top_k,
-            namespace=namespace,
-            include_metadata=True
+            top_k = top_k,
+            namespace = namespace,
+            include_metadata = True,
+            filter = metadata_filter
 
         ).matches
     )

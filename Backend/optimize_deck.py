@@ -69,27 +69,38 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
         update_report_field(deck=deck, field="Optimize", value="loading")
 
         user_prompt = build_user_prompt(body)
-
-        tower_task = query_vectors(query=user_prompt, top_k=10, namespace="tower_troops")
         
+        tower_types = ["tower_princess", "cannoneer", "dagger_duchess", "royal_chef"]    
         evolution_namespaces = [
             card_to_namespace(card.strip())
             for card in deck.split(",")
         ]
+
+        tower_tasks = [
+            query_vectors(query=user_prompt, top_k=5, namespace="tower_troops", metadata_filter= {
+                "troop": tower_type
+            })
+            for tower_type in tower_types
+        ]
         evolution_tasks = [
-            query_vectors(query=user_prompt, top_k=3, namespace=ns)
+            query_vectors(query=user_prompt, top_k=5, namespace=ns)
             for ns in evolution_namespaces
         ]
 
-        tower_matches, *evolution_results = await asyncio.gather(
-            tower_task,
-            *evolution_tasks
-        )
+        results = await asyncio.gather(*tower_tasks, *evolution_tasks)
+
+        tower_results = results[:len(tower_tasks)]
+        evolution_results = results[len(tower_tasks):]
+
 
         tower_context = [
-            {"Tower Troop Name": m.metadata["troop"], "Fact": m.metadata["text"]}
-            for m in tower_matches
-        ]
+            {
+                "Tower Troop Name": m.metadata["troop"],
+                "Fact": m.metadata["text"]
+            }
+            for matches in tower_results
+            for m in matches
+            ]
 
         evolution_context = [
             {
