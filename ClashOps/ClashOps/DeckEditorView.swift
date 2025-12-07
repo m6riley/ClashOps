@@ -111,23 +111,21 @@ struct DeckEditorView: View {
                             popupController.message = "Deck edited successfully"
                             popupController.showPopup = true
                         }
-                        if deckToEdit.cards?.components(separatedBy: ",").count == 8 {
-                            do {
-                                for (key, _) in deckToEdit.entity.attributesByName {
-                                    let value = deckToEdit.value(forKey: key)
-                                    print("🔎 \(key): \(String(describing: value))")
-                                }
-                                deckToEdit.category = selectedCategory
-                                try deckPersistenceService.saveContext()
-                                updateFavs.updateVar += 1
-                                dismiss()
-                            } catch {
-                                print("❌ Save error: \(error)")
-                            }
+
+                        guard deckCards.count == 8 else { return }
+
+                        do {
+                            deckToEdit.category = selectedCategory
+                            deckToEdit.cards = deckCards.joined(separator: ",")
+                            try deckPersistenceService.saveContext()
+                            updateFavs.updateVar += 1
+                            dismiss()
+                        } catch {
+                            print("❌ Save error: \(error)")
                         }
                     }) {
                         HStack {
-                            if deckToEdit.cards?.components(separatedBy: ",").count == 8 {
+                            if deckCards.count == 8 {
                                 Text("Confirm Deck")
                                     .foregroundColor(.customForegroundGold)
                                 Image(systemName: "checkmark")
@@ -219,7 +217,7 @@ struct DeckEditorView: View {
                         }
                     }
                     LazyVGrid(columns: deckColumns, spacing: 9) {
-                        ForEach(Array((deckToEdit.cards?.components(separatedBy: ",") ?? []).enumerated()), id: \.offset) { index, card in
+                        ForEach(Array(deckCards.enumerated()), id: \.offset) { index, card in
                             let cardIndex = index + 1
                             
                             let ev1UrlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(apiToName(api: card))-ev1.png"
@@ -279,18 +277,12 @@ struct DeckEditorView: View {
                     LazyVGrid(columns: cardColumns, spacing: 0) {
                         ForEach(sortedCards, id: \.key) { cardName, details in
                             Button(action: {
-                                if let cards = deckToEdit.cards?.components(separatedBy: ","),
-                                   !cards.contains(cardName),
-                                   cards.count < 8 {
-                                    deckCards = cards
+                                if !deckCards.contains(cardName), deckCards.count < 8 {
                                     deckCards.append(cardName)
-                                    deckToEdit.cards = deckCards.joined(separator: ",")
-                                } else if let cards = deckToEdit.cards?.components(separatedBy: ","),
-                                          cards.contains(cardName) {
-                                    deckCards = cards
+                                } else if deckCards.contains(cardName) {
                                     deckCards.removeAll { $0 == cardName }
-                                    deckToEdit.cards = deckCards.joined(separator: ",")
                                 }
+                                deckToEdit.cards = deckCards.joined(separator: ",")
                             }) {
                                 ZStack {
                                     let urlString = "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/\(details.apiName).png"
@@ -307,8 +299,7 @@ struct DeckEditorView: View {
                                         .frame(height: 90)
                                     }
                                     
-                                    if let cards = deckToEdit.cards?.components(separatedBy: ","),
-                                       cards.contains(details.cardName) {
+                                    if deckCards.contains(cardName) {
                                         Color.green.opacity(0.4)
                                             .cornerRadius(12)
                                     }
@@ -322,6 +313,8 @@ struct DeckEditorView: View {
             }
             .navigationBarBackButtonHidden(true)
             .onAppear {
+                deckCards = deckToEdit.cards?.components(separatedBy: ",") ?? []
+
                 if names.contains(deckToEdit.category ?? "none") {
                     selectedCategory = deckToEdit.category ?? "none"
                 } else {
