@@ -22,13 +22,7 @@ struct CategoryBuilderView: View {
     @ObservedObject var updateFavs: updateFavourites
     @EnvironmentObject var popupController: PopupController
     @Environment(\.managedObjectContext) private var viewContext
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-        ]
+    let columns = fiveColumnGrid
         
     var body: some View {
         ZStack {

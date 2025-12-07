@@ -26,12 +26,7 @@ struct FavouriteDecksView: View {
     var categoryNames: [String] {
         fetchCategories().compactMap { $0.name }
     }
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let columns = fourColumnGrid
     
     var body: some View {
 

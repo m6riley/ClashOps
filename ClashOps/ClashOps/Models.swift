@@ -17,6 +17,12 @@ let optimizeURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forReso
 let analyzeURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["ANALYZE_URL"] as? String) ?? ""
 let createReportURL: String = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["CREATE_REPORT_URL"] as? String) ?? ""
 
+// Grid layouts
+let fourColumnGrid: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
+let fiveColumnGrid: [GridItem] = Array(repeating: GridItem(.flexible()), count: 5)
+let sixColumnGrid: [GridItem] = Array(repeating: GridItem(.flexible()), count: 6)
+let eightColumnGrid: [GridItem] = Array(repeating: GridItem(.flexible()), count: 8)
+
 
 struct createReportRequest: Codable {
     let deck: String

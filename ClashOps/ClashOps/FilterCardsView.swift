@@ -22,14 +22,7 @@ struct FilterCardsView: View {
     @Binding var includedCardsName: Set<String>
     @Binding var discludedCardsName: Set<String>
  //   @ObservedObject var path: pathClass
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-
-    ]
+    let columns = fiveColumnGrid
     
     var sortedCards: [(key: String, value: Mapping)] {
         var base = Array(externalData.cards).sorted { $0.key < $1.key }
