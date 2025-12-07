@@ -3,6 +3,81 @@ import SwiftUI
 import Foundation
 import CoreData
 
+// MARK: - Persistence
+struct PersistenceController {
+    static let shared = PersistenceController()
+
+    static var preview: PersistenceController = {
+        let result = PersistenceController(inMemory: true)
+        let viewContext = result.container.viewContext
+        for _ in 0..<10 {
+            let newItem = FavDeck(context: viewContext) // ✅ use a Core Data entity
+            newItem.name = "Preview Deck"
+            newItem.cards = "Card1,Card2,Card3"
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+        return result
+    }()
+
+    let container: NSPersistentContainer
+
+    init(inMemory: Bool = false) {
+        container = NSPersistentContainer(name: "ClashOps")
+
+        // ✅ Enable automatic lightweight migration
+        if let description = container.persistentStoreDescriptions.first {
+            description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+            description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+            if inMemory {
+                description.url = URL(fileURLWithPath: "/dev/null")
+            }
+        }
+
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+
+        // ✅ Auto-merge context changes
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
+}
+
+final class DeckPersistenceService {
+    private let viewContext: NSManagedObjectContext
+
+    init(viewContext: NSManagedObjectContext) {
+        self.viewContext = viewContext
+    }
+
+    /// Creates and saves a new deck.
+    /// - Parameters:
+    ///   - name: Deck name to persist.
+    ///   - cards: Array of card identifiers.
+    ///   - category: Category name to associate with the deck.
+    func saveDeck(name: String, cards: [String], category: String) throws {
+        let deck = FavDeck(context: viewContext)
+        deck.name = name
+        deck.cards = cards.joined(separator: ",")
+        deck.category = category
+        try saveContext()
+    }
+
+    /// Persists any pending changes if needed.
+    func saveContext() throws {
+        if viewContext.hasChanges {
+            try viewContext.save()
+        }
+    }
+}
+
 // Keys and URLs
 let OPENAI_API_KEY = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["OPENAI_API_KEY"] as? String) ?? ""
 let decksURL = (NSDictionary(contentsOfFile: Bundle.main.path(forResource: "Config", ofType: "plist") ?? "")?["DECKS_URL"] as? String) ?? ""
