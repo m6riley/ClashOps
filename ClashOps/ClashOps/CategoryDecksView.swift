@@ -12,12 +12,7 @@ import CoreData
 struct CategoryDecksView: View {
     @Environment(\.dismiss) private var dismiss
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()) 
-    ]
+    let columns = fourColumnGrid
     
     @ObservedObject var externalData: ExternalData
     @ObservedObject var updateFavs: updateFavourites

@@ -17,12 +17,7 @@ struct FeaturedDecksView: View {
     let name: String
     let filterOptions: [String]
     @State var removeFromFavs: ObjectIdentifier? = nil
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let columns = fourColumnGrid
     
     @ObservedObject var updateFavs: updateFavourites
     @Environment(\.managedObjectContext) private var viewContext

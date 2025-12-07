@@ -5,13 +5,7 @@ import CoreData
 struct DeckCatalogView: View {
     
     //MARK: Declarations
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-        
-    ]
+    let columns = fourColumnGrid
     
     @ObservedObject var externalData: ExternalData
     @ObservedObject var viewModel: CardSelectionViewModel
