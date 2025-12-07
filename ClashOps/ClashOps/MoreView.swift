@@ -95,61 +95,6 @@ struct MoreView: View {
                         .multilineTextAlignment(.center)
                         .padding(.vertical, 8)
                     HStack {
-                        Text("Feedback Requests")
-                            .foregroundColor(.customForegroundGold)
-                            .padding(.top, 16)
-                            .padding(.leading, 16)
-                        Spacer()
-                    }
-                    Text("ClashOps is constantly improving, with new features and fixes being added every update (see roadmap). To help shape the app, submit a feedback request below using the form below.")
-                        .font(.system(size: 12, weight: .light))
-                        .foregroundColor(.customForegroundGold)
-                        .multilineTextAlignment(.center)
-                        .padding(.vertical, 8)
-                    TextField(
-                        "",
-                        text: Binding(
-                            get: { email },
-                            set: { email = $0 }
-                        ),
-                        prompt: Text(email)
-                            .foregroundColor(.customForegroundGold)
-                    )
-                    .background(Color.black.opacity(0.2))
-                    .font(.system(size: 12, weight: .light))
-                    .foregroundColor(.customForegroundGold)
-                    .frame(width: 200)
-                    .cornerRadius(8)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 16)
-                    TextField(
-                        "",
-                        text: Binding(
-                            get: { message },
-                            set: { message = $0 }
-                        ),
-                        prompt: Text(message)
-                            .foregroundColor(.customForegroundGold)
-                    )
-                    .background(Color.black.opacity(0.2))
-                    .font(.system(size: 12, weight: .light))
-                    .foregroundColor(.customForegroundGold)
-                    .frame(width: 200)
-                    .cornerRadius(8)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 16)
-                    
-                    Button(action: {}) {
-                        HStack {
-                            Text("Submit")
-                                .font(.system(size: 12, weight: .light))
-                                .foregroundColor(.customForegroundGold)
-                            Image(systemName: "envelope")
-                                .font(.system(size: 12, weight: .light))
-                                .foregroundColor(.customForegroundGold)
-                        }
-                    }
-                    HStack {
                         Text("Disclaimers")
                             .foregroundColor(.customForegroundGold)
                             .padding(.top, 16)
