@@ -138,10 +138,10 @@ Rules:
 - Follow the output JSON structure exactly. Do not include anything else.
 - Scores are all out of 5.0
 - There can be any number of card swaps (none, one, two, etc.).
-- In the recommended card swaps improvement summary, explain how each card swap contributes to mitigating the decks weak points. Explain any potential risks there may be for cards that are swapped out, and explain why the benifits of the card swaps outweigh these risks.
+- In the recommended card swaps improvement summary, explain how each card swap contributes to mitigating the decks weak points. Explain any potential risks there may be for cards that are swapped out, and explain why the benifits of the card swaps outweigh these risks. Explain why it was chosen over other swaps that were considred, and how it synergizes with the rest of the deck and the other card swaps.
 - Only select a tower troop from those referenced in TOWER TROOP CONTEXT.
 - In the recommended tower troop reasoning, explain the reasons why the tower troop is the best option. Explain how it addresses weak points of the deck, why it is a better choice than the other tower troops available, and any potential risks in using it.
 - Only select evolutions from those referenced in EVOLUTION CONTEXT. Fill the evolved card name field with the proper card name of the evolution (e.g. evolved_royal_giant -> Royal Giant). All recommended evolutions MUST be for a card already in the deck. Exactly two evolutions should be selected unless there are less than two available.
-- In the evoluton reasonings, explain why the evolution synergizes with the rest of the deck as well as the other seleced evolution (if there is one).
+- In the evoluton reasonings, explain why the evolution synergizes with the rest of the deck as well as the other seleced evolution (if there is one). Explain why they were picked over other available evolutions, and why it fills the deck's weak points.
 - Make all summarries/reasonings concise with simple language so any player can understand. Output as bullet points with each point being marked as either a pro ✅, con ❗, suggestion (💡) (use symbols as the bullets/dashes).
 """

@@ -4,8 +4,8 @@ import asyncio
 import azure.functions as func
 from azure.functions import Blueprint
 from shared.tables import get_report, update_report_field
-from shared.openai_utils import client as OPENAI_CLIENT
 from shared.prompts import offense_prompt, defense_prompt, synergy_prompt, versatility_prompt
+from shared.langchain_utils import send_chat
 
 
 analyze_deck_bp = Blueprint()
@@ -49,28 +49,18 @@ async def perform_analysis(deck, category_key):
     cfg = CATEGORY_CONFIG[category_key]
     field = cfg["field"]
     prompt = cfg["prompt"]
-    model = cfg["model"]
 
     # Mark as loading
     update_report_field(deck, field, "loading")
 
     # Call OpenAI model
-    response = await OPENAI_CLIENT.chat.completions.create(
-        model=model,
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": deck},
-        ],
-        max_completion_tokens=6000,
-    )
-
-    content = response.choices[0].message.content
+    results = send_chat(system_input=prompt, user_input=deck)
+    print(results.content)
 
     # Store in database
-    update_report_field(deck, field, content)
+    update_report_field(deck, field, results.content)
 
-    return content
+    return results.content
 
 
 # ---------------------------------------------------------------------------
