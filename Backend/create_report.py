@@ -1,6 +1,6 @@
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _reports, PARTITION_KEY, get_report
+from shared.tables import _reports, PARTITION_KEY
 
 create_report_bp = Blueprint()
 
