@@ -3,13 +3,12 @@ import logging
 import asyncio
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import update_report_field, _reports, PARTITION_KEY
+
+from shared.tables import get_report_by_deck, update_report_field
 from shared.pinecone_utils import query_vectors
 from shared.rag_utils import card_to_namespace
-from shared.openai_utils import run_chat
 from shared.prompts import optimize_prompt
 from shared.langchain_utils import build_chain
-
 
 
 optimize_deck_bp = Blueprint()
@@ -18,12 +17,31 @@ optimize_deck_bp = Blueprint()
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-def get_existing_optimize(deck: str):
-    try:
-        entity = _reports.get_entity(PARTITION_KEY, deck)
-        return entity.get("Optimize")
-    except Exception:
-        return None
+
+async def wait_for_optimize(resolved_rowkey: str, timeout: int = 300, interval: int = 1):
+    """
+    Poll the table for Optimize until it is no longer 'loading'.
+    Returns the final value or None on timeout.
+    """
+    from shared.tables import _reports
+
+    for _ in range(timeout):
+        await asyncio.sleep(interval)
+
+        try:
+            entity = _reports.get_entity(resolved_rowkey)
+        except Exception:
+            continue
+
+        val = entity.get("Optimize")
+
+        if val == "loading":
+            continue
+
+        if val not in ("loading", "no", None):
+            return val
+
+    return None  # timeout exceeded
 
 
 def build_user_prompt(body: dict):
@@ -57,63 +75,61 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
     if not deck:
         return func.HttpResponse("Missing 'deckToAnalyze'", status_code=400)
 
-    # Check existing table state
-    existing_value = get_existing_optimize(deck)
-    if existing_value is None:
+    # ---------------------------------------------------------
+    # Resolve correct row key via canonical deck matching
+    # ---------------------------------------------------------
+    report, resolved_rowkey = get_report_by_deck(deck)
+
+    if not report:
         return func.HttpResponse("Report not found", status_code=404)
 
-    # Someone else is optimizing — wait for it to finish
+    existing_value = report.get("Optimize")
+
+    # ---------------------------------------------------------
+    # CASE 1 — Optimization already running → wait for it
+    # ---------------------------------------------------------
     if existing_value == "loading":
-        logging.info(f"Optimization already running for deck '{deck}'. Waiting...")
+        logging.info(f"Optimization already running for deck '{resolved_rowkey}'. Waiting...")
 
-        # Poll every 1 second until the value is no longer 'loading'
-        for _ in range(300):  # wait up to 5 minutes (adjust as needed)
-            await asyncio.sleep(1)
-            updated = get_existing_optimize(deck)
+        finished = await wait_for_optimize(resolved_rowkey)
 
-            # If still loading → continue waiting
-            if updated == "loading":
-                continue
+        if finished is None:
+            return func.HttpResponse("Timeout waiting for optimization", status_code=504)
 
-            # If finished and now contains the optimized result → return it
-            if updated not in ("loading", "no", None):
-                return func.HttpResponse(
-                    json.dumps({"category": "optimize", "content": updated}),
-                    mimetype="application/json",
-                    status_code=200,
-                )
+        return func.HttpResponse(
+            json.dumps({"category": "optimize", "content": finished}),
+            mimetype="application/json",
+            status_code=200,
+        )
 
-        # Timeout safeguard
-        return func.HttpResponse("Timeout waiting for optimization", status_code=504)
-
-
-    # Fresh optimization required
+    # ---------------------------------------------------------
+    # CASE 2 — No optimization yet → perform now
+    # ---------------------------------------------------------
     if existing_value == "no":
-        update_report_field(deck=deck, field="Optimize", value="loading")
+        update_report_field(resolved_rowkey, "Optimize", "loading")
 
         user_prompt = build_user_prompt(body)
-
-        # Build chain
         chain = build_chain()
-        
+
+        # Tower troops namespaces
         tower_types = ["tower_princess", "cannoneer", "dagger_duchess", "royal_chef"]
+
+        # Evolution namespaces
         evolution_namespaces = [
             card_to_namespace(card.strip())
             for card in deck.split(",")
         ]
 
-        # Build retrievers list for chain.invoke()
+        # Build retriever list
         retrievers = []
 
-        # Tower retrievers
-        for tower_type in tower_types:
+        for tower in tower_types:
             retrievers.append({
                 "k": 5,
                 "namespace": "tower_troops",
-                "filter": {"troop": tower_type}
+                "filter": {"troop": tower}
             })
 
-        # Evolution retrievers
         for ns in evolution_namespaces:
             retrievers.append({
                 "k": 5,
@@ -121,16 +137,14 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
             })
 
         # Invoke chain
-        results = chain.invoke(
-            {
-                "system_instructions": optimize_prompt,
-                "user_input": user_prompt,
-                "retrievers": retrievers
-            }
-        )
+        results = chain.invoke({
+            "system_instructions": optimize_prompt,
+            "user_input": user_prompt,
+            "retrievers": retrievers
+        })
 
         # Store result
-        update_report_field(deck=deck, field="Optimize", value=results) 
+        update_report_field(resolved_rowkey, "Optimize", results)
 
         return func.HttpResponse(
             json.dumps({"category": "optimize", "content": results}),
@@ -138,7 +152,9 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
             status_code=200,
         )
 
-    # Optimization exists (cached result)
+    # ---------------------------------------------------------
+    # CASE 3 — Already optimized → return cached value
+    # ---------------------------------------------------------
     return func.HttpResponse(
         json.dumps({"category": "optimize", "content": existing_value}),
         mimetype="application/json",

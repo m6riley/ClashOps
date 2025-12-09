@@ -3,7 +3,8 @@ import logging
 import asyncio
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import get_report, update_report_field
+
+from shared.tables import get_report_by_deck, update_report_field
 from shared.prompts import offense_prompt, defense_prompt, synergy_prompt, versatility_prompt
 from shared.langchain_utils import build_chain
 
@@ -24,51 +25,67 @@ CATEGORY_CONFIG = {
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-async def wait_for_analysis(deck: str, field: str, timeout: int = 120, interval: int = 1):
+async def wait_for_analysis(resolved_rowkey: str, field: str, timeout: int = 120, interval: int = 1):
     """
     Poll the table until the field is no longer 'loading'.
     Returns the final stored value or None on timeout.
     """
+    from shared.tables import _reports  # local import to avoid circular
+
     for _ in range(timeout):
         await asyncio.sleep(interval)
-        updated = get_report(deck).get(field)
 
-        # Still loading → continue waiting
+        try:
+            entity = _reports.get_entity(resolved_rowkey)
+        except Exception:
+            continue
+
+        updated = entity.get(field)
+
         if updated == "loading":
             continue
 
-        # When it's no longer loading, return whatever is stored
         if updated not in ("loading", "no", None):
             return updated
 
     return None  # timeout expired
 
 
-def perform_analysis(deck, category_key):
-    """Run OpenAI model and update table."""
+def perform_analysis(deck: str, category_key: str):
+    """
+    Run model inference and update the report record.
+    """
     cfg = CATEGORY_CONFIG[category_key]
     field = cfg["field"]
     prompt = cfg["prompt"]
 
+    # ---------------------------------------------------------
+    # Resolve the actual RowKey in table (canonical match)
+    # ---------------------------------------------------------
+    report, resolved_rowkey = get_report_by_deck(deck)
+
+    if not report:
+        raise ValueError("Report not found for this deck")
+
+    # ---------------------------------------------------------
     # Mark as loading
-    update_report_field(deck, field, "loading")
+    # ---------------------------------------------------------
+    update_report_field(resolved_rowkey, field, "loading")
 
-    # Build the chain
+    # Build and run the langchain model
     chain = build_chain()
+    results = chain.invoke({
+        "system_instructions": prompt,
+        "user_input": deck,
+        "retrievers": []
+    })
 
-    # Invoke the chain
-    results = chain.invoke(
-        {
-            "system_instructions": prompt,
-            "user_input": deck,
-            "retrievers": []
-        }
-    )
+    print("MODEL RESPONSE:", results)
 
-    print(results)
-
-    # Store in database
-    update_report_field(deck, field, results)
+    # ---------------------------------------------------------
+    # Store result
+    # ---------------------------------------------------------
+    update_report_field(resolved_rowkey, field, results)
 
     return results
 
@@ -98,21 +115,22 @@ async def analyze_deck(req: func.HttpRequest) -> func.HttpResponse:
     cfg = CATEGORY_CONFIG[category]
     field = cfg["field"]
 
-    # Load or fail
-    report = get_report(deck)
+    # ---------------------------------------------------------
+    # Resolve correct report row (canonical detection)
+    # ---------------------------------------------------------
+    report, resolved_rowkey = get_report_by_deck(deck)
     if not report:
         return func.HttpResponse("Report not found", status_code=404)
 
     current_value = report.get(field)
 
-    # ----------------------------------------------------------------------
-    # CASE 1 — Another request is already analyzing this category
-    # ----------------------------------------------------------------------
+    # ---------------------------------------------------------
+    # Case 1 — Already loading → wait for it
+    # ---------------------------------------------------------
     if current_value == "loading":
-        logging.info(f"Analysis already running for deck '{deck}', category '{category}'. Waiting...")
+        logging.info(f"Analysis already running for deck '{resolved_rowkey}', category '{category}'. Waiting...")
 
-        finished = await wait_for_analysis(deck, field)
-
+        finished = await wait_for_analysis(resolved_rowkey, field)
         if finished is None:
             return func.HttpResponse("Timeout waiting for analysis", status_code=504)
 
@@ -122,21 +140,20 @@ async def analyze_deck(req: func.HttpRequest) -> func.HttpResponse:
             status_code=200,
         )
 
-    # ----------------------------------------------------------------------
-    # CASE 2 — Needs to generate analysis now
-    # ----------------------------------------------------------------------
+    # ---------------------------------------------------------
+    # Case 2 — No analysis yet → perform now
+    # ---------------------------------------------------------
     if current_value == "no":
         content = perform_analysis(deck, category)
-
         return func.HttpResponse(
             json.dumps({"category": category, "content": content}),
             mimetype="application/json",
             status_code=200,
         )
 
-    # ----------------------------------------------------------------------
-    # CASE 3 — Already generated, just return cached result
-    # ----------------------------------------------------------------------
+    # ---------------------------------------------------------
+    # Case 3 — Already analyzed → return cached value
+    # ---------------------------------------------------------
     return func.HttpResponse(
         json.dumps({"category": category, "content": current_value}),
         mimetype="application/json",
