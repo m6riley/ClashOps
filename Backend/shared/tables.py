@@ -20,6 +20,9 @@ _service = TableServiceClient.from_connection_string(_CONNECTION_STRING)
 # Reports table client (exported for direct access in some modules)
 _reports = _service.get_table_client("reports")
 
+# Accounts table client
+_accounts = _service.get_table_client("accounts")
+
 
 # UNUSED: This function is not currently used in the codebase
 def get_report(deck: str) -> dict | None:
