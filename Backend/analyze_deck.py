@@ -5,7 +5,7 @@ import azure.functions as func
 from azure.functions import Blueprint
 from shared.tables import get_report, update_report_field
 from shared.prompts import offense_prompt, defense_prompt, synergy_prompt, versatility_prompt
-from shared.langchain_utils import send_chat
+from shared.langchain_utils import build_chain
 
 
 analyze_deck_bp = Blueprint()
@@ -44,7 +44,7 @@ async def wait_for_analysis(deck: str, field: str, timeout: int = 120, interval:
     return None  # timeout expired
 
 
-async def perform_analysis(deck, category_key):
+def perform_analysis(deck, category_key):
     """Run OpenAI model and update table."""
     cfg = CATEGORY_CONFIG[category_key]
     field = cfg["field"]
@@ -53,14 +53,24 @@ async def perform_analysis(deck, category_key):
     # Mark as loading
     update_report_field(deck, field, "loading")
 
-    # Call OpenAI model
-    results = send_chat(system_input=prompt, user_input=deck)
-    print(results.content)
+    # Build the chain
+    chain = build_chain()
+
+    # Invoke the chain
+    results = chain.invoke(
+        {
+            "system_instructions": prompt,
+            "user_input": deck,
+            "retrievers": []
+        }
+    )
+
+    print(results)
 
     # Store in database
-    update_report_field(deck, field, results.content)
+    update_report_field(deck, field, results)
 
-    return results.content
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -116,7 +126,7 @@ async def analyze_deck(req: func.HttpRequest) -> func.HttpResponse:
     # CASE 2 — Needs to generate analysis now
     # ----------------------------------------------------------------------
     if current_value == "no":
-        content = await perform_analysis(deck, category)
+        content = perform_analysis(deck, category)
 
         return func.HttpResponse(
             json.dumps({"category": category, "content": content}),

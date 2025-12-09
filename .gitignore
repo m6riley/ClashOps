@@ -2,8 +2,10 @@
 # CUSTOM (your additions)
 ############################################################
 
+.zshrc
+
 # VS Code settings
-.vscode/
+
 # Local development settings
 .local.settings.json
 local.settings.json

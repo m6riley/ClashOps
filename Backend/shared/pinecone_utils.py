@@ -7,6 +7,7 @@ PINECONE_KEY = os.getenv("PINECONE_KEY")
 client = Pinecone(api_key=PINECONE_KEY)
 
 index = client.Index("tower-troops")
+INDEX_NAME = "tower-troops"
 
 from typing import Optional
 
