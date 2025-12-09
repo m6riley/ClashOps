@@ -1,5 +1,5 @@
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_community.vectorstores import Pinecone as LangChainPinecone
+from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from shared.pinecone_utils import index
@@ -58,14 +58,14 @@ def build_chain(
             namespace = cfg.pop("namespace", default_namespace)
 
             # build vectorstore for this namespace
-            vectorstore = LangChainPinecone(
+            vector_store = PineconeVectorStore(
                 index=index,
                 embedding=embeddings,
                 text_key="text",
                 namespace=namespace
             )
 
-            retriever = vectorstore.as_retriever(
+            retriever = vector_store.as_retriever(
                 search_type="similarity",
                 search_kwargs=cfg
             )

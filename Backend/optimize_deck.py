@@ -8,6 +8,7 @@ from shared.pinecone_utils import query_vectors
 from shared.rag_utils import card_to_namespace
 from shared.openai_utils import run_chat
 from shared.prompts import optimize_prompt
+from shared.langchain_utils import build_chain
 
 
 
@@ -91,66 +92,48 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
         update_report_field(deck=deck, field="Optimize", value="loading")
 
         user_prompt = build_user_prompt(body)
+
+        # Build chain
+        chain = build_chain()
         
-        tower_types = ["tower_princess", "cannoneer", "dagger_duchess", "royal_chef"]    
+        tower_types = ["tower_princess", "cannoneer", "dagger_duchess", "royal_chef"]
         evolution_namespaces = [
             card_to_namespace(card.strip())
             for card in deck.split(",")
         ]
 
-        tower_tasks = [
-            query_vectors(query=user_prompt, top_k=5, namespace="tower_troops", metadata_filter= {
-                "troop": tower_type
+        # Build retrievers list for chain.invoke()
+        retrievers = []
+
+        # Tower retrievers
+        for tower_type in tower_types:
+            retrievers.append({
+                "k": 5,
+                "namespace": "tower_troops",
+                "filter": {"troop": tower_type}
             })
-            for tower_type in tower_types
-        ]
-        evolution_tasks = [
-            query_vectors(query=user_prompt, top_k=5, namespace=ns)
-            for ns in evolution_namespaces
-        ]
 
-        results = await asyncio.gather(*tower_tasks, *evolution_tasks)
+        # Evolution retrievers
+        for ns in evolution_namespaces:
+            retrievers.append({
+                "k": 5,
+                "namespace": ns
+            })
 
-        tower_results = results[:len(tower_tasks)]
-        evolution_results = results[len(tower_tasks):]
-
-
-        tower_context = [
+        # Invoke chain
+        results = chain.invoke(
             {
-                "Tower Troop Name": m.metadata["troop"],
-                "Fact": m.metadata["text"]
+                "system_instructions": optimize_prompt,
+                "user_input": user_prompt,
+                "retrievers": retrievers
             }
-            for matches in tower_results
-            for m in matches
-            ]
-
-        evolution_context = [
-            {
-                "Evolution Name": m.metadata["troop"],
-                "Fact": m.metadata["text"]
-            }
-            for matches in evolution_results
-            for m in matches
-            ]
-
-        # Build final system message
-        system_message = (
-            "## SYSTEM INSTRUCTIONS ##\n"
-            + optimize_prompt
-            + "\n## TOWER TROOP CONTEXT ##\n"
-            + json.dumps(tower_context, indent=2)
-            + "\n## EVOLUTION CONTEXT ##\n"
-            + json.dumps(evolution_context, indent=2)
         )
 
-        # OpenAI optimization call
-        content = await run_chat(model="gpt-5", system=system_message, user=user_prompt)
-
         # Store result
-        update_report_field(deck=deck, field="Optimize", value=content) 
+        update_report_field(deck=deck, field="Optimize", value=results) 
 
         return func.HttpResponse(
-            json.dumps({"category": "optimize", "content": content}),
+            json.dumps({"category": "optimize", "content": results}),
             mimetype="application/json",
             status_code=200,
         )
