@@ -1,35 +1,80 @@
+"""
+Azure Function for optimizing Clash Royale decks.
+
+This function handles HTTP requests to optimize decks using LangChain with RAG
+retrieval from Pinecone. It uses deck analysis scores and summaries to generate
+optimization recommendations including card swaps, tower troops, and evolutions.
+"""
 import json
 import logging
 import asyncio
 import azure.functions as func
 from azure.functions import Blueprint
+from typing import Optional
 
 from shared.tables import get_report_by_deck, update_report_field
-from shared.pinecone_utils import query_vectors
 from shared.rag_utils import card_to_namespace
 from shared.prompts import optimize_prompt
 from shared.langchain_utils import build_chain
 
-
+# Azure Functions Blueprint
 optimize_deck_bp = Blueprint()
 
+# ---------------------------------------------------------------------------
+# Configuration Constants
+# ---------------------------------------------------------------------------
+
+# Polling configuration for optimization (longer timeout due to RAG retrieval)
+_DEFAULT_TIMEOUT_SECONDS = 300
+_DEFAULT_POLL_INTERVAL_SECONDS = 1
+
+# Tower troop types for RAG retrieval
+_TOWER_TROOP_TYPES = [
+    "tower_princess",
+    "cannoneer",
+    "dagger_duchess",
+    "royal_chef"
+]
+
+# RAG retrieval configuration
+_RETRIEVER_TOP_K = 5
+_TOWER_TROOPS_NAMESPACE = "tower_troops"
+
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Helper Functions
 # ---------------------------------------------------------------------------
 
-async def wait_for_optimize(resolved_rowkey: str, timeout: int = 300, interval: int = 1):
+async def wait_for_optimize(
+    resolved_rowkey: str,
+    timeout: int = _DEFAULT_TIMEOUT_SECONDS,
+    interval: int = _DEFAULT_POLL_INTERVAL_SECONDS
+) -> Optional[str]:
     """
-    Poll the table for Optimize until it is no longer 'loading'.
-    Returns the final value or None on timeout.
+    Poll the table for Optimize field until it is no longer 'loading'.
+    
+    Continuously checks the report table for the Optimize field until it
+    contains a completed optimization result or the timeout is reached.
+    
+    Args:
+        resolved_rowkey: The RowKey of the report entity
+        timeout: Maximum number of seconds to wait (default: 300)
+        interval: Seconds between polling attempts (default: 1)
+    
+    Returns:
+        The completed optimization result as a string, or None if timeout
     """
-    from shared.tables import _reports
+    # Local import to avoid circular dependency
+    from shared.tables import _reports, PARTITION_KEY
 
     for _ in range(timeout):
         await asyncio.sleep(interval)
 
         try:
-            entity = _reports.get_entity(resolved_rowkey)
+            entity = _reports.get_entity(
+                partition_key=PARTITION_KEY,
+                row_key=resolved_rowkey
+            )
         except Exception:
             continue
 
@@ -44,7 +89,19 @@ async def wait_for_optimize(resolved_rowkey: str, timeout: int = 300, interval: 
     return None  # timeout exceeded
 
 
-def build_user_prompt(body: dict):
+def build_user_prompt(body: dict) -> str:
+    """
+    Build a JSON-formatted user prompt from request body data.
+    
+    Extracts deck analysis scores and summaries from the request body
+    and formats them as a JSON string for the optimization prompt.
+    
+    Args:
+        body: Request body dictionary containing analysis data
+    
+    Returns:
+        JSON string containing deck analysis information
+    """
     return json.dumps({
         "Deck Analyzed": body.get("deckToAnalyze"),
         "Offense Score": body.get("offenseScore"),
@@ -58,43 +115,119 @@ def build_user_prompt(body: dict):
     })
 
 
+def build_retrievers(deck: str) -> list[dict]:
+    """
+    Build a list of retriever configurations for RAG retrieval.
+    
+    Creates retriever configs for:
+    - Tower troops (all types)
+    - Evolution namespaces (one per card in deck)
+    
+    Args:
+        deck: Deck string with comma-separated card names
+    
+    Returns:
+        List of retriever configuration dictionaries
+    """
+    retrievers = []
+
+    # Add tower troop retrievers
+    for tower in _TOWER_TROOP_TYPES:
+        retrievers.append({
+            "k": _RETRIEVER_TOP_K,
+            "namespace": _TOWER_TROOPS_NAMESPACE,
+            "filter": {"troop": tower}
+        })
+
+    # Add evolution namespace retrievers
+    evolution_namespaces = [
+        card_to_namespace(card.strip())
+        for card in deck.split(",")
+    ]
+
+    for ns in evolution_namespaces:
+        retrievers.append({
+            "k": _RETRIEVER_TOP_K,
+            "namespace": ns
+        })
+
+    return retrievers
+
+
 # ---------------------------------------------------------------------------
-# Route
+# Azure Function Route
 # ---------------------------------------------------------------------------
+
 @optimize_deck_bp.route(route="optimize_deck", auth_level=func.AuthLevel.FUNCTION)
 async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    HTTP-triggered Azure Function for deck optimization.
+    
+    Handles three cases:
+    1. Optimization already running: Polls until completion
+    2. No optimization yet: Performs optimization with RAG retrieval
+    3. Already optimized: Returns cached result
+    
+    Request body should contain:
+        - deckToAnalyze: Deck string to optimize
+        - offenseScore, offenseSummary: Offense analysis data
+        - defenseScore, defenseSummary: Defense analysis data
+        - synergyScore, synergySummary: Synergy analysis data
+        - versatilityScore, versatilitySummary: Versatility analysis data
+    
+    Returns:
+        HTTP response with JSON containing category "optimize" and content
+    """
     logging.info("Deck optimization request received")
 
-    # Parse JSON
+    # Parse and validate request body
     try:
         body = req.get_json()
-    except ValueError:
-        return func.HttpResponse("Invalid JSON", status_code=400)
+    except ValueError as e:
+        logging.error(f"Invalid JSON in request: {e}")
+        return func.HttpResponse(
+            "Invalid JSON",
+            status_code=400,
+            mimetype="text/plain"
+        )
 
     deck = body.get("deckToAnalyze")
     if not deck:
-        return func.HttpResponse("Missing 'deckToAnalyze'", status_code=400)
+        logging.warning("Missing 'deckToAnalyze' in request")
+        return func.HttpResponse(
+            "Missing 'deckToAnalyze'",
+            status_code=400,
+            mimetype="text/plain"
+        )
 
-    # ---------------------------------------------------------
     # Resolve correct row key via canonical deck matching
-    # ---------------------------------------------------------
     report, resolved_rowkey = get_report_by_deck(deck)
 
     if not report:
-        return func.HttpResponse("Report not found", status_code=404)
+        logging.warning(f"Report not found for deck: {deck}")
+        return func.HttpResponse(
+            "Report not found",
+            status_code=404,
+            mimetype="text/plain"
+        )
 
     existing_value = report.get("Optimize")
 
-    # ---------------------------------------------------------
-    # CASE 1 — Optimization already running → wait for it
-    # ---------------------------------------------------------
+    # Case 1: Optimization already running → wait for it
     if existing_value == "loading":
-        logging.info(f"Optimization already running for deck '{resolved_rowkey}'. Waiting...")
+        logging.info(
+            f"Optimization already running for deck '{resolved_rowkey}'. Waiting..."
+        )
 
         finished = await wait_for_optimize(resolved_rowkey)
 
         if finished is None:
-            return func.HttpResponse("Timeout waiting for optimization", status_code=504)
+            logging.error(f"Timeout waiting for optimization: {resolved_rowkey}")
+            return func.HttpResponse(
+                "Timeout waiting for optimization",
+                status_code=504,
+                mimetype="text/plain"
+            )
 
         return func.HttpResponse(
             json.dumps({"category": "optimize", "content": finished}),
@@ -102,59 +235,43 @@ async def optimize_deck(req: func.HttpRequest) -> func.HttpResponse:
             status_code=200,
         )
 
-    # ---------------------------------------------------------
-    # CASE 2 — No optimization yet → perform now
-    # ---------------------------------------------------------
+    # Case 2: No optimization yet → perform now
     if existing_value == "no":
-        update_report_field(resolved_rowkey, "Optimize", "loading")
+        try:
+            update_report_field(resolved_rowkey, "Optimize", "loading")
 
-        user_prompt = build_user_prompt(body)
-        chain = build_chain()
+            user_prompt = build_user_prompt(body)
+            chain = build_chain()
+            retrievers = build_retrievers(deck)
 
-        # Tower troops namespaces
-        tower_types = ["tower_princess", "cannoneer", "dagger_duchess", "royal_chef"]
-
-        # Evolution namespaces
-        evolution_namespaces = [
-            card_to_namespace(card.strip())
-            for card in deck.split(",")
-        ]
-
-        # Build retriever list
-        retrievers = []
-
-        for tower in tower_types:
-            retrievers.append({
-                "k": 5,
-                "namespace": "tower_troops",
-                "filter": {"troop": tower}
+            # Invoke chain with RAG retrieval
+            results = chain.invoke({
+                "system_instructions": optimize_prompt,
+                "user_input": user_prompt,
+                "retrievers": retrievers
             })
 
-        for ns in evolution_namespaces:
-            retrievers.append({
-                "k": 5,
-                "namespace": ns
-            })
+            logging.info(f"Optimization completed for deck: {resolved_rowkey}")
 
-        # Invoke chain
-        results = chain.invoke({
-            "system_instructions": optimize_prompt,
-            "user_input": user_prompt,
-            "retrievers": retrievers
-        })
+            # Store result
+            update_report_field(resolved_rowkey, "Optimize", results)
 
-        # Store result
-        update_report_field(resolved_rowkey, "Optimize", results)
+            return func.HttpResponse(
+                json.dumps({"category": "optimize", "content": results}),
+                mimetype="application/json",
+                status_code=200,
+            )
+        except Exception as e:
+            logging.error(f"Error during optimization: {e}")
+            # Reset loading state on error
+            update_report_field(resolved_rowkey, "Optimize", "no")
+            return func.HttpResponse(
+                "Internal server error",
+                status_code=500,
+                mimetype="text/plain"
+            )
 
-        return func.HttpResponse(
-            json.dumps({"category": "optimize", "content": results}),
-            mimetype="application/json",
-            status_code=200,
-        )
-
-    # ---------------------------------------------------------
-    # CASE 3 — Already optimized → return cached value
-    # ---------------------------------------------------------
+    # Case 3: Already optimized → return cached value
     return func.HttpResponse(
         json.dumps({"category": "optimize", "content": existing_value}),
         mimetype="application/json",

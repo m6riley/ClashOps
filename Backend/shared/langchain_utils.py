@@ -1,3 +1,9 @@
+"""
+LangChain utilities for building RAG (Retrieval-Augmented Generation) chains.
+
+This module provides functions to build LangChain chains that combine
+Pinecone vector retrieval with OpenAI chat models for context-aware responses.
+"""
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
@@ -5,21 +11,36 @@ from langchain_core.output_parsers import StrOutputParser
 from shared.pinecone_utils import index
 
 
-
 def build_chain(
     *,
     default_namespace: str = "",
-    model: str = "gpt-5" # Default model is gpt-5
-):
-
+    model: str = "gpt-5"
+) -> object:
+    """
+    Build a LangChain RAG chain with optional vector retrieval.
+    
+    The chain supports multi-pass retrieval from multiple Pinecone namespaces
+    and combines retrieved context with user input for LLM responses.
+    
+    Args:
+        default_namespace: Default namespace for vector retrieval (default: "")
+        model: OpenAI model name to use (default: "gpt-5")
+    
+    Returns:
+        A LangChain chain that can be invoked with:
+        {
+            "system_instructions": str,
+            "user_input": str,
+            "retrievers": list[dict] | None  # Optional list of retriever configs
+        }
+    """
     # ---- LLM ----
     llm = ChatOpenAI(model=model, temperature=0)
 
     # ---- Embeddings for query embedding ----
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
-
-    # ---- Prompt ----
+    # ---- Prompt Template ----
     template = """
     {system_instructions}
 
@@ -34,11 +55,24 @@ def build_chain(
     prompt = ChatPromptTemplate.from_template(template)
 
     # ---- Format list[Document] → string ----
-    def format_docs(docs):
+    def _format_docs(docs: list) -> str:
+        """Format a list of documents into a single string."""
         return "\n\n".join(d.page_content for d in docs)
 
     # ---- MULTI-PASS RETRIEVAL LOGIC ----
-    def build_context(inputs):
+    def _build_context(inputs: dict) -> str:
+        """
+        Build context string from multiple vector retrievers.
+        
+        Supports retrieval from multiple Pinecone namespaces with different
+        configurations. Deduplicates results by page_content.
+        
+        Args:
+            inputs: Dictionary containing "user_input" and optional "retrievers"
+        
+        Returns:
+            Formatted context string, or empty string if no retrieval
+        """
         all_docs = []
         user_input = inputs["user_input"]
 
@@ -51,7 +85,6 @@ def build_chain(
         # Case 2: retrievers provided but empty list → also no retrieval
         if len(retriever_configs) == 0:
             return ""   # no context
-
 
         for cfg in retriever_configs:
             # namespace override?
@@ -73,7 +106,7 @@ def build_chain(
             docs = retriever.invoke(user_input)
             all_docs.extend(docs)
 
-        # Deduplicate by page_content (optional)
+        # Deduplicate by page_content
         seen = set()
         unique_docs = []
         for d in all_docs:
@@ -81,12 +114,12 @@ def build_chain(
                 unique_docs.append(d)
                 seen.add(d.page_content)
 
-        return format_docs(unique_docs)
+        return _format_docs(unique_docs)
 
     # ---- Chain ----
     chain = (
         {
-            "context": build_context,
+            "context": _build_context,
             "user_input": lambda inputs: inputs["user_input"],
             "system_instructions": lambda inputs: inputs["system_instructions"],
         }
