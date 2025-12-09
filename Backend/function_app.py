@@ -7,6 +7,8 @@ from optimize_deck import optimize_deck_bp
 from refresh_decks import refresh_decks_bp
 from refresh_reports import refresh_reports_bp
 from add_account import add_account_bp
+from delete_account import delete_account_bp
+from edit_account import edit_account_bp
 
 # Create the main FunctionApp instance
 app = func.FunctionApp()
@@ -18,3 +20,5 @@ app.register_functions(optimize_deck_bp)
 app.register_functions(refresh_decks_bp)
 app.register_functions(refresh_reports_bp)
 app.register_functions(add_account_bp)
+app.register_functions(delete_account_bp)
+app.register_functions(edit_account_bp)
