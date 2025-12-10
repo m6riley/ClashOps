@@ -17,16 +17,6 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
     HTTP-triggered Azure Function for getting all features from the database.
     """
     logging.info("Get features request received")
-    # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
     # Get all features from database
     try:
         features = _features.query_entities(f"PartitionKey eq '{PARTITION_KEY}'")
@@ -42,4 +32,3 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
         status_code=200,
         mimetype="application/json"
     )
-    
