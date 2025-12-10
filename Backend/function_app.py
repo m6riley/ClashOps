@@ -13,6 +13,8 @@ from save_deck import save_deck_bp
 from save_category import save_category_bp
 from delete_category import delete_category_bp
 from delete_deck import delete_deck_bp
+from get_decks import get_decks_bp
+from get_categories import get_categories_bp
 
 # Create the main FunctionApp instance
 app = func.FunctionApp()
@@ -30,3 +32,5 @@ app.register_functions(save_deck_bp)
 app.register_functions(save_category_bp)
 app.register_functions(delete_category_bp)
 app.register_functions(delete_deck_bp)
+app.register_functions(get_decks_bp)
+app.register_functions(get_categories_bp)
