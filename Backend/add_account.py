@@ -6,6 +6,7 @@ Cosmos DB. It validates input, checks for existing accounts, and creates
 a new account if one doesn't already exist.
 """
 import logging
+import uuid
 import azure.functions as func
 from azure.functions import Blueprint
 
@@ -25,10 +26,11 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
     HTTP-triggered Azure Function for adding a new account to the database.
     
     Validates the request body, checks if the account already exists, and
-    creates a new account document if one doesn't exist.
+    creates a new account document if one doesn't exist. Each account is
+    assigned a unique UUID as its document ID.
     
     Request body should contain:
-        - email: Email address (used as document id and partition key)
+        - email: Email address (used as partition key)
         - password: Account password
     
     Returns:
@@ -69,22 +71,24 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="text/plain"
         )
 
-    # Check if account already exists
+    # Check if account already exists by querying for email
+    # Since email is the partition key, we need to enable cross-partition query
     try:
-        container.read_item(
-            item=email,
-            partition_key=email
-        )
-        # Account exists
-        logging.info(f"Account already exists for email: {email}")
-        return func.HttpResponse(
-            "Account already exists",
-            status_code=409,  # Conflict status code
-            mimetype="text/plain"
-        )
-    except exceptions.CosmosResourceNotFoundError:
-        # Account doesn't exist, proceed to create
-        pass
+        query = f"SELECT * FROM c WHERE c.{PARTITION_KEY_FIELD} = @email"
+        items = list(container.query_items(
+            query=query,
+            parameters=[{"name": "@email", "value": email}],
+            enable_cross_partition_query=True
+        ))
+        
+        if items:
+            # Account exists
+            logging.info(f"Account already exists for email: {email}")
+            return func.HttpResponse(
+                "Account already exists",
+                status_code=409,  # Conflict status code
+                mimetype="text/plain"
+            )
     except Exception as e:
         logging.error(f"Error checking account existence: {e}")
         return func.HttpResponse(
@@ -93,9 +97,12 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="text/plain"
         )
 
+    # Generate unique ID for the account
+    account_id = str(uuid.uuid4())
+
     # Create new account document
     account_document = {
-        "id": email,
+        "id": account_id,
         PARTITION_KEY_FIELD: email,
         "password": password
     }
