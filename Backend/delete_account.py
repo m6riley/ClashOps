@@ -1,15 +1,15 @@
 """
 Azure Function for deleting accounts from the database.
 
-This function handles HTTP requests to delete account entities from Azure
-Table Storage. It validates input, confirms the account exists, and deletes
+This function handles HTTP requests to delete account documents from Azure
+Cosmos DB. It validates input, confirms the account exists, and deletes
 the account if found.
 """
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.tables import _accounts, PARTITION_KEY
+from shared.cosmos_utils import container, exceptions
 
 # Azure Functions Blueprint
 delete_account_bp = Blueprint()
@@ -25,10 +25,10 @@ def delete_account(req: func.HttpRequest) -> func.HttpResponse:
     HTTP-triggered Azure Function for deleting an account from the database.
     
     Validates the request body, confirms the account exists, and deletes
-    the account entity if found.
+    the account document if found.
     
     Request body should contain:
-        - gmail: Gmail address (used as RowKey)
+        - email: Email address (used as document id and partition key)
     
     Returns:
         HTTP response indicating success, account not found, or error
@@ -46,57 +46,70 @@ def delete_account(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="text/plain"
         )
 
-    gmail = body.get("gmail")
+    email = body.get("email")
 
-    if not gmail:
-        logging.warning("Missing gmail field in request body")
+    if not email:
+        logging.warning("Missing email field in request body")
         return func.HttpResponse(
-            "Missing 'gmail' field in request body",
+            "Missing 'email' field in request body",
             status_code=400,
             mimetype="text/plain"
         )
 
-    # Normalize and validate that it's a Gmail address
-    gmail = gmail.strip()
-    gmail_lower = gmail.lower()
+    # Normalize and validate email address
+    email = email.strip().lower()
     
-    if not gmail_lower.endswith("@gmail.com"):
-        logging.warning(f"Invalid Gmail address provided: {gmail}")
+    if not email or "@" not in email:
+        logging.warning(f"Invalid email address provided: {email}")
         return func.HttpResponse(
-            "Invalid Gmail address. Must be a @gmail.com email address",
+            "Invalid email address format",
             status_code=400,
             mimetype="text/plain"
         )
 
     # Check if account exists before attempting to delete
     try:
-        existing_account = _accounts.get_entity(
-            partition_key=PARTITION_KEY,
-            row_key=gmail
+        container.read_item(
+            item=email,
+            partition_key=email
         )
-        
         # Account exists, proceed with deletion
-        logging.info(f"Account found for gmail: {gmail}. Proceeding with deletion.")
+        logging.info(f"Account found for email: {email}. Proceeding with deletion.")
         
-    except Exception:
+    except exceptions.CosmosResourceNotFoundError:
         # Account doesn't exist
-        logging.warning(f"Account not found for gmail: {gmail}")
+        logging.warning(f"Account not found for email: {email}")
         return func.HttpResponse(
             "Account not found",
             status_code=404,
             mimetype="text/plain"
         )
-
-    # Delete the account entity
-    try:
-        _accounts.delete_entity(
-            partition_key=PARTITION_KEY,
-            row_key=gmail
+    except Exception as e:
+        logging.error(f"Error checking account existence: {e}")
+        return func.HttpResponse(
+            f"Error checking account existence: {e}",
+            status_code=500,
+            mimetype="text/plain"
         )
-        logging.info(f"Account deleted successfully for gmail: {gmail}")
+
+    # Delete the account document
+    try:
+        container.delete_item(
+            item=email,
+            partition_key=email
+        )
+        logging.info(f"Account deleted successfully for email: {email}")
         return func.HttpResponse(
             "Account deleted successfully",
             status_code=200,
+            mimetype="text/plain"
+        )
+    except exceptions.CosmosResourceNotFoundError:
+        # Account was deleted between check and delete (race condition)
+        logging.warning(f"Account not found (race condition): {email}")
+        return func.HttpResponse(
+            "Account not found",
+            status_code=404,
             mimetype="text/plain"
         )
     except Exception as e:
