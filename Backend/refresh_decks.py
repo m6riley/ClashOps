@@ -129,4 +129,3 @@ def refresh_decks(myTimer: func.TimerRequest) -> None:
         logging.warning("No decks to upload")
 
     logging.info("Deck refresh process completed successfully")
-    
