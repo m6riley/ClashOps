@@ -23,6 +23,12 @@ _reports = _service.get_table_client("reports")
 # Accounts table client
 _accounts = _service.get_table_client("accounts")
 
+# Decks table client
+_decks = _service.get_table_client("decks")
+
+# Categories table client
+_categories = _service.get_table_client("categories")
+
 
 # UNUSED: This function is not currently used in the codebase
 def get_report(deck: str) -> dict | None:

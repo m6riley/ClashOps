@@ -9,6 +9,10 @@ from refresh_reports import refresh_reports_bp
 from add_account import add_account_bp
 from delete_account import delete_account_bp
 from edit_account import edit_account_bp
+from save_deck import save_deck_bp
+from save_category import save_category_bp
+from delete_category import delete_category_bp
+from delete_deck import delete_deck_bp
 
 # Create the main FunctionApp instance
 app = func.FunctionApp()
@@ -22,3 +26,7 @@ app.register_functions(refresh_reports_bp)
 app.register_functions(add_account_bp)
 app.register_functions(delete_account_bp)
 app.register_functions(edit_account_bp)
+app.register_functions(save_deck_bp)
+app.register_functions(save_category_bp)
+app.register_functions(delete_category_bp)
+app.register_functions(delete_deck_bp)
