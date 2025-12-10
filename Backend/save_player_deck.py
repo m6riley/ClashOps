@@ -1,18 +1,18 @@
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _decks, PARTITION_KEY
+from shared.tables import _playerDecks, PARTITION_KEY
 import uuid
 
 # Azure Functions Blueprint
-save_deck_bp = Blueprint()
+save_player_deck_bp = Blueprint()
 
 # ---------------------------------------------------------------------------
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@save_deck_bp.route(route="save_deck", auth_level=func.AuthLevel.FUNCTION)
-def save_deck(req: func.HttpRequest) -> func.HttpResponse:
+@save_player_deck_bp.route(route="save_deck", auth_level=func.AuthLevel.FUNCTION)
+def save_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for saving a deck to the database.
     """
@@ -41,7 +41,7 @@ def save_deck(req: func.HttpRequest) -> func.HttpResponse:
         )
     # Save deck to database
     try:
-        _decks.create_entity({
+        _playerDecks.create_entity({
             "PartitionKey": PARTITION_KEY,
             "RowKey": deckID,
             "Cards": cards,

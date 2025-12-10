@@ -1,22 +1,21 @@
 import logging
-import json
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _decks, PARTITION_KEY
+from shared.tables import _playerDecks, PARTITION_KEY
 
 # Azure Functions Blueprint
-get_decks_bp = Blueprint()
+delete_player_deck_bp = Blueprint()
 
 # ---------------------------------------------------------------------------
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@get_decks_bp.route(route="get_decks", auth_level=func.AuthLevel.FUNCTION)
-def get_decks(req: func.HttpRequest) -> func.HttpResponse:
+@delete_player_deck_bp.route(route="delete_deck", auth_level=func.AuthLevel.FUNCTION)
+def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
-    HTTP-triggered Azure Function for getting all decks from the database.
+    HTTP-triggered Azure Function for deleting a deck from the database.
     """
-    logging.info("Get decks request received")
+    logging.info("Delete deck request received")
     # Parse and validate request body
     try:
         body = req.get_json()
@@ -27,26 +26,29 @@ def get_decks(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400,
             mimetype="text/plain"
         )
-    userID = body.get("userID")
-    if not userID:
+    deckID = body.get("deckID")
+    if not deckID:
         logging.warning("Missing field in request")
         return func.HttpResponse(
             "Missing field in request",
             status_code=400,
             mimetype="text/plain"
         )
-    # Get all decks from database
+    # Delete deck from database
     try:
-        decks = _decks.query_entities(f"PartitionKey eq '{PARTITION_KEY}' and UserID eq '{userID}'")
+        _playerDecks.delete_entity(
+            partition_key=PARTITION_KEY,
+            row_key=deckID
+        )
     except Exception as e:
-        logging.error(f"Error getting decks: {e}")
+        logging.error(f"Error deleting deck: {e}")
         return func.HttpResponse(
-            f"Error getting decks: {e}",
+            f"Error deleting deck: {e}",
             status_code=500,
             mimetype="text/plain"
         )
     return func.HttpResponse(
-        json.dumps(decks),
+        "Deck deleted successfully",
         status_code=200,
-        mimetype="application/json"
+        mimetype="text/plain"
     )

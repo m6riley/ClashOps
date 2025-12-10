@@ -23,11 +23,17 @@ _reports = _service.get_table_client("reports")
 # Accounts table client
 _accounts = _service.get_table_client("accounts")
 
-# Decks table client
-_decks = _service.get_table_client("decks")
+# Player Decks table client
+_playerDecks = _service.get_table_client("playerdecks")
 
 # Categories table client
 _categories = _service.get_table_client("categories")
+
+# Decks table client
+_decks = _service.get_table_client("decks")
+
+# Features table client
+_features = _service.get_table_client("features")
 
 
 # UNUSED: This function is not currently used in the codebase
