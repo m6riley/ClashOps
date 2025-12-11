@@ -11,8 +11,8 @@ get_player_decks_bp = Blueprint()
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@get_player_decks_bp.route(route="get_decks", auth_level=func.AuthLevel.FUNCTION)
-def get_decks(req: func.HttpRequest) -> func.HttpResponse:
+@get_player_decks_bp.route(route="get_player_decks", auth_level=func.AuthLevel.FUNCTION)
+def get_player_decks(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for getting all decks from the database.
     """
@@ -37,7 +37,7 @@ def get_decks(req: func.HttpRequest) -> func.HttpResponse:
         )
     # Get all decks from database
     try:
-        decks = _playerDecks.query_entities(f"PartitionKey eq '{PARTITION_KEY}' and UserID eq '{userID}'")
+        decks = list(_playerDecks.query_entities(f"PartitionKey eq '{PARTITION_KEY}' and UserID eq '{userID}'"))
     except Exception as e:
         logging.error(f"Error getting decks: {e}")
         return func.HttpResponse(

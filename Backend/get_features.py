@@ -1,3 +1,6 @@
+from typing import Any
+
+
 import logging
 import json
 import csv
@@ -25,7 +28,7 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
 
         # Parse CSV rows into dictionaries
         reader = csv.DictReader(io.StringIO(csv_text))
-        features = list(reader)
+        features = list[dict[str | Any, str | Any]](reader)
 
     except Exception as e:
         logging.error(f"Error getting features from blob: {e}")

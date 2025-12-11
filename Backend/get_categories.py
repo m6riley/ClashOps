@@ -37,7 +37,7 @@ def get_categories(req: func.HttpRequest) -> func.HttpResponse:
         )
     # Get all categories from database
     try:
-        categories = _categories.query_entities(f"PartitionKey eq '{PARTITION_KEY}' and UserID eq '{userID}'")
+        categories = list(_categories.query_entities(f"PartitionKey eq '{PARTITION_KEY}' and UserID eq '{userID}'"))
     except Exception as e:
         logging.error(f"Error getting categories: {e}")
         return func.HttpResponse(
