@@ -14,4 +14,4 @@ _PINECONE_KEY = os.getenv("PINECONE_KEY")
 _client = Pinecone(api_key=_PINECONE_KEY)
 
 # Pinecone index instance (exported for use in other modules)
-index = _client.Index("tower-troops")
+index = _client.Index("clashops")

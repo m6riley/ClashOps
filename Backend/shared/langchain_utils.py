@@ -17,7 +17,7 @@ from shared.pinecone_utils import index
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-large")
 
 
-def chunk_text(text: str, chunk_size: int, chunk_overlap: int) -> list[str]:
+def chunk_text(text: str, chunk_size: int, chunk_overlap: int, separators: list[str]) -> list[str]:
     """
     Chunk text into chunks.
     
@@ -31,7 +31,8 @@ def chunk_text(text: str, chunk_size: int, chunk_overlap: int) -> list[str]:
     """
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size, 
-        chunk_overlap=chunk_overlap)
+        chunk_overlap=chunk_overlap,
+        separators=separators)
     return text_splitter.split_text(text)
 
 

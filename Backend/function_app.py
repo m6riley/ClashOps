@@ -18,6 +18,7 @@ from save_player_deck import save_player_deck_bp
 from get_features import get_features_bp
 from get_decks import get_decks_bp
 from ingest_blob import ingest_blob_bp
+from remove_blob import remove_blob_bp
 
 # Create the main FunctionApp instance
 app = func.FunctionApp()
@@ -40,3 +41,4 @@ app.register_functions(get_categories_bp)
 app.register_functions(get_features_bp)
 app.register_functions(get_decks_bp)
 app.register_functions(ingest_blob_bp)
+app.register_functions(remove_blob_bp)
