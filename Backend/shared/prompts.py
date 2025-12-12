@@ -29,11 +29,11 @@ STRICT RULES (MANDATORY)
    - Pros: "✅ ..."
    - Cons: "❗ ..."
    - Suggestions: "💡 ..."
-3. The roles MUST appear in the exact order listed.
+3. The roles MUST appear in the exact order listed (e.g. Win Conditions, then Offensive Support, then Big Damage Spells, etc.).
 4. Every role must contain:
    - "Score"
    - "Summary"
-   - "Cards" (only cards that actually belong to that role)
+   - "Cards" (The cards in the deck that fit that role and must be included in the summary)
 5. Never place spells in any role except Big Damage Spells and Small Damage Spells.
 6. "Damage spells" must ONLY include spells that can hit towers directly.
 
@@ -41,46 +41,38 @@ STRICT SCORING RUBRIC (USE THIS EXACTLY — NO SUBJECTIVE DRIFT)
 ------------------------------------------------------------
 
 SCORING RULES FOR "Win Conditions" (0–5):
-- +3.0 if deck contains a primary win condition (e.g., Hog, RG, Miner, Graveyard, X-Bow, Giant, etc.)
-- +1.5 for each additional viable win condition (e.g., Miner + Poison synergy, RG + Fisherman).
-- –1.0 if the deck only wins by spell cycle.
+- +4.0 if deck contains a primary win condition (e.g., Hog, RG, Miner, Graveyard, X-Bow, Giant, etc.)
+- +1.0 for an additional secondary win condition (e.g., Skeleton Barrel, Wall Breakers, Battle Ram, etc.).
 - Cap at 5.0.
 
 SCORING RULES FOR "Offensive Support" (0–5):
-- +1.0 for each card that directly enables pushes (e.g., Ice Spirit, Fire Spirit, Knight, Valkyrie, Flying Machine, etc.)
-- +1.0 if support provides air + ground coverage.
-- +1.0 if deck has at least one tank for win condition (e.g., Giant, RG, MK).
-- –1.0 if push units are too fragile or mismatched.
+- +1.0 for each card that directly enables/supports pushes (e.g., Ice Spirit, Fire Spirit, Knight, Valkyrie, Flying Machine, etc.)
+- +1.0 if the card synergizes with the win condition (e.g. Night Witch for Golem, Fisherman for Royal Giant, Princess for Goblin Barrel, ect.)
 - Cap at 5.0.
 
 SCORING RULES FOR "Big Damage Spells" (0–5):
-- +3.0 if the deck includes ANY ≥4 elixir tower-damaging spell (Fireball, Rocket, Lightning).
-- +1.0 if the spell synergizes with the win condition (Fireball for Hog/Graveyard, Rocket for cycle).
-- –1.0 if spell is present but deck has no way to support spell cycle.
+- +4.0 if the deck includes ANY ≥4 elixir tower-damaging spell (Fireball, Rocket, Lightning).
+- +1.0 if the spell synergizes with the win condition (e.g. EQ for Hog, Rocket/Fireball for X-Bow, etc.).
 - Cap at 5.0.
 
 SCORING RULES FOR "Small Damage Spells" (0–5):
-- +2.0 if the deck has a reliable ≤3 elixir tower-damaging spell (Log, Zap, Snowball).
-- +1.0 if the spell provides both utility + damage.
-- –2.0 if the deck lacks any small spell.
+- +4.0 if the deck has a reliable ≤3 elixir tower-damaging spell (Log, Zap, Snowball).
+- +1.0 if the spell provides both utility + damage (e.g. Log for knockback, zap for reset, etc.).
 - Cap at 5.0.
 
 SCORING RULES FOR "Bridge Pressure" (0–5):
 - +1.0 for each unit that applies instant pressure (Bandit, Ghost, Hog, Goblin Barrel, Wall Breakers, Archer Queen at bridge, etc.)
-- +1.0 if deck supports dual-lane pressure.
-- –1.5 if deck has no quick-pressure tools.
+- +1.0 if deck supports dual-lane pressure (Wall Breakers, Royal Recruits, etc.).
 - Cap at 5.0.
 
 SCORING RULES FOR "Pump Responses" (0–5):
 - +3.0 if deck includes a spell or unit that efficiently punishes Elixir Pump (Fireball, Lightning, Miner).
-- +1.0 if deck can apply fast lane pressure after Pump is placed.
-- –3.0 if the deck cannot punish Pump at all.
+- +2.0 if deck can apply fast lane pressure after Pump is placed (e.g. Wall Breakers, Hog Rider, etc.).
 - Cap at 5.0.
 
 SCORING RULES FOR "Chip Damage" (0–5):
-- +2.0 if the deck has a guaranteed chip source (Miner, Goblin Barrel, Spear Goblins, Fire Spirit).
-- +1.0 if the deck has two or more chip tools.
-- –2.0 if no consistent chip exists.
+- +2.0 if the deck has a guaranteed chip source (Miner, Goblin Barrel, Spear Goblins, Spirits).
+- +1.0 for each additional guaranteed chip tool.
 - Cap at 5.0.
 
 FINAL "Offense.Score" CALCULATION (REQUIRED)
@@ -136,11 +128,11 @@ STRICT RULES (MANDATORY)
    - Pros:      "✅ ..."
    - Cons:      "❗ ..."
    - Suggestions:"💡 ..."
-3. The roles MUST appear in the exact order shown.
+3. The roles MUST appear in the exact order shown (e.g. Air Defense, then Crowd Control, then Mini Tank, etc.).
 4. Each role MUST include:
    - "Score"
    - "Summary"
-   - "Cards" (only cards that truly fit that role)
+   - "Cards" (The cards in the deck that fit that role and must be included in the summary)
 5. The output MUST follow the JSON structure exactly with no additional commentary.
 
 ------------------------------------------------------------
@@ -149,62 +141,53 @@ STRICT SCORING RUBRIC
 ------------------------------------------------------------
 
 AIR DEFENSE (0–5)
-- +2.0 for each strong anti-air unit (e.g., Musketeer, Archers, Flying Machine, Minions, AQ)
-- +1.0 if the deck can consistently target air + survive air swarms
-- –1.0 if air defense is fragile or slow
-- –2.0 if the deck cannot reliably answer air win conditions
+- +2.0 for each troop or building that can target air troops (e.g., Musketeer, Archers, Flying Machine, Minions, AQ, etc.)
+- +1.0 if the deck contains a troop or building unit that can target air swarms (e.g. Baby Dragon, Wizard, etc.)
+- –1.0 if all air defense troops are vulnerable to spells (i.e. glass cannons and/or swarms)
 - Cap at 5.0
 
 CROWD CONTROL (0–5)
-- +1.0 for each splash/AoE unit (Valkyrie, Bowler, Baby Dragon, Wizard, Bomb Tower)
-- +1.0 for synergy with spells
-- –2.0 if the deck struggles vs swarm or mass troops
+- +2.0 for each splash/AoE unit (Valkyrie, Bowler, Baby Dragon, Wizard, Bomb Tower, etc.)
+- +1.0 if the deck contains Tornado
 - Cap at 5.0
 
 MINI TANK (0–5)
-- +2.0 if deck has at least one mini tank (Knight, Valkyrie, Ice Golem, Mega Knight)
-- +1.0 if mini tank synergizes well defensively
-- –1.0 for fragile frontline
-- –2.0 if no mini tank exists
+- +4.0 if deck has at least one mini tank (Knight, Valkyrie, Ice Golem, etc.)
+- +1.0 if the mini tanks synergize with the win condition (e.g. Ice Golem for Hog, Knight for Graveyard, etc.)
 - Cap at 5.0
 
 BUILDINGS (0–5)
-- +3.0 if deck contains a defensive building (Cannon, Bomb Tower, Tesla, Inferno Tower)
-- +1.0 if building complements defensive archetype
-- –2.0 if deck lacks buildings in a meta that demands structure support
+- +4.0 if deck contains a defensive building (Cannon, Bomb Tower, Tesla, Inferno Tower)
+- +3.0 if the deck contains a seige building (X-Bow, Mortar)
+- +1.0 if building synergizes with win condition (e.g. Cannon/Tesla for Hog, Tombstone for Lava Hound, etc.)
 - Cap at 5.0
 
 RESET MECHANICS (0–5)
 (Units or spells that stop charges or inferno beams: Zap, Snowball, Electro Spirit, Ewiz, Electro Giant, Lightning.)
 - +2.0 if deck includes any reset tool
-- +1.0 if reset tool is reliable and cycle-friendly
-- –3.0 if deck cannot reset Inferno Tower/Dragon or Sparky
+- +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky (e.g. Zap, Lightning, etc.)
+- +1.0 if deck include more than one reset tool
 - Cap at 5.0
 
 TANK KILLER (0–5)
-- +2.0 for each strong tank killer (Mini Pekka, DPS buildings, Inferno Tower, Inferno Dragon)
-- +1.0 if multiple DPS layers exist
-- –2.0 if the deck struggles vs tanks (Giant, Golem, Lava, MK)
+- +5.0 for a tank killer (Mini Pekka, DPS buildings, Inferno Dragon, etc.)
 - Cap at 5.0
 
 CONTROL STALL (0–5)
 (Ability to slow or delay opponent: Ice Spirit, Tornado, buildings, Bowler, cheap cycle spells.)
-- +2.0 if deck can reliably stall/slow pushes
-- +1.0 for Tornado or strong disruptors
-- –2.0 if deck cannot delay big pushes
+- +1.0 for each kiting tool (e.g. Spirits, Skeletons, Buildings, etc.)
+- +1.0 for each tool that has a slow/stun/knockback effect (e.g. Ice Spirit, E-Spirit, Bowler, Ice Wizard, etc.)
+- +2.0 for Tornado 
 - Cap at 5.0
 
 CYCLE CARDS (0–5)
-- +1.0 per cheap cycle card (≤2 elixir)
-- –2.0 if cycle is slow (≥4.0 average with minimal 1–2 elixir cards)
-- +1.0 if cycle supports defensive flexibility
+- +2.0 per cheap cycle card (≤2 elixir)
 - Cap at 5.0
 
 INVESTMENTS (0–5)
 (Elixir Pump, Tombstone, Furnace, Queen Ability, Goblin Hut — anything that “generates long-term value.”)
-- +3.0 if deck has a safe, consistent long-term investment
-- +1.0 if investment synergizes with defense
-- –2.0 if deck relies on investments b
+- +2.0 for each troop that can be played in the back for passive defense
+- +2.0 for each building (+3.0 for Elixer Collector)
 
 '''
 
@@ -238,11 +221,11 @@ STRICT RULES (MANDATORY)
    - Pros:       "✅ ..."
    - Cons:       "❗ ..."
    - Suggestions:"💡 ..."
-3. Follow the exact order and JSON structure shown above.
+3. Follow the exact order and JSON structure shown above (e.g. Offensive Combos, then Defensive Combos).
 4. Each combo category MUST include:
    - "Score"
    - "Summary"
-   - "Cards" (array of card names that participate in combos)
+   - "Cards" (The cards in the deck that fit that combo and must be included in the summary)
 5. Only list actual combos present in the deck — do NOT invent combos that do not exist.
 6. The final Synergy.Score MUST be computed strictly using the rubric below.
 
@@ -259,7 +242,6 @@ Scoring:
 - +1.5 for each strong, proven offensive combo (up to 2 combos)
 - +0.5 for each secondary supporting interaction (e.g., support troop enabling a push)
 - –1.0 if offensive combos require difficult timing or have low reliability
-- –2.0 if the deck has no consistent offensive combos
 - Cap at 5.0
 
 DEFENSIVE COMBOS (0–5)
@@ -270,7 +252,6 @@ Scoring:
 - +1.5 for each strong, reliable defensive combo (up to 2 combos)
 - +0.5 for each supportive interaction (cycle card or control card that enhances a defensive unit)
 - –1.0 if defensive combos depend on high elixir or risky timing
-- –2.0 if the deck lacks reliable defensive interactions
 - Cap at 5.0
 
 ------------------------------------------------------------
@@ -507,7 +488,7 @@ STRICT OPTIMIZATION RULES
 
 TOWER TROOP RULES
 ------------------------------------------------------------
-1. Only choose tower troops from TOWER TROOP CONTEXT.
+1. Only choose from tower troops mentioned in the context.
 2. Select the tower troop that MOST improves the lowest-scoring matchup category in Versatility.
 3. Reasoning must:
    - compare against ALL other tower troops
@@ -516,7 +497,7 @@ TOWER TROOP RULES
 
 EVOLUTION RULES
 ------------------------------------------------------------
-1. ONLY choose evolutions from EVOLUTION CONTEXT.
+1. ONLY choose evolutions mentioned in the context.
 2. MUST choose exactly two evolutions unless fewer than two exist.
 3. Evolutions MUST:
    - Improve the weakest categories

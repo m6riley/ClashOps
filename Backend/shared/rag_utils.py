@@ -17,10 +17,12 @@ def card_to_namespace(card: str) -> str:
     Returns:
         Namespace string (e.g., "evolved_goblin_barrel")
     """
-    return (
-        "evolution_"
-        + card.lower()
-        .replace(" ", "_")
-        .replace("[", "")
-        .replace("]", "")
-    )
+    if card.replace("[", "").replace("]", "") == "X-Bow":
+        return "x-bow"
+    elif card.replace("[", "").replace("]", "") == "Mini P.E.K.K.A":
+        return "mini_pekka"
+    elif card.replace("[", "").replace("]", "") == "P.E.K.K.A":
+        return "pekka"
+    else:
+        return card.lower().replace(" ", "_").replace("[", "").replace("]", "")
+    

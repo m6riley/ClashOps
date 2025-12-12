@@ -20,6 +20,7 @@ from shared.prompts import (
     versatility_prompt
 )
 from shared.langchain_utils import build_chain
+from shared.rag_utils import card_to_namespace
 
 # Azure Functions Blueprint
 analyze_deck_bp = Blueprint()
@@ -55,6 +56,7 @@ CATEGORY_CONFIG = {
 # Polling configuration
 _DEFAULT_TIMEOUT_SECONDS = 120
 _DEFAULT_POLL_INTERVAL_SECONDS = 1
+_RETRIEVER_TOP_K = 5
 
 
 # ---------------------------------------------------------------------------
@@ -140,12 +142,28 @@ def perform_analysis(deck: str, category_key: str) -> str:
     # Mark as loading
     update_report_field(resolved_rowkey, field, "loading")
 
+    retrievers = []
+    card_namespaces = [
+        card_to_namespace(card.strip())
+        for card in deck.replace("[", "").replace("]", "").split(",")
+    ]
+    for ns in card_namespaces:
+        retrievers.append({
+            "k": _RETRIEVER_TOP_K,
+            "metadata": {
+                "namespace": ns
+            }
+        })
+        
+    logging.info(f"Retrievers: {retrievers}")
+
+
     # Build and run the LangChain model
     chain = build_chain()
     results = chain.invoke({
         "system_instructions": prompt,
         "user_input": deck,
-        "retrievers": []
+        "retrievers": retrievers
     })
 
     logging.info(f"Model response received for {category_key} analysis")

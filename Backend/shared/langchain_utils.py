@@ -10,6 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from shared.pinecone_utils import index
+import logging
 
 
 
@@ -38,7 +39,7 @@ def chunk_text(text: str, chunk_size: int, chunk_overlap: int, separators: list[
 
 def build_chain(
     *,
-    default_namespace: str = "",
+    default_namespace: str = "__default__",
     model: str = "gpt-5"
 ) -> object:
     """
@@ -87,17 +88,16 @@ def build_chain(
         Build context string from multiple vector retrievers.
         
         Supports retrieval from multiple Pinecone namespaces with different
-        configurations. Deduplicates results by page_content.
+        configurations. Groups retrieved text by namespace and formats as:
+        "NamespaceName:\n*text1\n*text2..."
         
         Args:
             inputs: Dictionary containing "user_input" and optional "retrievers"
         
         Returns:
-            Formatted context string, or empty string if no retrieval
+            Formatted context string organized by namespace, or empty string if no retrieval
         """
-        all_docs = []
         user_input = inputs["user_input"]
-
         retriever_configs = inputs.get("retrievers", None)
 
         # Case 1: retrievers omitted entirely → treat as no retrieval
@@ -108,35 +108,69 @@ def build_chain(
         if len(retriever_configs) == 0:
             return ""   # no context
 
-        for cfg in retriever_configs:
-            # namespace override?
-            namespace = cfg.pop("namespace", default_namespace)
+        # Dictionary to store docs grouped by namespace
+        namespace_docs = {}
+        # Dictionary to track seen texts per namespace for deduplication
+        namespace_seen = {}
 
-            # build vectorstore for this namespace
+        for cfg in retriever_configs:
+            # Create a copy of cfg to avoid mutating the original
+            search_kwargs = cfg.copy()
+            
+            # Extract desired namespace filter from metadata.namespace or fall back to namespace field
+            metadata = search_kwargs.pop("metadata", {})
+            filter_namespace = metadata.get("namespace") if isinstance(metadata, dict) else None
+            if filter_namespace is None:
+                filter_namespace = search_kwargs.pop("namespace", default_namespace)
+
+            # Always use "__default__" as the actual Pinecone namespace
+            # Filter by metadata.namespace field instead
+            # Merge with existing filter if present
+            if "filter" not in search_kwargs:
+                search_kwargs["filter"] = {}
+            elif not isinstance(search_kwargs["filter"], dict):
+                # If filter exists but isn't a dict, create a new dict
+                search_kwargs["filter"] = {}
+            
+            # Add metadata filter for namespace field (merge with existing filters)
+            search_kwargs["filter"]["namespace"] = {"$eq": filter_namespace}
+
+            # build vectorstore using "__default__" namespace
             vector_store = PineconeVectorStore(
                 index=index,
                 embedding=embedding_model,
                 text_key="text",
-                namespace=namespace
+                namespace="__default__"
             )
 
             retriever = vector_store.as_retriever(
                 search_type="similarity",
-                search_kwargs=cfg
+                search_kwargs=search_kwargs
             )
 
             docs = retriever.invoke(user_input)
-            all_docs.extend(docs)
+            logging.info(f"Facts for {filter_namespace}: {docs}")
+            
+            # Initialize namespace list and seen set if not exists
+            if filter_namespace not in namespace_docs:
+                namespace_docs[filter_namespace] = []
+                namespace_seen[filter_namespace] = set()
+            
+            # Add docs to namespace group (deduplicate by page_content within namespace)
+            for doc in docs:
+                if doc.page_content not in namespace_seen[filter_namespace]:
+                    namespace_docs[filter_namespace].append(doc.page_content)
+                    namespace_seen[filter_namespace].add(doc.page_content)
 
-        # Deduplicate by page_content
-        seen = set()
-        unique_docs = []
-        for d in all_docs:
-            if d.page_content not in seen:
-                unique_docs.append(d)
-                seen.add(d.page_content)
+        # Format output: "Namespace:\n*text1\n*text2..."
+        context_parts = []
+        for namespace, texts in namespace_docs.items():
+            if texts:  # Only add if there are texts
+                namespace_header = f"{namespace}:"
+                formatted_texts = "\n".join(f"*{text}" for text in texts)
+                context_parts.append(f"{namespace_header}\n{formatted_texts}")
 
-        return _format_docs(unique_docs)
+        return "\n\n".join(context_parts)
 
     # ---- Chain ----
     chain = (

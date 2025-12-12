@@ -29,7 +29,7 @@ _DEFAULT_TIMEOUT_SECONDS = 300
 _DEFAULT_POLL_INTERVAL_SECONDS = 1
 
 # Tower troop types for RAG retrieval
-_TOWER_TROOP_TYPES = [
+_TOWER_TROOP_NAMESPACES = [
     "tower_princess",
     "cannoneer",
     "dagger_duchess",
@@ -38,7 +38,6 @@ _TOWER_TROOP_TYPES = [
 
 # RAG retrieval configuration
 _RETRIEVER_TOP_K = 5
-_TOWER_TROOPS_NAMESPACE = "tower_troops"
 
 
 # ---------------------------------------------------------------------------
@@ -132,23 +131,26 @@ def build_retrievers(deck: str) -> list[dict]:
     retrievers = []
 
     # Add tower troop retrievers
-    for tower in _TOWER_TROOP_TYPES:
+    for ns in _TOWER_TROOP_NAMESPACES:
         retrievers.append({
             "k": _RETRIEVER_TOP_K,
-            "namespace": _TOWER_TROOPS_NAMESPACE,
-            "filter": {"troop": tower}
+            "metadata": {
+                "namespace": ns
+            }
         })
 
     # Add evolution namespace retrievers
     evolution_namespaces = [
-        card_to_namespace(card.strip())
-        for card in deck.split(",")
+        "evolution_" + card_to_namespace(card.strip())
+        for card in deck.replace("[", "").replace("]", "").split(",")
     ]
 
     for ns in evolution_namespaces:
         retrievers.append({
             "k": _RETRIEVER_TOP_K,
-            "namespace": ns
+            "metadata": {
+                "namespace": ns
+            }
         })
 
     return retrievers
