@@ -35,27 +35,6 @@ _decks = _service.get_table_client("decks")
 # Features table client
 _features = _service.get_table_client("features")
 
-
-# UNUSED: This function is not currently used in the codebase
-def get_report(deck: str) -> dict | None:
-    """
-    Get a report entity by deck string (exact match).
-    
-    Args:
-        deck: Deck string to look up
-    
-    Returns:
-        Report entity dictionary, or None if not found
-    
-    Note: This function is currently unused. Use get_report_by_deck()
-          instead for canonical deck matching.
-    """
-    try:
-        return _reports.get_entity(PARTITION_KEY, deck)
-    except Exception:
-        return None
-
-
 def update_report_field(deck: str, field: str, value: str) -> None:
     """
     Update a specific field in a report entity.

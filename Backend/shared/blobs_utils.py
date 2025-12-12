@@ -18,12 +18,13 @@ _CONTAINER_NAME = "clashopscontainer"
 _service = BlobServiceClient.from_connection_string(_CONNECTION_STRING)
 
 # Blob client for the decks.csv file (exported for use in other modules)
-_decks = _service.get_blob_client(
+decks = _service.get_blob_client(
     container=_CONTAINER_NAME,
     blob="decks.csv"
 )
 
-_features = _service.get_blob_client(
+features = _service.get_blob_client(
     container=_CONTAINER_NAME,
     blob="features.csv"
 )
+

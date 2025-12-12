@@ -2,7 +2,7 @@ import logging
 import json
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _playerDecks, PARTITION_KEY
+from shared.table_utils import _playerDecks, PARTITION_KEY
 
 # Azure Functions Blueprint
 get_player_decks_bp = Blueprint()

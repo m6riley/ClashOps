@@ -8,7 +8,31 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from shared.pinecone_utils import index
+
+
+
+
+embedding_model = OpenAIEmbeddings(model="text-embedding-3-large")
+
+
+def chunk_text(text: str, chunk_size: int, chunk_overlap: int) -> list[str]:
+    """
+    Chunk text into chunks.
+    
+    Args:
+        text: The text to chunk
+        chunk_size: The size of each chunk
+        chunk_overlap: The overlap between chunks
+    
+    Returns:
+        A list of chunks
+    """
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size, 
+        chunk_overlap=chunk_overlap)
+    return text_splitter.split_text(text)
 
 
 def build_chain(
@@ -36,9 +60,6 @@ def build_chain(
     """
     # ---- LLM ----
     llm = ChatOpenAI(model=model, temperature=0)
-
-    # ---- Embeddings for query embedding ----
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
     # ---- Prompt Template ----
     template = """
@@ -93,7 +114,7 @@ def build_chain(
             # build vectorstore for this namespace
             vector_store = PineconeVectorStore(
                 index=index,
-                embedding=embeddings,
+                embedding=embedding_model,
                 text_key="text",
                 namespace=namespace
             )

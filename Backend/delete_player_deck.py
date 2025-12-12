@@ -1,7 +1,7 @@
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _playerDecks, PARTITION_KEY
+from shared.table_utils import _playerDecks, PARTITION_KEY
 
 # Azure Functions Blueprint
 delete_player_deck_bp = Blueprint()

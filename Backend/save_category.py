@@ -1,7 +1,7 @@
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.tables import _categories, PARTITION_KEY
+from shared.table_utils import _categories, PARTITION_KEY
 import uuid
 
 # Azure Functions Blueprint

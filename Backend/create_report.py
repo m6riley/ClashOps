@@ -9,7 +9,7 @@ import logging
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.tables import _reports, PARTITION_KEY
+from shared.table_utils import _reports, PARTITION_KEY
 
 # Azure Functions Blueprint
 create_report_bp = Blueprint()

@@ -7,7 +7,7 @@ import csv
 import io
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.blobs import _decks
+from shared.blobs_utils import decks
 
 get_decks_bp = Blueprint()
 
@@ -19,7 +19,7 @@ def get_decks(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Get decks request received")
     try:
         # Download CSV bytes from blob
-        blob_bytes = _decks.download_blob().readall()
+        blob_bytes = decks.download_blob().readall()
 
         # Convert to text
         csv_text = blob_bytes.decode("utf-8")

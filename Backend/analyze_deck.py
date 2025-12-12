@@ -12,7 +12,7 @@ import azure.functions as func
 from azure.functions import Blueprint
 from typing import Optional
 
-from shared.tables import get_report_by_deck, update_report_field
+from shared.table_utils import get_report_by_deck, update_report_field
 from shared.prompts import (
     offense_prompt,
     defense_prompt,
@@ -83,7 +83,7 @@ async def wait_for_analysis(
         The completed analysis result as a string, or None if timeout
     """
     # Local import to avoid circular dependency
-    from shared.tables import _reports, PARTITION_KEY
+    from shared.table_utils import _reports, PARTITION_KEY
 
     for _ in range(timeout):
         await asyncio.sleep(interval)

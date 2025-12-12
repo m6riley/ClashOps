@@ -7,7 +7,7 @@ import csv
 import io
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.blobs import _features
+from shared.blobs_utils import features
 
 # Azure Functions Blueprint
 get_features_bp = Blueprint()
@@ -21,7 +21,7 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         # Download CSV bytes from blob
-        blob_bytes = _features.download_blob().readall()
+        blob_bytes = features.download_blob().readall()
 
         # Convert to text
         csv_text = blob_bytes.decode("utf-8")

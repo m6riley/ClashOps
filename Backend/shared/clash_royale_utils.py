@@ -12,7 +12,7 @@ import time
 from urllib.parse import quote
 from datetime import datetime
 from io import StringIO
-from .blobs import _decks
+from .blobs_utils import decks
 
 # Clash Royale API key from environment variable
 _CLASH_ROYALE_KEY = os.getenv("CLASH_ROYALE_KEY")
@@ -169,5 +169,5 @@ def upload_decks(sorted_decks: list[dict]) -> None:
             deck["last_entry"].isoformat()  # convert datetime to string
         ])
 
-    _decks.upload_blob(csv_buffer.getvalue(), overwrite=True)
+    decks.upload_blob(csv_buffer.getvalue(), overwrite=True)
     print("Uploaded decks.csv to blob storage")
