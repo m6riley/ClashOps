@@ -39,13 +39,14 @@ function App() {
   const [deckCategories, setDeckCategories] = useState({}) // Map deck IDs to category IDs: { deckId: categoryId }
   const [categoryDialog, setCategoryDialog] = useState(null) // Track category dialog: { mode: 'create' | 'edit', category: category | null }
   const [expandedCategory, setExpandedCategory] = useState(null) // Track which category is expanded (similar to expandedFeature)
-  const [isLoggedIn, setIsLoggedIn] = useState(true) // Track if user is logged in (auto-logged in for dev)
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // Track if user is logged in
   const [showLoginPrompt, setShowLoginPrompt] = useState(false) // Show login prompt dialog
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false) // Show subscription prompt dialog
   const [showPaymentForm, setShowPaymentForm] = useState(false) // Show payment form dialog
   const [showAnalyzeLoading, setShowAnalyzeLoading] = useState(false) // Show analyze loading screen
   const [showAnalysisView, setShowAnalysisView] = useState(false) // Show analysis view
   const [analyzingDeck, setAnalyzingDeck] = useState(null) // Deck being analyzed
+  const [analysisResults, setAnalysisResults] = useState(null) // Analysis results from API
   const [isSubscribed, setIsSubscribed] = useState(true) // Track subscription status (auto-subscribed for dev)
 
   // Handle analyze deck click
@@ -61,7 +62,8 @@ function App() {
   }
 
   // Handle analysis loading complete
-  const handleAnalysisComplete = () => {
+  const handleAnalysisComplete = (results) => {
+    setAnalysisResults(results)
     setShowAnalyzeLoading(false)
     setShowAnalysisView(true)
   }
@@ -680,8 +682,9 @@ function App() {
       )}
 
       {/* Analyze Loading Dialog */}
-      {showAnalyzeLoading && (
+      {showAnalyzeLoading && analyzingDeck && (
         <AnalyzeLoading
+          deck={analyzingDeck}
           onClose={() => {
             setShowAnalyzeLoading(false)
             setAnalyzingDeck(null)
@@ -746,9 +749,11 @@ function App() {
           <AnalysisView
             deck={analyzingDeck}
             allCards={cards}
+            analysisResults={analysisResults}
             onClose={() => {
               setShowAnalysisView(false)
               setAnalyzingDeck(null)
+              setAnalysisResults(null)
             }}
           />
         ) : (
@@ -1188,6 +1193,7 @@ function App() {
             isSubscribed={isSubscribed}
             setIsSubscribed={setIsSubscribed}
             onSubscribe={() => setShowPaymentForm(true)}
+            onNotification={setNotification}
           />
         )}
           </>

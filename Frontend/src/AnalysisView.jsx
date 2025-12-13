@@ -5,8 +5,15 @@ import ElixirIcon from './assets/Elixir.svg'
 import CycleIcon from './assets/Cycle.svg'
 import OptimizeLoading from './OptimizeLoading'
 
-function AnalysisView({ deck, onClose, allCards }) {
+function AnalysisView({ deck, onClose, allCards, analysisResults }) {
   const [expandedCategories, setExpandedCategories] = useState({
+    offense: false,
+    defense: false,
+    synergy: false,
+    versatility: false
+  })
+  
+  const [categoriesExpandedOnce, setCategoriesExpandedOnce] = useState({
     offense: false,
     defense: false,
     synergy: false,
@@ -15,6 +22,8 @@ function AnalysisView({ deck, onClose, allCards }) {
   
   const [optimizationsLoaded, setOptimizationsLoaded] = useState(false)
   const [showOptimizeLoading, setShowOptimizeLoading] = useState(false)
+  const [optimizationResults, setOptimizationResults] = useState(null)
+  const [optimizationApiComplete, setOptimizationApiComplete] = useState(false)
   
   const [animatedScores, setAnimatedScores] = useState({
     offense: 0,
@@ -30,39 +39,211 @@ function AnalysisView({ deck, onClose, allCards }) {
     versatility: ''
   })
   
+  const [typedSubcategorySummaries, setTypedSubcategorySummaries] = useState({})
+  
   const [typedOptimizations, setTypedOptimizations] = useState({
     cardSwaps: '',
     towerTroop: '',
     evolutions: ''
   })
   
-  // Define the summary texts
-  const summaryTexts = {
-    offense: '✅ Fast 2.6 cycle enables constant Hog Rider pressure supported by cheap utilities.\n❗ One-dimensional offense; can stall out vs multiple buildings and Tornado.\n💡 Outcycle building counters and convert spell value into safe tower damage in double elixir.',
-    defense: '✅ Strong defensive core with multiple building options and area control spells.\n❗ Vulnerable to heavy beatdown pushes and lacks reliable air defense.\n💡 Use buildings to distract and cycle back to defensive cards quickly.',
-    synergy: '✅ Cards work well together with complementary roles and elixir efficiency.\n❗ Some cards may conflict in certain matchups or situations.\n💡 Maximize card interactions by timing plays and managing elixir carefully.',
-    versatility: '✅ Deck can adapt to various playstyles and meta matchups effectively.\n❗ Limited flexibility in certain game modes or against specific archetypes.\n💡 Adjust playstyle based on opponent\'s deck and adapt strategy throughout the match.'
-  }
+  // Extract summary texts from analysis results
+  const summaryTexts = useMemo(() => {
+    const getSummary = (category) => {
+      if (!analysisResults || !analysisResults[category]) {
+        // Fallback to placeholder
+        const placeholders = {
+          offense: '✅ Fast 2.6 cycle enables constant Hog Rider pressure supported by cheap utilities.\n❗ One-dimensional offense; can stall out vs multiple buildings and Tornado.\n💡 Outcycle building counters and convert spell value into safe tower damage in double elixir.',
+          defense: '✅ Strong defensive core with multiple building options and area control spells.\n❗ Vulnerable to heavy beatdown pushes and lacks reliable air defense.\n💡 Use buildings to distract and cycle back to defensive cards quickly.',
+          synergy: '✅ Cards work well together with complementary roles and elixir efficiency.\n❗ Some cards may conflict in certain matchups or situations.\n💡 Maximize card interactions by timing plays and managing elixir carefully.',
+          versatility: '✅ Deck can adapt to various playstyles and meta matchups effectively.\n❗ Limited flexibility in certain game modes or against specific archetypes.\n💡 Adjust playstyle based on opponent\'s deck and adapt strategy throughout the match.'
+        }
+        return placeholders[category] || ''
+      }
+      const categoryData = analysisResults[category]
+      // All categories use capitalized key: "Offense", "Defense", "Synergy", "Versatility"
+      const categoryKey = category.charAt(0).toUpperCase() + category.slice(1)
+      if (categoryData[categoryKey] && categoryData[categoryKey].Summary) {
+        return categoryData[categoryKey].Summary
+      }
+      return ''
+    }
+    
+    return {
+      offense: getSummary('offense'),
+      defense: getSummary('defense'),
+      synergy: getSummary('synergy'),
+      versatility: getSummary('versatility')
+    }
+  }, [analysisResults])
   
-  // Define the optimization texts
-  const optimizationTexts = {
-    cardSwaps: '💡 Consider replacing [Card A] with [Card B] for better synergy with your win condition.\n⚡ This swap improves your cycle speed by 0.3 elixir while maintaining defensive capabilities.',
-    towerTroop: '🏰 Recommended: [Tower Troop Name]\n📊 This tower troop complements your deck\'s playstyle and provides strong defensive value against common meta threats.',
-    evolutions: '✨ Recommended Evolution: [Evolution Name]\n🎯 This evolution enhances your deck\'s offensive potential and works well with your current card combinations.'
+  // Format deck as comma-separated string
+  const formatDeckString = (deck) => {
+    if (!deck || !deck.cardNames || deck.cardNames.length === 0) {
+      return ''
+    }
+    // Format as "[Card1, Card2, Card3, ...]"
+    return `[${deck.cardNames.join(', ')}]`
   }
+
+  // Extract optimization texts from API results or use placeholders
+  const optimizationTexts = useMemo(() => {
+    if (!optimizationResults || !optimizationResults.Optimize) {
+      return {
+        cardSwaps: '💡 Consider replacing [Card A] with [Card B] for better synergy with your win condition.\n⚡ This swap improves your cycle speed by 0.3 elixir while maintaining defensive capabilities.',
+        towerTroop: '🏰 Recommended: [Tower Troop Name]\n📊 This tower troop complements your deck\'s playstyle and provides strong defensive value against common meta threats.',
+        evolutions: '✨ Recommended Evolution: [Evolution Name]\n🎯 This evolution enhances your deck\'s offensive potential and works well with your current card combinations.'
+      }
+    }
+
+    const optimize = optimizationResults.Optimize
+    let cardSwapsText = ''
+    let towerTroopText = ''
+    let evolutionsText = ''
+
+    // Format Card Swaps (don't include list in text, we'll show infographic separately)
+    if (optimize['Recommended Swaps']) {
+      const swaps = optimize['Recommended Swaps']
+      cardSwapsText = swaps['Improvement Summary'] || ''
+    }
+
+    // Format Tower Troop (don't include name in text, we'll show card separately)
+    if (optimize['Recommended Tower Troop']) {
+      const towerTroop = optimize['Recommended Tower Troop']
+      towerTroopText = towerTroop.Reasoning || ''
+    }
+
+    // Format Evolutions (don't include list in text, we'll show cards separately)
+    if (optimize['Recommended Evolutions']) {
+      const evolutions = optimize['Recommended Evolutions']
+      evolutionsText = evolutions.Reasoning || ''
+    }
+
+    return {
+      cardSwaps: cardSwapsText || 'No card swaps recommended at this time.',
+      towerTroop: towerTroopText || 'No tower troop recommendation available.',
+      evolutions: evolutionsText || 'No evolution recommendations available.'
+    }
+  }, [optimizationResults])
   
   const toggleCategory = (category) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [category]: !prev[category]
-    }))
+    setExpandedCategories(prev => {
+      const newValue = !prev[category]
+      // Mark as expanded once if this is the first time opening
+      if (newValue && !categoriesExpandedOnce[category]) {
+        setCategoriesExpandedOnce(prevOnce => ({
+          ...prevOnce,
+          [category]: true
+        }))
+      }
+      return {
+        ...prev,
+        [category]: newValue
+      }
+    })
+  }
+
+  // Extract subcategories from analysis results
+  const getSubcategories = (category) => {
+    if (!analysisResults || !analysisResults[category]) return null
+    const categoryData = analysisResults[category]
+    const categoryKey = category.charAt(0).toUpperCase() + category.slice(1)
+    
+    if (category === 'versatility') {
+      // Versatility has Archetypes
+      return categoryData[categoryKey]?.Archetypes || null
+    } else if (category === 'synergy') {
+      // Synergy has Combos
+      return categoryData[categoryKey]?.Combos || null
+    } else {
+      // Offense and Defense have Roles
+      return categoryData[categoryKey]?.Roles || null
+    }
   }
   
-  const handleLoadOptimizations = () => {
+  const handleLoadOptimizations = async () => {
+    if (!analysisResults || !deck) return
+
     setShowOptimizeLoading(true)
+    setOptimizationApiComplete(false)
+
+    try {
+      const deckString = formatDeckString(deck)
+      if (!deckString) {
+        throw new Error('Invalid deck format')
+      }
+
+      // Extract scores and summaries from analysis results
+      const getCategoryData = (category) => {
+        if (!analysisResults || !analysisResults[category]) return { score: 0, summary: '' }
+        const categoryData = analysisResults[category]
+        const categoryKey = category.charAt(0).toUpperCase() + category.slice(1)
+        const score = categoryData[categoryKey]?.Score ? parseFloat(categoryData[categoryKey].Score) : 0
+        const summary = categoryData[categoryKey]?.Summary || ''
+        return { score, summary }
+      }
+
+      const offenseData = getCategoryData('offense')
+      const defenseData = getCategoryData('defense')
+      const synergyData = getCategoryData('synergy')
+      const versatilityData = getCategoryData('versatility')
+
+      const functionUrl = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/optimize_deck?code=xjYyGBJ553iiu6HPGz679RyIsVmt42ViHbZbYfOnpLiLAzFuofpdcg=='
+
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deckToAnalyze: deckString,
+          offenseScore: offenseData.score,
+          offenseSummary: offenseData.summary,
+          defenseScore: defenseData.score,
+          defenseSummary: defenseData.summary,
+          synergyScore: synergyData.score,
+          synergySummary: synergyData.summary,
+          versatilityScore: versatilityData.score,
+          versatilitySummary: versatilityData.summary
+        })
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Failed to optimize deck: ${response.status} ${errorText}`)
+      }
+
+      const data = await response.json()
+      
+      // Parse the content JSON string
+      let parsedContent
+      try {
+        parsedContent = typeof data.content === 'string' ? JSON.parse(data.content) : data.content
+      } catch (parseError) {
+        console.error('Error parsing optimization content:', parseError)
+        parsedContent = data.content
+      }
+
+      setOptimizationResults(parsedContent)
+      // Mark API call as complete - OptimizeLoading will wait for this before finishing
+      setOptimizationApiComplete(true)
+    } catch (error) {
+      console.error('Error optimizing deck:', error)
+      // Still set results with error message
+      setOptimizationResults({
+        Optimize: {
+          'Recommended Swaps': { 'Improvement Summary': `Error loading optimizations: ${error.message}` },
+          'Recommended Tower Troop': { 'Reasoning': 'Unable to load tower troop recommendation.' },
+          'Recommended Evolutions': { 'Reasoning': 'Unable to load evolution recommendations.' }
+        }
+      })
+      // Mark API call as complete even on error
+      setOptimizationApiComplete(true)
+    }
   }
   
   const handleOptimizeComplete = () => {
+    // Called when OptimizeLoading animation completes (after API call is done)
     setShowOptimizeLoading(false)
     setOptimizationsLoaded(true)
   }
@@ -102,13 +283,26 @@ function AnalysisView({ deck, onClose, allCards }) {
     return getCheapestFourCards(deck.cards, allCards)
   }, [deck.cards, allCards])
   
-  // Generate random scores for demonstration (0-5 scale, with decimals for + and - variants)
-  const randomScores = useMemo(() => ({
-    offense: Math.random() * 5, // 0-5 with decimals
-    defense: Math.random() * 5, // 0-5 with decimals
-    synergy: Math.random() * 5, // 0-5 with decimals
-    versatility: Math.random() * 5 // 0-5 with decimals
-  }), [])
+  // Extract scores from analysis results (0-5 scale)
+  const randomScores = useMemo(() => {
+    const getScore = (category) => {
+      if (!analysisResults || !analysisResults[category]) return Math.random() * 5
+      const categoryData = analysisResults[category]
+      // All categories use capitalized key: "Offense", "Defense", "Synergy", "Versatility"
+      const categoryKey = category.charAt(0).toUpperCase() + category.slice(1)
+      if (categoryData[categoryKey] && categoryData[categoryKey].Score !== undefined) {
+        return parseFloat(categoryData[categoryKey].Score) || 0
+      }
+      return Math.random() * 5 // Fallback to random if data not available
+    }
+    
+    return {
+      offense: getScore('offense'),
+      defense: getScore('defense'),
+      synergy: getScore('synergy'),
+      versatility: getScore('versatility')
+    }
+  }, [analysisResults])
   
   // Scroll to top when component mounts
   useEffect(() => {
@@ -154,6 +348,84 @@ function AnalysisView({ deck, onClose, allCards }) {
       if (timeoutId) clearTimeout(timeoutId)
     }
   }, [])
+
+  // Type out subcategory summaries with typing animation when category is first expanded
+  useEffect(() => {
+    if (!analysisResults) return
+
+    const typingSpeed = 30 // milliseconds per character
+    const categories = ['offense', 'defense', 'synergy', 'versatility']
+    
+    // Check if any category was just expanded for the first time
+    const categoriesToType = categories.filter(category => {
+      if (!categoriesExpandedOnce[category]) return false
+      // Check if any subcategory for this category hasn't been typed yet
+      const subcategories = getSubcategories(category)
+      if (!subcategories) return false
+      return Object.keys(subcategories).some(subcategoryName => {
+        const key = `${category}-${subcategoryName}`
+        const currentText = typedSubcategorySummaries[key] || ''
+        const fullText = subcategories[subcategoryName].Summary || subcategories[subcategoryName].Description || ''
+        return currentText.length < fullText.length
+      })
+    })
+    
+    if (categoriesToType.length === 0) return
+
+    // Collect subcategories for categories that were just expanded
+    const allSubcategories = {}
+    const charIndices = {}
+    
+    categoriesToType.forEach(category => {
+      const subcategories = getSubcategories(category)
+      if (subcategories) {
+        Object.entries(subcategories).forEach(([subcategoryName, subcategoryData]) => {
+          const key = `${category}-${subcategoryName}`
+          const summaryText = subcategoryData.Summary || subcategoryData.Description || ''
+          if (summaryText) {
+            const currentText = typedSubcategorySummaries[key] || ''
+            // Only add if not fully typed yet
+            if (currentText.length < summaryText.length) {
+              allSubcategories[key] = summaryText
+              charIndices[key] = currentText.length // Start from where we left off
+            }
+          }
+        })
+      }
+    })
+
+    // If no new subcategories to type, return early
+    if (Object.keys(allSubcategories).length === 0) return
+
+    let timeoutId
+    
+    const typeNextChars = () => {
+      let allDone = true
+      
+      Object.keys(allSubcategories).forEach(key => {
+        const fullText = allSubcategories[key]
+        if (charIndices[key] < fullText.length) {
+          allDone = false
+          setTypedSubcategorySummaries(prev => ({
+            ...prev,
+            [key]: fullText.substring(0, charIndices[key] + 1)
+          }))
+          charIndices[key]++
+        }
+      })
+      
+      if (!allDone) {
+        timeoutId = setTimeout(typeNextChars, typingSpeed)
+      }
+    }
+    
+    // Start typing immediately when category is expanded
+    timeoutId = setTimeout(typeNextChars, 100)
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [categoriesExpandedOnce, analysisResults, typedSubcategorySummaries])
   
   // Type out optimizations with typing animation (in parallel) when optimizations are loaded
   useEffect(() => {
@@ -299,15 +571,17 @@ function AnalysisView({ deck, onClose, allCards }) {
         <OptimizeLoading
           onClose={() => {
             setShowOptimizeLoading(false)
+            setOptimizationsLoaded(false)
           }}
           onComplete={handleOptimizeComplete}
+          apiComplete={optimizationApiComplete}
         />
       )}
       <div className="analysis-view">
       <div className="analysis-header-section">
         <div className="page-title-container">
           <div className="title-section">
-            <h1 className="page-title">Deck Analysis</h1>
+            <h1 className="page-title">Deck Report Card</h1>
             <div className="analysis-grid">
               <div className="analysis-grid-item">
                 <div className="analysis-deck-cards">
@@ -395,11 +669,11 @@ function AnalysisView({ deck, onClose, allCards }) {
             <div className="analysis-grid-item">
               <div className="analysis-score-stats">
                 <div className="analysis-score-item">
-                  <span className="analysis-score-label analysis-score-label-overall">Overall Score <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(overallScoreToLetterGrade(overallScore))}`}>{overallScoreToLetterGrade(overallScore)}</span></span>
+                  <span className="analysis-score-label analysis-score-label-overall">🏆 Overall Score <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(overallScoreToLetterGrade(overallScore))}`}>{overallScoreToLetterGrade(overallScore)}</span></span>
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></span>
+                    <span className="analysis-score-label">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.offense)}%` }}></div>
                     </div>
@@ -407,7 +681,7 @@ function AnalysisView({ deck, onClose, allCards }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></span>
+                    <span className="analysis-score-label">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -420,7 +694,7 @@ function AnalysisView({ deck, onClose, allCards }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></span>
+                    <span className="analysis-score-label">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -433,7 +707,7 @@ function AnalysisView({ deck, onClose, allCards }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></span>
+                    <span className="analysis-score-label">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -449,7 +723,7 @@ function AnalysisView({ deck, onClose, allCards }) {
           </div>
           <div className="analysis-categories-grid">
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></h3>
+              <h3 className="analysis-grid-item-title">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></h3>
               <div className="analysis-category-summary">
                 {typedSummaries.offense}
                 {typedSummaries.offense.length < summaryTexts.offense.length && <span className="typing-cursor">|</span>}
@@ -468,14 +742,57 @@ function AnalysisView({ deck, onClose, allCards }) {
                   </svg>
                 )}
               </button>
-              {expandedCategories.offense && (
-                <div className="analysis-category-subcategories">
-                  {/* Subcategories will go here */}
-                </div>
-              )}
+              {expandedCategories.offense && (() => {
+                const roles = getSubcategories('offense')
+                if (!roles) return null
+                return (
+                  <div className="analysis-category-subcategories">
+                    {Object.entries(roles).map(([roleName, roleData]) => {
+                      const score = roleData.Score !== undefined ? parseFloat(roleData.Score) : null
+                      const letterGrade = score !== null ? scoreToLetterGrade(score) : null
+                      return (
+                      <div key={roleName} className="analysis-subcategory-item">
+                        <h4 className="analysis-subcategory-title">
+                          {roleName}
+                          {letterGrade && (
+                            <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(letterGrade)}`}> {letterGrade}</span>
+                          )}
+                        </h4>
+                        {roleData.Cards && roleData.Cards.length > 0 && (
+                          <div className="analysis-subcategory-cards">
+                            {roleData.Cards.map((cardName, index) => (
+                              <img
+                                key={index}
+                                src={getCardImageUrl(cardName)}
+                                alt={cardName}
+                                className="analysis-subcategory-card-image"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        {roleData.Summary && (() => {
+                          const key = `offense-${roleName}`
+                          const typedText = typedSubcategorySummaries[key] || ''
+                          const fullText = roleData.Summary
+                          return (
+                            <div className="analysis-subcategory-summary">
+                              {typedText}
+                              {typedText.length < fullText.length && <span className="typing-cursor">|</span>}
+                            </div>
+                          )
+                        })()}
+                      </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></h3>
+              <h3 className="analysis-grid-item-title">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></h3>
               <div className="analysis-category-summary">
                 {typedSummaries.defense}
                 {typedSummaries.defense.length < summaryTexts.defense.length && <span className="typing-cursor">|</span>}
@@ -494,14 +811,57 @@ function AnalysisView({ deck, onClose, allCards }) {
                   </svg>
                 )}
               </button>
-              {expandedCategories.defense && (
-                <div className="analysis-category-subcategories">
-                  {/* Subcategories will go here */}
-                </div>
-              )}
+              {expandedCategories.defense && (() => {
+                const roles = getSubcategories('defense')
+                if (!roles) return null
+                return (
+                  <div className="analysis-category-subcategories">
+                    {Object.entries(roles).map(([roleName, roleData]) => {
+                      const score = roleData.Score !== undefined ? parseFloat(roleData.Score) : null
+                      const letterGrade = score !== null ? scoreToLetterGrade(score) : null
+                      return (
+                      <div key={roleName} className="analysis-subcategory-item">
+                        <h4 className="analysis-subcategory-title">
+                          {roleName}
+                          {letterGrade && (
+                            <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(letterGrade)}`}> {letterGrade}</span>
+                          )}
+                        </h4>
+                        {roleData.Cards && roleData.Cards.length > 0 && (
+                          <div className="analysis-subcategory-cards">
+                            {roleData.Cards.map((cardName, index) => (
+                              <img
+                                key={index}
+                                src={getCardImageUrl(cardName)}
+                                alt={cardName}
+                                className="analysis-subcategory-card-image"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        {roleData.Summary && (() => {
+                          const key = `defense-${roleName}`
+                          const typedText = typedSubcategorySummaries[key] || ''
+                          const fullText = roleData.Summary
+                          return (
+                            <div className="analysis-subcategory-summary">
+                              {typedText}
+                              {typedText.length < fullText.length && <span className="typing-cursor">|</span>}
+                            </div>
+                          )
+                        })()}
+                      </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></h3>
+              <h3 className="analysis-grid-item-title">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></h3>
               <div className="analysis-category-summary">
                 {typedSummaries.synergy}
                 {typedSummaries.synergy.length < summaryTexts.synergy.length && <span className="typing-cursor">|</span>}
@@ -520,14 +880,57 @@ function AnalysisView({ deck, onClose, allCards }) {
                   </svg>
                 )}
               </button>
-              {expandedCategories.synergy && (
-                <div className="analysis-category-subcategories">
-                  {/* Subcategories will go here */}
-                </div>
-              )}
+              {expandedCategories.synergy && (() => {
+                const combos = getSubcategories('synergy')
+                if (!combos) return null
+                return (
+                  <div className="analysis-category-subcategories">
+                    {Object.entries(combos).map(([comboName, comboData]) => {
+                      const score = comboData.Score !== undefined ? parseFloat(comboData.Score) : null
+                      const letterGrade = score !== null ? scoreToLetterGrade(score) : null
+                      return (
+                      <div key={comboName} className="analysis-subcategory-item">
+                        <h4 className="analysis-subcategory-title">
+                          {comboName}
+                          {letterGrade && (
+                            <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(letterGrade)}`}> {letterGrade}</span>
+                          )}
+                        </h4>
+                        {comboData.Cards && comboData.Cards.length > 0 && (
+                          <div className="analysis-subcategory-cards">
+                            {comboData.Cards.map((cardName, index) => (
+                              <img
+                                key={index}
+                                src={getCardImageUrl(cardName)}
+                                alt={cardName}
+                                className="analysis-subcategory-card-image"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        {comboData.Summary && (() => {
+                          const key = `synergy-${comboName}`
+                          const typedText = typedSubcategorySummaries[key] || ''
+                          const fullText = comboData.Summary
+                          return (
+                            <div className="analysis-subcategory-summary">
+                              {typedText}
+                              {typedText.length < fullText.length && <span className="typing-cursor">|</span>}
+                            </div>
+                          )
+                        })()}
+                      </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></h3>
+              <h3 className="analysis-grid-item-title">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></h3>
               <div className="analysis-category-summary">
                 {typedSummaries.versatility}
                 {typedSummaries.versatility.length < summaryTexts.versatility.length && <span className="typing-cursor">|</span>}
@@ -546,15 +949,43 @@ function AnalysisView({ deck, onClose, allCards }) {
                   </svg>
                 )}
               </button>
-              {expandedCategories.versatility && (
-                <div className="analysis-category-subcategories">
-                  {/* Subcategories will go here */}
-                </div>
-              )}
+              {expandedCategories.versatility && (() => {
+                const archetypes = getSubcategories('versatility')
+                if (!archetypes) return null
+                return (
+                  <div className="analysis-category-subcategories">
+                    {Object.entries(archetypes).map(([archetypeName, archetypeData]) => {
+                      const score = archetypeData.Score !== undefined ? parseFloat(archetypeData.Score) : null
+                      const letterGrade = score !== null ? scoreToLetterGrade(score) : null
+                      return (
+                      <div key={archetypeName} className="analysis-subcategory-item">
+                        <h4 className="analysis-subcategory-title">
+                          {archetypeName}
+                          {letterGrade && (
+                            <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(letterGrade)}`}> {letterGrade}</span>
+                          )}
+                        </h4>
+                        {archetypeData.Description && (() => {
+                          const key = `versatility-${archetypeName}`
+                          const typedText = typedSubcategorySummaries[key] || ''
+                          const fullText = archetypeData.Description
+                          return (
+                            <div className="analysis-subcategory-summary">
+                              {typedText}
+                              {typedText.length < fullText.length && <span className="typing-cursor">|</span>}
+                            </div>
+                          )
+                        })()}
+                      </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
             </div>
           </div>
           <div className="analysis-grid-item analysis-optimizations-grid-item">
-            <h3 className="analysis-grid-item-title">Optimizations</h3>
+            <h3 className="analysis-grid-item-title">⚡ Optimizations</h3>
             {!optimizationsLoaded && (
               <>
                 <div className="analysis-category-summary">
@@ -574,21 +1005,180 @@ function AnalysisView({ deck, onClose, allCards }) {
             {optimizationsLoaded && (
               <div className="analysis-optimizations-subsections">
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">Recommended Card Swaps</h4>
+                  <h4 className="analysis-optimization-subsection-title">🔄 Recommended Card Swaps</h4>
+                  {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Swaps'] && optimizationResults.Optimize['Recommended Swaps'].Swaps && optimizationResults.Optimize['Recommended Swaps'].Swaps.length > 0 && (
+                    <div className="analysis-card-swaps-infographic">
+                      <div className="analysis-card-swap-row">
+                        <div className="analysis-card-swap-row-label analysis-card-swap-label-out">- Out</div>
+                        <div className="analysis-card-swap-cards">
+                          {optimizationResults.Optimize['Recommended Swaps'].Swaps.map((swap, index) => (
+                            <div key={index} className="analysis-card-swap-card-wrapper">
+                              <img
+                                src={getCardImageUrl(swap['Replaced Card'])}
+                                alt={swap['Replaced Card']}
+                                className="analysis-card-swap-image"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="analysis-card-swap-arrow-large">↓</div>
+                      <div className="analysis-card-swap-row">
+                        <div className="analysis-card-swap-row-label analysis-card-swap-label-in">+ In</div>
+                        <div className="analysis-card-swap-cards">
+                          {optimizationResults.Optimize['Recommended Swaps'].Swaps.map((swap, index) => (
+                            <div key={index} className="analysis-card-swap-card-wrapper">
+                              <img
+                                src={getCardImageUrl(swap['New Card'])}
+                                alt={swap['New Card']}
+                                className="analysis-card-swap-image"
+                                onError={(e) => {
+                                  e.target.style.display = 'none'
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Swaps'] && optimizationResults.Optimize['Recommended Swaps'].Swaps && optimizationResults.Optimize['Recommended Swaps'].Swaps.length > 0 && (() => {
+                    // Get original values
+                    const originalElixir = deck.elixirCost || 0
+                    const originalCycle = deck.cycle || 0
+                    
+                    // Calculate new deck after swaps
+                    const currentCards = [...(deck.cardNames || [])]
+                    const swaps = optimizationResults.Optimize['Recommended Swaps'].Swaps
+                    const newCards = currentCards.map(card => {
+                      const swap = swaps.find(s => s['Replaced Card'] === card)
+                      return swap ? swap['New Card'] : card
+                    })
+                    
+                    // Build card elixir map from allCards
+                    const cardElixirMap = {}
+                    if (allCards && allCards.length > 0) {
+                      allCards.forEach(card => {
+                        const cardName = card.card_name?.trim()
+                        const elixirCost = parseFloat(card.elixer_cost) || 0
+                        if (cardName) {
+                          cardElixirMap[cardName] = elixirCost
+                        }
+                      })
+                    }
+                    
+                    // Calculate average elixir cost
+                    const costs = newCards
+                      .map(name => cardElixirMap[name] || 0)
+                      .filter(cost => cost > 0)
+                    const averageElixir = costs.length > 0 
+                      ? Math.round((costs.reduce((acc, cost) => acc + cost, 0) / costs.length) * 10) / 10
+                      : 0
+                    
+                    // Calculate four-card cycle (sum of 4 cheapest cards)
+                    const cycleCosts = newCards
+                      .map(name => cardElixirMap[name] || 0)
+                      .filter(cost => cost > 0)
+                      .sort((a, b) => a - b)
+                      .slice(0, 4)
+                    const fourCardCycle = cycleCosts.length > 0
+                      ? Math.round(cycleCosts.reduce((acc, cost) => acc + cost, 0) * 10) / 10
+                      : 0
+                    
+                    // Compare and determine color/symbol for elixir
+                    const elixirDiff = averageElixir - originalElixir
+                    let elixirColor = ''
+                    let elixirSymbol = ''
+                    if (Math.abs(elixirDiff) < 0.01) {
+                      elixirColor = 'yellow'
+                      elixirSymbol = '-'
+                    } else if (elixirDiff > 0) {
+                      elixirColor = 'red'
+                      elixirSymbol = '↑'
+                    } else {
+                      elixirColor = 'green'
+                      elixirSymbol = '↓'
+                    }
+                    
+                    // Compare and determine color/symbol for cycle
+                    const cycleDiff = fourCardCycle - originalCycle
+                    let cycleColor = ''
+                    let cycleSymbol = ''
+                    if (Math.abs(cycleDiff) < 0.01) {
+                      cycleColor = 'yellow'
+                      cycleSymbol = '-'
+                    } else if (cycleDiff > 0) {
+                      cycleColor = 'red'
+                      cycleSymbol = '↑'
+                    } else {
+                      cycleColor = 'green'
+                      cycleSymbol = '↓'
+                    }
+                    
+                    return (
+                      <div className="analysis-swap-stats">
+                        <div className="analysis-stat-item">
+                          <img src={ElixirIcon} alt="Elixir" className="analysis-stat-icon" />
+                          <span className="analysis-stat-label">Average Elixir Cost:</span>
+                          <span className={`analysis-stat-value analysis-stat-value-${elixirColor}`}>
+                            {averageElixir} <span className={`analysis-stat-symbol analysis-stat-symbol-${elixirColor}`}>{elixirSymbol}</span>
+                          </span>
+                        </div>
+                        <div className="analysis-stat-item">
+                          <img src={CycleIcon} alt="Cycle" className="analysis-stat-icon" />
+                          <span className="analysis-stat-label">4-Card Cycle Speed:</span>
+                          <span className={`analysis-stat-value analysis-stat-value-${cycleColor}`}>
+                            {fourCardCycle} <span className={`analysis-stat-symbol analysis-stat-symbol-${cycleColor}`}>{cycleSymbol}</span>
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })()}
                   <div className="analysis-optimization-content">
                     {typedOptimizations.cardSwaps}
                     {typedOptimizations.cardSwaps.length < optimizationTexts.cardSwaps.length && <span className="typing-cursor">|</span>}
                   </div>
                 </div>
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">Recommended Tower Troop</h4>
+                  <h4 className="analysis-optimization-subsection-title">🏰 Recommended Tower Troop</h4>
+                  {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Tower Troop'] && optimizationResults.Optimize['Recommended Tower Troop']['Tower Troop'] && (
+                    <div className="analysis-subcategory-cards">
+                      <img
+                        src={getCardImageUrl(optimizationResults.Optimize['Recommended Tower Troop']['Tower Troop'])}
+                        alt={optimizationResults.Optimize['Recommended Tower Troop']['Tower Troop']}
+                        className="analysis-subcategory-card-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="analysis-optimization-content">
                     {typedOptimizations.towerTroop}
                     {typedOptimizations.towerTroop.length < optimizationTexts.towerTroop.length && <span className="typing-cursor">|</span>}
                   </div>
                 </div>
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">Recommended Evolutions</h4>
+                  <h4 className="analysis-optimization-subsection-title">🔮 Recommended Evolutions</h4>
+                  {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Evolutions'] && optimizationResults.Optimize['Recommended Evolutions'].Evolutions && optimizationResults.Optimize['Recommended Evolutions'].Evolutions.length > 0 && (
+                    <div className="analysis-subcategory-cards">
+                      {optimizationResults.Optimize['Recommended Evolutions'].Evolutions.map((evo, index) => (
+                        <img
+                          key={index}
+                          src={getCardEvolutionImageUrl(evo.Evolution)}
+                          alt={evo.Evolution}
+                          className="analysis-subcategory-card-image"
+                          onError={(e) => {
+                            // Fallback to normal card image if evolution image fails
+                            e.target.src = getCardImageUrl(evo.Evolution)
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
                   <div className="analysis-optimization-content">
                     {typedOptimizations.evolutions}
                     {typedOptimizations.evolutions.length < optimizationTexts.evolutions.length && <span className="typing-cursor">|</span>}

@@ -9,7 +9,7 @@ import logging
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.cosmos_utils import container, exceptions
+from shared.cosmos_utils import container, exceptions, PARTITION_KEY_FIELD
 
 # Azure Functions Blueprint
 edit_account_bp = Blueprint()
@@ -70,22 +70,28 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     # Check if account exists and get current document
+    # Query by email (partition key) since document ID is a UUID
     try:
-        existing_account = container.read_item(
-            item=email,
-            partition_key=email
-        )
-        # Account exists, proceed with update
+        query = f"SELECT * FROM c WHERE c.{PARTITION_KEY_FIELD} = @email"
+        items = list(container.query_items(
+            query=query,
+            parameters=[{"name": "@email", "value": email}],
+            enable_cross_partition_query=True
+        ))
+        
+        if not items:
+            # Account doesn't exist
+            logging.warning(f"Account not found for email: {email}")
+            return func.HttpResponse(
+                "Account not found",
+                status_code=404,
+                mimetype="text/plain"
+            )
+        
+        # Account exists, get the document
+        existing_account = items[0]
         logging.info(f"Account found for email: {email}. Proceeding with password update.")
         
-    except exceptions.CosmosResourceNotFoundError:
-        # Account doesn't exist
-        logging.warning(f"Account not found for email: {email}")
-        return func.HttpResponse(
-            "Account not found",
-            status_code=404,
-            mimetype="text/plain"
-        )
     except Exception as e:
         logging.error(f"Error checking account existence: {e}")
         return func.HttpResponse(
@@ -97,9 +103,12 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
     # Update the account password
     existing_account["password"] = password
     
+    # Get the document ID (UUID) and partition key (email) for replace_item
+    account_id = existing_account.get("id")
+    
     try:
         container.replace_item(
-            item=email,
+            item=account_id,
             body=existing_account
         )
         logging.info(f"Account password updated successfully for email: {email}")

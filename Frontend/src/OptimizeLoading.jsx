@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './OptimizeLoading.css'
 
-function OptimizeLoading({ onClose, onComplete }) {
+function OptimizeLoading({ onClose, onComplete, apiComplete }) {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -19,7 +19,8 @@ function OptimizeLoading({ onClose, onComplete }) {
   }, [])
 
   useEffect(() => {
-    if (progress === 100) {
+    // Only complete when both progress reaches 100 AND API call is complete
+    if (progress === 100 && apiComplete) {
       const timeout = setTimeout(() => {
         if (onComplete) {
           onComplete()
@@ -27,7 +28,15 @@ function OptimizeLoading({ onClose, onComplete }) {
       }, 500)
       return () => clearTimeout(timeout)
     }
-  }, [progress, onComplete])
+  }, [progress, apiComplete, onComplete])
+
+  // Neural network structure: input layer (4 nodes), hidden layer 1 (6 nodes), hidden layer 2 (5 nodes), output layer (3 nodes)
+  const layers = [
+    { nodes: 4, label: 'Input' },
+    { nodes: 6, label: 'Hidden 1' },
+    { nodes: 5, label: 'Hidden 2' },
+    { nodes: 3, label: 'Output' }
+  ]
 
   return (
     <div className="optimize-loading-overlay" onClick={onClose}>
@@ -37,39 +46,76 @@ function OptimizeLoading({ onClose, onComplete }) {
           <p className="optimize-loading-subtitle">Analyzing your deck and generating recommendations...</p>
         </div>
         
-        <div className="optimize-loading-progress">
-          <div className="optimize-loading-progress-bar">
-            <div 
-              className="optimize-loading-progress-fill" 
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <span className="optimize-loading-progress-text">{Math.round(progress)}%</span>
+        <div className="neural-network-container">
+          <svg className="neural-network-svg" viewBox="0 0 600 400">
+            {/* Draw connections */}
+            {layers.map((layer, layerIndex) => {
+              if (layerIndex === layers.length - 1) return null
+              const nextLayer = layers[layerIndex + 1]
+              return (
+                <g key={`connections-${layerIndex}`}>
+                  {Array.from({ length: layer.nodes }).map((_, i) => 
+                    Array.from({ length: nextLayer.nodes }).map((_, j) => {
+                      const x1 = 100 + layerIndex * 150
+                      const y1 = 80 + (i * (240 / (layer.nodes - 1 || 1)))
+                      const x2 = 100 + (layerIndex + 1) * 150
+                      const y2 = 80 + (j * (240 / (nextLayer.nodes - 1 || 1)))
+                      const delay = (i * nextLayer.nodes + j) * 0.1
+                      return (
+                        <line
+                          key={`${i}-${j}`}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          className="neural-connection"
+                          style={{
+                            animationDelay: `${delay}s`,
+                            opacity: progress > 20 ? 1 : 0.3
+                          }}
+                        />
+                      )
+                    })
+                  )}
+                </g>
+              )
+            })}
+            
+            {/* Draw nodes */}
+            {layers.map((layer, layerIndex) => (
+              <g key={`layer-${layerIndex}`} className="neural-layer">
+                {Array.from({ length: layer.nodes }).map((_, i) => {
+                  const x = 100 + layerIndex * 150
+                  const y = 80 + (i * (240 / (layer.nodes - 1 || 1)))
+                  const delay = (layerIndex * 10 + i) * 0.15
+                  return (
+                    <g key={`node-${i}`}>
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={12}
+                        className="neural-node"
+                        style={{
+                          animationDelay: `${delay}s`
+                        }}
+                      />
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={8}
+                        className="neural-node-core"
+                        style={{
+                          animationDelay: `${delay + 0.1}s`
+                        }}
+                      />
+                    </g>
+                  )
+                })}
+              </g>
+            ))}
+          </svg>
         </div>
 
-        <div className="optimize-loading-steps">
-          <div className={`optimize-loading-step ${progress > 30 ? 'completed' : progress > 15 ? 'active' : ''}`}>
-            <div className="step-icon">{progress > 30 ? '✓' : progress > 15 ? '⟳' : '○'}</div>
-            <div className="step-text">
-              <div className="step-title">Recommending Card Swaps</div>
-              <div className="step-description">Evaluating alternative cards</div>
-            </div>
-          </div>
-          <div className={`optimize-loading-step ${progress > 60 ? 'completed' : progress > 45 ? 'active' : ''}`}>
-            <div className="step-icon">{progress > 60 ? '✓' : progress > 45 ? '⟳' : '○'}</div>
-            <div className="step-text">
-              <div className="step-title">Recommending Tower Troop</div>
-              <div className="step-description">Analyzing tower and troop combinations</div>
-            </div>
-          </div>
-          <div className={`optimize-loading-step ${progress > 90 ? 'completed' : progress > 75 ? 'active' : ''}`}>
-            <div className="step-icon">{progress > 90 ? '✓' : progress > 75 ? '⟳' : '○'}</div>
-            <div className="step-text">
-              <div className="step-title">Recommending Evolutions</div>
-              <div className="step-description">Identifying evolution opportunities</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )

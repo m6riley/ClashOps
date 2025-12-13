@@ -71,74 +71,75 @@
   text-align: center;
 }
 
-.optimize-loading-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.optimize-loading-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-.optimize-loading-step.active {
-  background: rgba(168, 85, 247, 0.2);
-  border: 1px solid rgba(168, 85, 247, 0.4);
-}
-
-.optimize-loading-step.completed {
-  background: rgba(20, 184, 166, 0.2);
-  border: 1px solid rgba(20, 184, 166, 0.4);
-}
-
-.optimize-loading-step .step-icon {
-  width: 24px;
-  height: 24px;
+.neural-network-container {
+  width: 100%;
+  height: 300px;
+  margin: 30px 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  overflow: hidden;
 }
 
-.optimize-loading-step.active .step-icon {
-  color: #a855f7;
-  animation: spin 1s linear infinite;
+.neural-network-svg {
+  width: 100%;
+  height: 100%;
 }
 
-.optimize-loading-step.completed .step-icon {
-  color: #14b8a6;
+.neural-connection {
+  stroke: rgba(168, 85, 247, 0.3);
+  stroke-width: 1.5;
+  fill: none;
+  animation: pulse-connection 2s ease-in-out infinite;
 }
 
-.optimize-loading-step .step-text {
-  flex: 1;
-}
-
-.optimize-loading-step .step-title {
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.optimize-loading-step .step-description {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 14px;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+@keyframes pulse-connection {
+  0%, 100% {
+    stroke: rgba(168, 85, 247, 0.3);
+    stroke-width: 1.5;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    stroke: rgba(168, 85, 247, 0.8);
+    stroke-width: 2.5;
+  }
+}
+
+.neural-node {
+  fill: rgba(168, 85, 247, 0.4);
+  stroke: rgba(168, 85, 247, 0.6);
+  stroke-width: 2;
+  animation: pulse-node 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
+}
+
+.neural-node-core {
+  fill: rgba(168, 85, 247, 0.8);
+  animation: pulse-core 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.8));
+}
+
+@keyframes pulse-node {
+  0%, 100% {
+    r: 12;
+    opacity: 0.6;
+  }
+  50% {
+    r: 14;
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-core {
+  0%, 100% {
+    r: 6;
+    opacity: 0.8;
+  }
+  50% {
+    r: 10;
+    opacity: 1;
   }
 }
 
