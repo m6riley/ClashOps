@@ -76,7 +76,7 @@ function CardImage({ card, index, onVariantLoaded }) {
   )
 }
 
-function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck }) {
+function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck, onAnalyze }) {
   const [heroVariantLoaded, setHeroVariantLoaded] = useState({})
   
   const handleFavouriteClick = () => {
@@ -158,7 +158,16 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
             Edit Deck
           </button>
         )}
-        <button className="action-btn analyze-btn">
+        <button 
+          className="action-btn analyze-btn" 
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (onAnalyze) {
+              onAnalyze(deck)
+            }
+          }}
+        >
           <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
             <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
             <path d="M8 2 L8 8 L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>

@@ -28,3 +28,8 @@ features = _service.get_blob_client(
     blob="features.csv"
 )
 
+cards = _service.get_blob_client(
+    container=_CONTAINER_NAME,
+    blob="cards.csv"
+)
+

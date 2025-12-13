@@ -1,0 +1,203 @@
+.subscription-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.subscription-prompt-dialog {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  position: relative;
+}
+
+.subscription-prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.subscription-prompt-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  border-radius: 16px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.subscription-prompt-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 36px;
+  cursor: pointer;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: color 0.2s;
+  border-radius: 50%;
+}
+
+.subscription-prompt-close:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.subscription-prompt-content {
+  margin-bottom: 30px;
+}
+
+.subscription-prompt-title {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.subscription-prompt-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.subscription-prompt-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.subscription-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.subscription-feature-item svg {
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+.subscription-prompt-pricing {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(99, 102, 241, 0.2) 50%, rgba(20, 184, 166, 0.2) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  margin-bottom: 20px;
+}
+
+.pricing-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.pricing-currency {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.pricing-value {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pricing-period {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.pricing-note {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  margin: 0;
+}
+
+.subscription-prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subscription-prompt-button {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.subscription-prompt-button:hover {
+  transform: translateY(-2px);
+}
+
+.subscription-prompt-button-primary {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  color: white;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+}
+
+.subscription-prompt-button-primary:hover {
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+}
+
+.subscription-prompt-button-secondary {
+  background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+  color: white;
+  border: 1px solid #666;
+}
+
+.subscription-prompt-button-secondary:hover {
+  background: linear-gradient(135deg, #5a5a5a 0%, #4a4a4a 100%);
+  box-shadow: 0 4px 12px rgba(102, 102, 102, 0.4);
+  border-color: #777;
+}
+

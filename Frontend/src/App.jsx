@@ -10,14 +10,22 @@ import DeckEditor from './DeckEditor'
 import CategoryDialog from './CategoryDialog'
 import CategoryBanner from './CategoryBanner'
 import Particles from './Particles'
+import AccountView from './AccountView'
+import LoginPrompt from './LoginPrompt'
+import SubscriptionPrompt from './SubscriptionPrompt'
+import PaymentForm from './PaymentForm'
+import AnalyzeLoading from './AnalyzeLoading'
+import AnalysisView from './AnalysisView'
+import InitialLoading from './InitialLoading'
 
 function App() {
   const [decks, setDecks] = useState([])
   const [features, setFeatures] = useState([])
   const [loading, setLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState(null)
   const [expandedFeature, setExpandedFeature] = useState(null) // Track which feature is expanded
-  const [activeTab, setActiveTab] = useState('catalog') // Track active tab: 'catalog' or 'favourites'
+  const [activeTab, setActiveTab] = useState('catalog') // Track active tab: 'catalog', 'favourites', or 'account'
   const [favouriteDecks, setFavouriteDecks] = useState([]) // Track favourite deck IDs
   const [favouriteDeckNames, setFavouriteDeckNames] = useState({}) // Track favourite deck names: { 'deckId-index': 'name' }
   const [notification, setNotification] = useState(null) // Track notification state
@@ -31,146 +39,56 @@ function App() {
   const [deckCategories, setDeckCategories] = useState({}) // Map deck IDs to category IDs: { deckId: categoryId }
   const [categoryDialog, setCategoryDialog] = useState(null) // Track category dialog: { mode: 'create' | 'edit', category: category | null }
   const [expandedCategory, setExpandedCategory] = useState(null) // Track which category is expanded (similar to expandedFeature)
+  const [isLoggedIn, setIsLoggedIn] = useState(true) // Track if user is logged in (auto-logged in for dev)
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false) // Show login prompt dialog
+  const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false) // Show subscription prompt dialog
+  const [showPaymentForm, setShowPaymentForm] = useState(false) // Show payment form dialog
+  const [showAnalyzeLoading, setShowAnalyzeLoading] = useState(false) // Show analyze loading screen
+  const [showAnalysisView, setShowAnalysisView] = useState(false) // Show analysis view
+  const [analyzingDeck, setAnalyzingDeck] = useState(null) // Deck being analyzed
+  const [isSubscribed, setIsSubscribed] = useState(true) // Track subscription status (auto-subscribed for dev)
 
-  useEffect(() => {
-    // Load decks and features from local CSV files
-    const loadData = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        
-        // Load cards CSV
-        const cardsResponse = await fetch('/cards.csv')
-        if (!cardsResponse.ok) {
-          throw new Error(`Failed to load cards.csv: ${cardsResponse.statusText}`)
-        }
-        const cardsCsvText = await cardsResponse.text()
-        
-        // Load decks CSV
-        const decksResponse = await fetch('/decks.csv')
-        if (!decksResponse.ok) {
-          throw new Error(`Failed to load decks.csv: ${decksResponse.statusText}`)
-        }
-        const decksCsvText = await decksResponse.text()
-        
-        // Load features CSV
-        const featuresResponse = await fetch('/features.csv')
-        if (!featuresResponse.ok) {
-          throw new Error(`Failed to load features.csv: ${featuresResponse.statusText}`)
-        }
-        const featuresCsvText = await featuresResponse.text()
-        
-        // Parse CSV
-        const parseCSV = (csvText) => {
-          const lines = csvText.trim().split('\n')
-          const headers = lines[0].split(',')
-          
-          return lines.slice(1).map(line => {
-            const values = []
-            let current = ''
-            let inQuotes = false
-            
-            for (let i = 0; i < line.length; i++) {
-              const char = line[i]
-              if (char === '"') {
-                inQuotes = !inQuotes
-              } else if (char === ',' && !inQuotes) {
-                values.push(current.trim())
-                current = ''
-              } else {
-                current += char
-              }
-            }
-            values.push(current.trim())
-            
-            const row = {}
-            headers.forEach((header, index) => {
-              row[header.trim()] = values[index] || ''
-            })
-            return row
-          })
-        }
-        
-        // Parse cards and create mapping from card name to elixir cost
-        const cardsData = parseCSV(cardsCsvText)
-        setCards(cardsData) // Store all cards data for filter view
-        const cardElixirMap = {}
-        cardsData.forEach(card => {
-          const cardName = card.card_name?.trim()
-          const elixirCost = parseFloat(card.elixer_cost) || 0
-          if (cardName) {
-            cardElixirMap[cardName] = elixirCost
-          }
-        })
-        
-        // Function to calculate average elixir cost of a deck
-        const calculateAverageElixirCost = (cardNames) => {
-          const costs = cardNames
-            .map(name => cardElixirMap[name] || 0)
-            .filter(cost => cost > 0)
-          
-          if (costs.length === 0) return 0
-          const sum = costs.reduce((acc, cost) => acc + cost, 0)
-          return Math.round((sum / costs.length) * 10) / 10
-        }
-        
-        // Function to calculate four-card cycle (sum of 4 cheapest cards)
-        const calculateFourCardCycle = (cardNames) => {
-          const costs = cardNames
-            .map(name => cardElixirMap[name] || 0)
-            .filter(cost => cost > 0)
-            .sort((a, b) => a - b) // Sort ascending
-            .slice(0, 4) // Take 4 cheapest
-          
-          if (costs.length === 0) return 0
-          const sum = costs.reduce((acc, cost) => acc + cost, 0)
-          return Math.round(sum * 10) / 10
-        }
-        
-        const featuresData = parseCSV(featuresCsvText)
-        setFeatures(featuresData)
-        
-        // Parse decks CSV
-        const decksData = parseCSV(decksCsvText)
-        
-        // Transform the decks data
-        const transformedDecks = decksData.map((deck) => {
-          const cardsString = deck.cards || ''
-          const cardNames = cardsString.split(';').map(name => name.trim()).filter(name => name)
-          
-          const cards = cardNames.map(cardName => ({
-            name: cardName,
-            rarity: 'common'
-          }))
-          
-          while (cards.length < 8) {
-            cards.push({ name: `Card ${cards.length + 1}`, rarity: 'common' })
-          }
-          
-          return {
-            id: parseInt(deck.deck_id || deck.id || 0),
-            elixirCost: calculateAverageElixirCost(cardNames),
-            cycle: calculateFourCardCycle(cardNames),
-            score: parseFloat(deck.score || 0),
-            cards: cards.slice(0, 8),
-            cardNames: cardNames // Keep for filtering
-          }
-        })
-        
-        // Sort decks by score (descending)
-        transformedDecks.sort((a, b) => b.score - a.score)
-        
-        setDecks(transformedDecks)
-      } catch (err) {
-        console.error('Error loading data:', err)
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
+  // Handle analyze deck click
+  const handleAnalyzeDeck = (deck) => {
+    console.log('handleAnalyzeDeck called', { isLoggedIn, isSubscribed, deck })
+    if (!isLoggedIn || !isSubscribed) {
+      setShowSubscriptionPrompt(true)
+    } else {
+      // Store the deck and show loading screen
+      setAnalyzingDeck(deck)
+      setShowAnalyzeLoading(true)
     }
+  }
 
-    loadData()
-  }, [])
+  // Handle analysis loading complete
+  const handleAnalysisComplete = () => {
+    setShowAnalyzeLoading(false)
+    setShowAnalysisView(true)
+  }
+
+  // Handle subscription
+  const handleSubscribe = () => {
+    if (!isLoggedIn) {
+      setShowSubscriptionPrompt(false)
+      setShowLoginPrompt(true)
+      return
+    }
+    // Show payment form
+    setShowSubscriptionPrompt(false)
+    setShowPaymentForm(true)
+  }
+
+  // Handle payment form completion
+  const handlePaymentComplete = () => {
+    setIsSubscribed(true)
+    setShowPaymentForm(false)
+    setNotification({
+      message: 'Welcome to ClashOps Diamond!',
+      type: 'success'
+    })
+  }
+
+  // Cards, features, and decks are now loaded from Azure Functions during initial loading
   
   // Helper function to check if deck matches filter (contains all selected, excludes all excluded)
   const deckMatchesFilter = (deck) => {
@@ -219,6 +137,10 @@ function App() {
 
   // Add deck to favourites (allows duplicates)
   const addToFavourites = (deckId) => {
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true)
+      return
+    }
     setFavouriteDecks(prev => {
       const newIndex = prev.length
       // Set default name for the new favourite deck
@@ -501,6 +423,10 @@ function App() {
 
   // Handle create new deck
   const handleCreateNewDeck = () => {
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true)
+      return
+    }
     const emptyDeck = {
       id: -1, // Temporary ID, will be replaced on save
       cards: Array(8).fill(null).map(() => ({ name: null, rarity: 'common' })),
@@ -523,8 +449,179 @@ function App() {
   for (let i = 0; i < features.length; i += 2) {
     groupedFeatures.push(features.slice(i, i + 2))
   }
+  const handleInitialLoadingComplete = async () => {
+    // Load features, decks, and cards from Azure Functions
+    try {
+      // Create AbortController for timeout
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+      
+      // Load features, decks, and cards in parallel
+      const [featuresResponse, decksResponse, cardsResponse] = await Promise.all([
+        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_features?code=DS5LZbckSVcYRHSC2lg1kspMj_9YIUOKwqKI2x2HaP7AAzFu758ciw==', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          mode: 'cors',
+          signal: controller.signal
+        }),
+        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_decks?code=983cRvpPitpcxlgRcBzjsjLi0dPukNbj7KGxfbUbi-pHAzFuo-FZGw==', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          mode: 'cors',
+          signal: controller.signal
+        }),
+        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_cards?code=f2W9t18O5vc0q_U0c_DnSnyyKMZ4xfYMlVen22JUMrw5AzFuHFJHNQ==', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          mode: 'cors',
+          signal: controller.signal
+        })
+      ])
+      
+      clearTimeout(timeoutId)
+      
+      // Handle features response
+      if (!featuresResponse.ok) {
+        const errorText = await featuresResponse.text()
+        throw new Error(`Failed to load features: ${featuresResponse.status} ${featuresResponse.statusText}. ${errorText}`)
+      }
+      
+      const featuresData = await featuresResponse.json()
+      if (Array.isArray(featuresData)) {
+        setFeatures(featuresData)
+      } else {
+        console.warn('Features data is not an array:', featuresData)
+        setFeatures([])
+      }
+      
+      // Handle cards response
+      if (!cardsResponse.ok) {
+        const errorText = await cardsResponse.text()
+        throw new Error(`Failed to load cards: ${cardsResponse.status} ${cardsResponse.statusText}. ${errorText}`)
+      }
+      
+      const cardsData = await cardsResponse.json()
+      if (Array.isArray(cardsData)) {
+        setCards(cardsData) // Store all cards data for filter view
+      } else {
+        console.warn('Cards data is not an array:', cardsData)
+        setCards([])
+      }
+      
+      // Build card elixir map from cards data
+      const cardElixirMap = {}
+      if (cardsData && cardsData.length > 0) {
+        cardsData.forEach(card => {
+          const cardName = card.card_name?.trim()
+          const elixirCost = parseFloat(card.elixer_cost) || 0
+          if (cardName) {
+            cardElixirMap[cardName] = elixirCost
+          }
+        })
+      }
+      
+      // Handle decks response
+      if (!decksResponse.ok) {
+        const errorText = await decksResponse.text()
+        throw new Error(`Failed to load decks: ${decksResponse.status} ${decksResponse.statusText}. ${errorText}`)
+      }
+      
+      const decksData = await decksResponse.json()
+      if (Array.isArray(decksData)) {
+        
+        // Function to calculate average elixir cost of a deck
+        const calculateAverageElixirCost = (cardNames) => {
+          if (Object.keys(cardElixirMap).length === 0) return 0
+          const costs = cardNames
+            .map(name => cardElixirMap[name] || 0)
+            .filter(cost => cost > 0)
+          
+          if (costs.length === 0) return 0
+          const sum = costs.reduce((acc, cost) => acc + cost, 0)
+          return Math.round((sum / costs.length) * 10) / 10
+        }
+        
+        // Function to calculate four-card cycle (sum of 4 cheapest cards)
+        const calculateFourCardCycle = (cardNames) => {
+          if (Object.keys(cardElixirMap).length === 0) return 0
+          const costs = cardNames
+            .map(name => cardElixirMap[name] || 0)
+            .filter(cost => cost > 0)
+            .sort((a, b) => a - b) // Sort ascending
+            .slice(0, 4) // Take 4 cheapest
+          
+          if (costs.length === 0) return 0
+          const sum = costs.reduce((acc, cost) => acc + cost, 0)
+          return Math.round(sum * 10) / 10
+        }
+        
+        // Transform the decks data
+        const transformedDecks = decksData.map((deck) => {
+          const cardsString = deck.cards || ''
+          const cardNames = cardsString.split(';').map(name => name.trim()).filter(name => name)
+          
+          const deckCards = cardNames.map(cardName => ({
+            name: cardName,
+            rarity: 'common'
+          }))
+          
+          while (deckCards.length < 8) {
+            deckCards.push({ name: null, rarity: 'common' })
+          }
+          
+          return {
+            id: parseInt(deck.deck_id || deck.id || 0),
+            elixirCost: calculateAverageElixirCost(cardNames),
+            cycle: calculateFourCardCycle(cardNames),
+            score: parseFloat(deck.score || 0),
+            cards: deckCards.slice(0, 8),
+            cardNames: cardNames // Keep for filtering
+          }
+        })
+        
+        // Sort decks by score (descending)
+        transformedDecks.sort((a, b) => b.score - a.score)
+        
+        setDecks(transformedDecks)
+      } else {
+        console.warn('Decks data is not an array:', decksData)
+        setDecks([])
+      }
+    } catch (err) {
+      console.error('Error loading data:', err)
+      if (err.name === 'AbortError') {
+        setError('Request timed out. Please try again.')
+      } else if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
+        setError('Network error: Unable to connect to server. Please check if CORS is enabled on the Azure Function.')
+      } else {
+        setError(err.message || 'Failed to load data')
+      }
+      // Set empty arrays as fallback
+      setFeatures([])
+      setDecks([])
+      setCards([])
+    } finally {
+      setInitialLoading(false)
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="App">
+      {initialLoading && (
+        <InitialLoading onComplete={handleInitialLoadingComplete} />
+      )}
+      {!initialLoading && (
+        <>
       {/* Particle Effects */}
       <Particles />
       
@@ -554,7 +651,45 @@ function App() {
           onCancel={handleCancelCategoryDialog}
         />
       )}
-      
+
+      {/* Login Prompt Dialog */}
+      {showLoginPrompt && (
+        <LoginPrompt
+          onClose={() => setShowLoginPrompt(false)}
+          onGoToAccount={() => {
+            setShowLoginPrompt(false)
+            setActiveTab('account')
+          }}
+        />
+      )}
+
+      {/* Subscription Prompt Dialog */}
+      {showSubscriptionPrompt && (
+        <SubscriptionPrompt
+          onClose={() => setShowSubscriptionPrompt(false)}
+          onSubscribe={handleSubscribe}
+        />
+      )}
+
+      {/* Payment Form Dialog */}
+      {showPaymentForm && (
+        <PaymentForm
+          onClose={() => setShowPaymentForm(false)}
+          onComplete={handlePaymentComplete}
+        />
+      )}
+
+      {/* Analyze Loading Dialog */}
+      {showAnalyzeLoading && (
+        <AnalyzeLoading
+          onClose={() => {
+            setShowAnalyzeLoading(false)
+            setAnalyzingDeck(null)
+          }}
+          onComplete={handleAnalysisComplete}
+        />
+      )}
+
       {/* Background decorative element */}
       <div className="background-swords">
         <Swords size={400} />
@@ -589,13 +724,35 @@ function App() {
           >
             Favourite Decks
           </a>
-          <a href="#" className="nav-link">Account</a>
+          <a 
+            href="#" 
+            className={`nav-link ${activeTab === 'account' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault()
+              setActiveTab('account')
+              setExpandedFeature(null)
+            }}
+          >
+            Account
+          </a>
           <a href="#" className="nav-link">About</a>
         </nav>
       </header>
 
       {/* Main Content */}
       <main className="main-content">
+        {/* Analysis View - separate view that replaces all tab content */}
+        {showAnalysisView && analyzingDeck ? (
+          <AnalysisView
+            deck={analyzingDeck}
+            allCards={cards}
+            onClose={() => {
+              setShowAnalysisView(false)
+              setAnalyzingDeck(null)
+            }}
+          />
+        ) : (
+          <>
         {activeTab === 'catalog' && (
           <>
             {showFilterView ? (
@@ -670,6 +827,7 @@ function App() {
                               deck={deck} 
                               isFavourite={favouriteDecks.includes(deck.id)}
                               onToggleFavourite={addToFavourites}
+                              onAnalyze={handleAnalyzeDeck}
                             />
                           ))
                         ) : (
@@ -712,6 +870,7 @@ function App() {
                                         deck={deck} 
                                         isFavourite={favouriteDecks.includes(deck.id)}
                                         onToggleFavourite={addToFavourites}
+                                        onAnalyze={handleAnalyzeDeck}
                                       />
                                     ))}
                                   </div>
@@ -746,6 +905,7 @@ function App() {
                               deck={deck} 
                               isFavourite={favouriteDecks.includes(deck.id)}
                               onToggleFavourite={addToFavourites}
+                              onAnalyze={handleAnalyzeDeck}
                             />
                           ))
                         ) : (
@@ -920,6 +1080,7 @@ function App() {
                                 favouriteIndex={index}
                                 deckName={favouriteDeckNames[`${deck.id}-${index}`] || 'My Favourite Deck'}
                                 onEditDeck={handleEditDeck}
+                                onAnalyze={handleAnalyzeDeck}
                               />
                             ))
                           ) : (
@@ -963,16 +1124,17 @@ function App() {
                                   {displayDecks.length > 0 && (
                                     <div className={`category-decks-grid ${shouldSpanFullWidth ? 'category-decks-grid-single' : ''}`}>
                                       {displayDecks.map(({ deck, index }) => (
-                                        <DeckCard 
-                                          key={`${deck.id}-${index}`} 
-                                          deck={deck} 
-                                          isFavourite={false}
-                                          isInFavouritesView={true}
-                                          onRemoveFavourite={requestRemoveFromFavourites}
-                                          favouriteIndex={index}
-                                          deckName={favouriteDeckNames[`${deck.id}-${index}`] || 'My Favourite Deck'}
-                                          onEditDeck={handleEditDeck}
-                                        />
+                              <DeckCard 
+                                key={`${deck.id}-${index}`} 
+                                deck={deck} 
+                                isFavourite={false}
+                                isInFavouritesView={true}
+                                onRemoveFavourite={requestRemoveFromFavourites}
+                                favouriteIndex={index}
+                                deckName={favouriteDeckNames[`${deck.id}-${index}`] || 'My Favourite Deck'}
+                                onEditDeck={handleEditDeck}
+                                onAnalyze={handleAnalyzeDeck}
+                              />
                                       ))}
                                     </div>
                                   )}
@@ -1000,6 +1162,7 @@ function App() {
                                   favouriteIndex={index}
                                   deckName={favouriteDeckNames[`${deck.id}-${index}`] || 'My Favourite Deck'}
                                   onEditDeck={handleEditDeck}
+                                  onAnalyze={handleAnalyzeDeck}
                                 />
                               ))}
                             </div>
@@ -1018,8 +1181,20 @@ function App() {
             )}
           </>
         )}
+        {activeTab === 'account' && (
+          <AccountView 
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+            isSubscribed={isSubscribed}
+            setIsSubscribed={setIsSubscribed}
+            onSubscribe={() => setShowPaymentForm(true)}
+          />
+        )}
+          </>
+        )}
       </main>
-
+        </>
+      )}
     </div>
   )
 }

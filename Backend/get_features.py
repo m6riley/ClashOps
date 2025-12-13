@@ -28,7 +28,7 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
 
         # Parse CSV rows into dictionaries
         reader = csv.DictReader(io.StringIO(csv_text))
-        features = list[dict[str | Any, str | Any]](reader)
+        features_list = list[dict[str | Any, str | Any]](reader)
 
     except Exception as e:
         logging.error(f"Error getting features from blob: {e}")
@@ -39,7 +39,7 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     return func.HttpResponse(
-        json.dumps(features),
+        json.dumps(features_list),
         status_code=200,
         mimetype="application/json"
     )
