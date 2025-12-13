@@ -1,0 +1,639 @@
+.App {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
+  color: white;
+  padding: 20px 40px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Background decorative swords */
+.background-swords {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.1;
+  z-index: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.crown-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  color: white;
+}
+
+.logo-accent {
+  color: #ffd700;
+}
+
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  transition: opacity 0.3s;
+}
+
+.nav-link:hover {
+  opacity: 0.7;
+}
+
+.nav-link.active {
+  color: #ffd700;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.rsvp-button {
+  background-color: #ffd700;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rsvp-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1400px;
+  margin: 60px auto 0;
+  position: relative;
+  z-index: 10;
+  padding: 0 40px;
+  padding-bottom: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 30px 0;
+  width: 100%;
+}
+
+.page-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter-button,
+.create-deck-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #8b6914 100%);
+  color: #2a2a2a;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.filter-button:hover,
+.create-deck-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.filter-button svg,
+.create-deck-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.filter-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #2a2a2a;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-title {
+  text-align: left;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  margin: 0;
+  text-decoration: underline;
+  text-decoration-color: #ffd700;
+}
+
+.page-description {
+  max-width: 600px;
+  line-height: 1.5;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.deck-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.deck-count-number {
+  color: #ffd700;
+  font-size: 48px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: #ffd700;
+  line-height: 1;
+}
+
+.deck-count-text {
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+  text-underline-offset: 10px;
+}
+
+.decks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.decks-grid .deck-card {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.features-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.features-row-single {
+  grid-template-columns: 1fr;
+}
+
+.feature-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-section .decks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-section-expanded {
+  width: 100%;
+  grid-column: 1 / -1; /* Span full width when expanded */
+}
+
+.feature-decks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-decks-grid-single {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Ensure deck cards in features take full width of their grid cell and match main grid size */
+.feature-decks-grid .deck-card {
+  width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.category-pair-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 60px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.category-pair-row-single {
+  grid-template-columns: 1fr;
+}
+
+.category-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+}
+
+.category-section-expanded {
+  width: 100%;
+  grid-column: 1 / -1; /* Span full width when expanded */
+}
+
+.category-section-expanded .decks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.category-decks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.category-decks-grid-single {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.category-decks-grid .deck-card {
+  width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.uncategorized-separator {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.3) 50%, transparent 100%);
+  margin: 60px 0 40px 0;
+  width: 100%;
+}
+
+.uncategorized-section {
+  width: 100%;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+}
+
+.uncategorized-section .decks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.uncategorized-title {
+  color: #ffd700;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+.loading-message,
+.error-message,
+.no-decks-message {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  padding: 40px;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: #ff6b6b;
+}
+
+.no-decks-message {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Left Section - Main Event */
+.main-event {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 700px;
+}
+
+.tournament-banner {
+  background-color: #ffd700;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+.main-title {
+  font-size: 64px;
+  font-weight: bold;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.title-white {
+  color: white;
+}
+
+.title-yellow {
+  color: #ffd700;
+}
+
+.event-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 10px 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+  background-color: #ffd700;
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.btn-secondary {
+  background-color: #4a4a4a;
+  color: white;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 74, 74, 0.4);
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.event-details {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 10px;
+}
+
+/* Right Section - Event Card */
+.event-card {
+  background: linear-gradient(180deg, #1e3a5f 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 30px;
+  position: relative;
+  height: fit-content;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.card-crown {
+  font-size: 60px;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 15px;
+  line-height: 1;
+}
+
+.card-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin: 0 0 5px 0;
+  letter-spacing: 2px;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin: 0 0 25px 0;
+}
+
+.card-details {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.card-detail-item {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.detail-icon {
+  font-size: 18px;
+}
+
+.slots-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: #1a1a2e;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.badge-status {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.badge-value {
+  font-size: 14px;
+  color: white;
+}
+
+.elixir-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #2a2a2a;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.elixir-icon {
+  font-size: 20px;
+  color: #9b59b6;
+}
+
+.badge-label {
+  font-size: 10px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.card-badge .badge-value {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .event-card {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding: 15px 20px;
+  }
+  
+  .header {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .main-title {
+    font-size: 42px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
