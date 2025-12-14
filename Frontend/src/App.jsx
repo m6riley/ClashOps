@@ -1590,13 +1590,25 @@ function App() {
                   setCategoryDialog({ mode: 'create', category: null })
                 }}
                 onEditCategory={(categoryId) => {
-                  // Convert categoryId to number for comparison (select returns string)
-                  const categoryIdNum = categoryId ? Number(categoryId) : null
-                  if (categoryIdNum) {
-                    const category = categories.find(c => c.id === categoryIdNum)
-                    if (category) {
-                      setCategoryDialog({ mode: 'edit', category })
+                  if (!categoryId) return
+                  
+                  // Find the category - id could be a number (old) or string UUID (new)
+                  // categoryId from select is always a string, but category.id could be string (UUID) or number
+                  const category = categories.find(cat => {
+                    // If both are strings, compare directly
+                    if (typeof cat.id === 'string' && typeof categoryId === 'string') {
+                      return cat.id === categoryId
                     }
+                    // If cat.id is number, convert categoryId to number for comparison
+                    if (typeof cat.id === 'number') {
+                      return cat.id === Number(categoryId)
+                    }
+                    // If cat.id is string UUID, compare as strings
+                    return String(cat.id) === String(categoryId)
+                  })
+                  
+                  if (category) {
+                    setCategoryDialog({ mode: 'edit', category })
                   }
                 }}
                 onDeleteCategory={async (categoryId) => {
@@ -1621,6 +1633,42 @@ function App() {
                   const actualCategoryId = category.id
                   
                   if (window.confirm('Are you sure you want to delete this category? Decks in this category will be moved to "No Category".')) {
+                    // Find all decks that have this category
+                    const decksToUpdate = []
+                    Object.keys(deckCategories).forEach(deckId => {
+                      const deckCategoryId = deckCategories[deckId]
+                      // Check if this deck has the category being deleted
+                      let matches = false
+                      if (typeof actualCategoryId === 'string' && typeof deckCategoryId === 'string') {
+                        matches = deckCategoryId === actualCategoryId
+                      } else if (typeof actualCategoryId === 'number' && typeof deckCategoryId === 'number') {
+                        matches = deckCategoryId === actualCategoryId
+                      } else {
+                        // Mixed types, compare as strings
+                        matches = String(deckCategoryId) === String(actualCategoryId)
+                      }
+                      
+                      if (matches) {
+                        // Find the deck object to get card names and deck name
+                        const deck = favouriteDecks.find(d => d.id === deckId)
+                        if (deck && deck.cardNames) {
+                          const deckName = favouriteDeckNames[`${deckId}-${favouriteDecks.findIndex(d => d.id === deckId)}`] || 'My Favourite Deck'
+                          decksToUpdate.push({
+                            deckId: deckId,
+                            cardNames: deck.cardNames,
+                            deckName: deckName
+                          })
+                        }
+                      }
+                    })
+                    
+                    // Update all decks in the backend to have category "none"
+                    if (decksToUpdate.length > 0 && isLoggedIn && currentUserId) {
+                      await Promise.all(decksToUpdate.map(deckInfo => 
+                        editDeckInBackend(deckInfo.deckId, deckInfo.cardNames, 'none', deckInfo.deckName)
+                      ))
+                    }
+                    
                     // Delete from backend if category has a UUID (string ID with dashes)
                     // Only call backend if the ID is a UUID string (not a number from Date.now())
                     if (typeof actualCategoryId === 'string' && actualCategoryId.includes('-')) {

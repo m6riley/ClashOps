@@ -20,7 +20,7 @@ _service = TableServiceClient.from_connection_string(_CONNECTION_STRING)
 # Reports table client (exported for direct access in some modules)
 _reports = _service.get_table_client("reports")
 
-# Accounts table client
+# Accounts table client (exported for account management)
 _accounts = _service.get_table_client("accounts")
 
 # Player Decks table client

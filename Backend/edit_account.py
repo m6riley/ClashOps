@@ -2,14 +2,14 @@
 Azure Function for editing existing accounts in the database.
 
 This function handles HTTP requests to update account passwords in Azure
-Cosmos DB. It validates input, confirms the account exists, and updates
+Table Storage. It validates input, confirms the account exists, and updates
 the password if found.
 """
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.cosmos_utils import container, exceptions, PARTITION_KEY_FIELD
+from shared.table_utils import _accounts, PARTITION_KEY
 
 # Azure Functions Blueprint
 edit_account_bp = Blueprint()
@@ -28,7 +28,7 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
     the password for the account.
     
     Request body should contain:
-        - email: Email address (used as document id and partition key)
+        - email: Email address
         - password: New account password
     
     Returns:
@@ -69,17 +69,12 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="text/plain"
         )
 
-    # Check if account exists and get current document
-    # Query by email (partition key) since document ID is a UUID
+    # Check if account exists and get current entity
     try:
-        query = f"SELECT * FROM c WHERE c.{PARTITION_KEY_FIELD} = @email"
-        items = list(container.query_items(
-            query=query,
-            parameters=[{"name": "@email", "value": email}],
-            enable_cross_partition_query=True
-        ))
+        query = f"PartitionKey eq '{PARTITION_KEY}' and Email eq '{email}'"
+        accounts = list(_accounts.query_entities(query))
         
-        if not items:
+        if not accounts:
             # Account doesn't exist
             logging.warning(f"Account not found for email: {email}")
             return func.HttpResponse(
@@ -88,8 +83,8 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="text/plain"
             )
         
-        # Account exists, get the document
-        existing_account = items[0]
+        # Account exists, get the entity
+        existing_account = accounts[0]
         logging.info(f"Account found for email: {email}. Proceeding with password update.")
         
     except Exception as e:
@@ -101,28 +96,26 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     # Update the account password
-    existing_account["password"] = password
+    existing_account["Password"] = password
     
-    # Get the document ID (UUID) and partition key (email) for replace_item
-    account_id = existing_account.get("id")
+    # Get the RowKey (UserID) and PartitionKey for upsert
+    user_id = existing_account.get("RowKey")
+    
+    if not user_id:
+        logging.error(f"Account entity missing RowKey for email: {email}")
+        return func.HttpResponse(
+            "Account entity is missing required fields",
+            status_code=500,
+            mimetype="text/plain"
+        )
     
     try:
-        container.replace_item(
-            item=account_id,
-            body=existing_account
-        )
+        # Use upsert to update the entity
+        _accounts.upsert_entity(entity=existing_account)
         logging.info(f"Account password updated successfully for email: {email}")
         return func.HttpResponse(
             "Account password updated successfully",
             status_code=200,
-            mimetype="text/plain"
-        )
-    except exceptions.CosmosResourceNotFoundError:
-        # Account was deleted between check and update (race condition)
-        logging.warning(f"Account not found (race condition): {email}")
-        return func.HttpResponse(
-            "Account not found",
-            status_code=404,
             mimetype="text/plain"
         )
     except Exception as e:
@@ -132,4 +125,3 @@ def edit_account(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             mimetype="text/plain"
         )
-

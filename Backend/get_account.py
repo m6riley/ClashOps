@@ -9,7 +9,7 @@ import json
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.cosmos_utils import container, exceptions, PARTITION_KEY_FIELD
+from shared.table_utils import _accounts, PARTITION_KEY
 
 # Azure Functions Blueprint
 get_account_bp = Blueprint()
@@ -28,11 +28,11 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
     the password. Returns the account ID if credentials are correct.
     
     Request body should contain:
-        - email: Email address (used as partition key)
+        - email: Email address
         - password: Account password
     
     Returns:
-        - 200: Account ID (JSON: {"account_id": "..."})
+        - 200: Account ID (JSON: {"id": "...", "email": "..."})
         - 408: Password is incorrect
         - 409: Account does not exist
         - 400: Invalid request
@@ -75,14 +75,10 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
 
     # Query for account by email
     try:
-        query = f"SELECT * FROM c WHERE c.{PARTITION_KEY_FIELD} = @email"
-        items = list(container.query_items(
-            query=query,
-            parameters=[{"name": "@email", "value": email}],
-            enable_cross_partition_query=True
-        ))
+        query = f"PartitionKey eq '{PARTITION_KEY}' and Email eq '{email}'"
+        accounts = list(_accounts.query_entities(query))
         
-        if not items:
+        if not accounts:
             # Account does not exist
             logging.info(f"Account not found for email: {email}")
             return func.HttpResponse(
@@ -92,8 +88,8 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
             )
         
         # Account exists, verify password
-        account = items[0]
-        stored_password = account.get("password")
+        account = accounts[0]
+        stored_password = account.get("Password")
         
         if stored_password != password:
             # Password is incorrect
@@ -104,11 +100,11 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="text/plain"
             )
         
-        # Password is correct, return account ID
-        account_id = account.get("id")
+        # Password is correct, return account ID (RowKey) and email
+        user_id = account.get("RowKey")  # UserID is stored as RowKey
         logging.info(f"Account verified successfully for email: {email}")
         return func.HttpResponse(
-            json.dumps({"account_id": account_id}),
+            json.dumps({"id": user_id, "email": email}),
             status_code=200,
             mimetype="application/json"
         )
@@ -120,4 +116,3 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             mimetype="text/plain"
         )
-
