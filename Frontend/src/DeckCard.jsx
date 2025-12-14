@@ -76,7 +76,7 @@ function CardImage({ card, index, onVariantLoaded }) {
   )
 }
 
-function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck, onAnalyze }) {
+function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck, onAnalyze, hideButtons = false }) {
   const [heroVariantLoaded, setHeroVariantLoaded] = useState({})
   
   const handleFavouriteClick = () => {
@@ -136,45 +136,47 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
       </div>
 
       {/* Action buttons */}
-      <div className="deck-actions">
-        <button 
-          className="action-btn favorite-btn"
-          onClick={handleFavouriteClick}
-        >
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1 L10 5 L14 6 L11 9 L11.5 13 L8 11 L4.5 13 L5 9 L2 6 L6 5 Z" fill="currentColor"/>
-          </svg>
-          {isInFavouritesView ? 'Remove from Favourites' : 'Add to Favourites'}
-        </button>
-        {isInFavouritesView && onEditDeck && (
+      {!hideButtons && (
+        <div className="deck-actions">
           <button 
-            className="action-btn edit-btn"
-            onClick={() => onEditDeck(deck, favouriteIndex)}
+            className="action-btn favorite-btn"
+            onClick={handleFavouriteClick}
           >
             <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <path d="M11.5 1 L15 4.5 L5.5 14 L2 14 L2 10.5 L11.5 1 Z" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9.5 3 L13 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M8 1 L10 5 L14 6 L11 9 L11.5 13 L8 11 L4.5 13 L5 9 L2 6 L6 5 Z" fill="currentColor"/>
             </svg>
-            Edit Deck
+            {isInFavouritesView ? 'Remove from Favourites' : 'Add to Favourites'}
           </button>
-        )}
-        <button 
-          className="action-btn analyze-btn" 
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (onAnalyze) {
-              onAnalyze(deck)
-            }
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-            <path d="M8 2 L8 8 L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          Analyze (beta)
-        </button>
-      </div>
+          {isInFavouritesView && onEditDeck && (
+            <button 
+              className="action-btn edit-btn"
+              onClick={() => onEditDeck(deck, favouriteIndex)}
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                <path d="M11.5 1 L15 4.5 L5.5 14 L2 14 L2 10.5 L11.5 1 Z" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9.5 3 L13 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              Edit Deck
+            </button>
+          )}
+          <button 
+            className="action-btn analyze-btn" 
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              if (onAnalyze) {
+                onAnalyze(deck)
+              }
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              <path d="M8 2 L8 8 L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            Analyze (beta)
+          </button>
+        </div>
+      )}
     </div>
   )
 }

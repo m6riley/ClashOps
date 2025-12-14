@@ -1420,7 +1420,7 @@ function App() {
         <div className="page-title-container">
                   <div className="title-section">
           <h1 className="page-title">Deck Catalog</h1>
-                    <p className="page-description">Browse the most powerful decks in the current meta.</p>
+                    <p className="page-description">Discover the top decks in the arena, refreshed every season.</p>
                   </div>
                   <div className="page-title-actions">
                     <button 
@@ -1460,7 +1460,7 @@ function App() {
                 ? getDecksForFeature(expandedFeature.filter_options)
                     : getFilteredDecks()
               return (
-                <div className="feature-section feature-section-expanded">
+                <div className="category-section category-section-expanded">
                   <FeatureBanner 
                     feature={expandedFeature}
                     decks={allDecks}
@@ -1497,22 +1497,24 @@ function App() {
                       const shouldSpanFullWidth = isLastPair && isSingleFeature
                       
                       return (
-                        <div key={pairIndex} className={`features-row ${shouldSpanFullWidth ? 'features-row-single' : ''}`}>
+                        <div key={pairIndex} className={`category-pair-row ${shouldSpanFullWidth ? 'category-pair-row-single' : ''}`}>
                     {featurePair.map((feature, index) => {
                             const maxDecks = shouldSpanFullWidth ? 4 : 2
                             const featureDecks = getDecksForFeature(feature.filter_options, maxDecks)
+                            const allFeatureDecks = getDecksForFeature(feature.filter_options)
+                            const hasMoreDecks = allFeatureDecks.length > maxDecks
                       return (
-                              <div key={index} className={`feature-section ${shouldSpanFullWidth ? 'feature-section-single' : ''}`}>
+                              <div key={index} className={`category-section ${shouldSpanFullWidth ? 'category-section-single' : ''}`}>
                           <FeatureBanner 
                             feature={feature} 
                             decks={featureDecks}
                             isExpanded={false}
                             onSeeAll={() => setExpandedFeature(feature)}
                             onBack={() => {}}
-                                  hideSeeAll={featureDecks.length <= maxDecks}
+                                  hideSeeAll={!hasMoreDecks}
                           />
                           {featureDecks.length > 0 && (
-                                  <div className={`feature-decks-grid ${shouldSpanFullWidth ? 'feature-decks-grid-single' : ''}`}>
+                                  <div className={`category-decks-grid ${shouldSpanFullWidth ? 'category-decks-grid-single' : ''}`}>
                               {featureDecks.map(deck => (
                                       <DeckCard 
                                         key={deck.id} 
@@ -1532,7 +1534,7 @@ function App() {
                     })}
                 
                 {/* Top Decks section */}
-                <div className="feature-section">
+                <div className="category-section">
                   <FeatureBanner 
                     feature={{
                       featured_text: 'Top Decks',
@@ -1754,7 +1756,7 @@ function App() {
                 <div className="page-title-container">
                   <div className="title-section">
                     <h1 className="page-title">Favourite Decks</h1>
-                    <p className="page-description">Your saved favourite decks</p>
+                    <p className="page-description">Save and organize your favourite decks.</p>
                   </div>
                   <div className="page-title-actions">
                     <button 
