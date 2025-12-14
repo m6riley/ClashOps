@@ -22,6 +22,7 @@ function CategoryDialog({ category, onSave, onCancel }) {
   const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0].value)
   const [selectedIcon, setSelectedIcon] = useState(null)
   const [availableIcons, setAvailableIcons] = useState([])
+  const [isClosing, setIsClosing] = useState(false)
 
   // Load available icons from category_icons folder
   useEffect(() => {
@@ -77,16 +78,28 @@ function CategoryDialog({ category, onSave, onCancel }) {
       return // Don't save if name is empty
     }
     
-    onSave({
-      name: categoryName.trim(),
-      color: selectedColor,
-      icon: selectedIcon
-    })
+    setIsClosing(true)
+    // Wait for fade out animation to complete
+    setTimeout(() => {
+      onSave({
+        name: categoryName.trim(),
+        color: selectedColor,
+        icon: selectedIcon
+      })
+    }, 300) // Match animation duration
+  }
+
+  const handleCancel = () => {
+    setIsClosing(true)
+    // Wait for fade out animation to complete
+    setTimeout(() => {
+      onCancel()
+    }, 300) // Match animation duration
   }
 
   return (
-    <div className="category-dialog-overlay" onClick={onCancel}>
-      <div className="category-dialog" onClick={(e) => e.stopPropagation()}>
+    <div className={`category-dialog-overlay ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleCancel}>
+      <div className={`category-dialog ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={(e) => e.stopPropagation()}>
         <div className="category-dialog-header">
           <h3 className="category-dialog-title">
             {category ? 'Edit Category' : 'Create Category'}
@@ -161,7 +174,7 @@ function CategoryDialog({ category, onSave, onCancel }) {
         </div>
 
         <div className="category-dialog-actions">
-          <button className="category-dialog-button category-dialog-button-cancel" onClick={onCancel}>
+          <button className="category-dialog-button category-dialog-button-cancel" onClick={handleCancel}>
             Cancel
           </button>
           <button 

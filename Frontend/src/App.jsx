@@ -11,12 +11,14 @@ import CategoryDialog from './CategoryDialog'
 import CategoryBanner from './CategoryBanner'
 import Particles from './Particles'
 import AccountView from './AccountView'
+import AboutView from './AboutView'
 import LoginPrompt from './LoginPrompt'
 import SubscriptionPrompt from './SubscriptionPrompt'
 import PaymentForm from './PaymentForm'
 import AnalyzeLoading from './AnalyzeLoading'
 import AnalysisView from './AnalysisView'
 import InitialLoading from './InitialLoading'
+import CountUpAnimation from './CountUpAnimation'
 import {
   getGetPlayerDecksUrl,
   getGetCategoriesUrl,
@@ -38,10 +40,22 @@ function App() {
   const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState(null)
   const [expandedFeature, setExpandedFeature] = useState(null) // Track which feature is expanded
-  const [activeTab, setActiveTab] = useState('catalog') // Track active tab: 'catalog', 'favourites', or 'account'
+  const [activeTab, setActiveTab] = useState('catalog') // Track active tab: 'catalog', 'favourites', 'account', or 'about'
+  const [shouldAnimateDeckCount, setShouldAnimateDeckCount] = useState(false) // Track if deck count should animate
   const [favouriteDecks, setFavouriteDecks] = useState([]) // Track favourite deck objects (separate copies)
   const [favouriteDeckNames, setFavouriteDeckNames] = useState({}) // Track favourite deck names: { 'favouriteDeckId-index': 'name' }
   const [notification, setNotification] = useState(null) // Track notification state
+  const [notificationKey, setNotificationKey] = useState(0) // Key to force new notification to mount
+  
+  // Wrapper function to set notification and force remount (skips exit animation of previous)
+  const showNotification = (notificationData) => {
+    setNotification(null) // Immediately clear current notification
+    setNotificationKey(prev => prev + 1) // Increment key to force new mount
+    // Use setTimeout to ensure the old notification is unmounted before mounting new one
+    setTimeout(() => {
+      setNotification(notificationData)
+    }, 10)
+  }
   const [confirmRemove, setConfirmRemove] = useState(null) // Track confirmation state: { deckId, index }
   const [cards, setCards] = useState([]) // All cards data
   const [selectedFilterCards, setSelectedFilterCards] = useState([]) // Selected cards for filtering: [{ cardName, mode }]
@@ -100,7 +114,7 @@ function App() {
   const handlePaymentComplete = () => {
     setIsSubscribed(true)
     setShowPaymentForm(false)
-    setNotification({
+    showNotification({
       message: 'Welcome to ClashOps Diamond!',
       type: 'success'
     })
@@ -557,7 +571,7 @@ function App() {
       })
     }
     
-    setNotification({
+    showNotification({
       message: `Deck added to favourites`,
       type: 'success'
     })
@@ -602,7 +616,7 @@ function App() {
         })
         return reindexed
       })
-      setNotification({
+      showNotification({
         message: `Deck removed from favourites`,
         type: 'info'
       })
@@ -830,7 +844,7 @@ function App() {
           })
         }
         
-        setNotification({
+        showNotification({
           message: `Deck created successfully`,
           type: 'success'
         })
@@ -894,7 +908,7 @@ function App() {
           })
         }
         
-        setNotification({
+        showNotification({
           message: `Deck updated successfully`,
           type: 'success'
         })
@@ -1026,7 +1040,7 @@ function App() {
         icon: categoryData.icon
       }
       setCategories(prev => [...prev, newCategory])
-      setNotification({
+      showNotification({
         message: 'Category created successfully',
         type: 'success'
       })
@@ -1052,7 +1066,7 @@ function App() {
           ? { ...cat, ...categoryData }
           : cat
       ))
-      setNotification({
+      showNotification({
         message: 'Category updated successfully',
         type: 'success'
       })
@@ -1256,6 +1270,11 @@ function App() {
       } finally {
       setInitialLoading(false)
         setLoading(false)
+        // Trigger deck count animation when data is loaded
+        if (activeTab === 'catalog') {
+          setShouldAnimateDeckCount(true)
+          setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+        }
       }
     }
 
@@ -1272,6 +1291,7 @@ function App() {
       {/* Notification */}
       {notification && (
         <Notification
+          key={notificationKey}
           message={notification.message}
           type={notification.type}
           onClose={() => setNotification(null)}
@@ -1354,6 +1374,9 @@ function App() {
               e.preventDefault()
               setActiveTab('catalog')
               setExpandedFeature(null)
+              setShouldAnimateDeckCount(true)
+              // Reset animation flag after a delay
+              setTimeout(() => setShouldAnimateDeckCount(false), 2500)
             }}
           >
             Deck Catalog
@@ -1380,7 +1403,17 @@ function App() {
           >
             Account
           </a>
-          <a href="#" className="nav-link">About</a>
+          <a 
+            href="#" 
+            className={`nav-link ${activeTab === 'about' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault()
+              setActiveTab('about')
+              setExpandedFeature(null)
+            }}
+          >
+            About
+          </a>
         </nav>
       </header>
 
@@ -1443,7 +1476,13 @@ function App() {
                         : getFilteredDecks().length
             return (
               <div className="deck-count">
-                <span className="deck-count-number">{currentDeckCount}</span>
+                <span className="deck-count-number">
+                  {shouldAnimateDeckCount ? (
+                    <CountUpAnimation target={currentDeckCount} duration={2000} />
+                  ) : (
+                    currentDeckCount
+                  )}
+                </span>
                 <span className="deck-count-text">unique decks</span>
               </div>
             )
@@ -1744,7 +1783,7 @@ function App() {
                       }
                     }
                     
-                    setNotification({
+                    showNotification({
                       message: 'Category deleted successfully',
                       type: 'success'
                     })
@@ -1928,7 +1967,7 @@ function App() {
             isSubscribed={isSubscribed}
             setIsSubscribed={setIsSubscribed}
             onSubscribe={() => setShowPaymentForm(true)}
-            onNotification={setNotification}
+            onNotification={showNotification}
             onLogin={(userId) => {
               setCurrentUserId(userId)
               fetchPlayerDecks(userId)
@@ -1939,6 +1978,9 @@ function App() {
               setFavouriteDeckNames({})
             }}
           />
+        )}
+        {activeTab === 'about' && (
+          <AboutView decks={decks} />
         )}
           </>
         )}

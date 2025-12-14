@@ -4,6 +4,7 @@ import { getAnalyzeDeckUrl, getCreateReportUrl } from './config'
 
 function AnalyzeLoading({ deck, onClose, onComplete }) {
   const [progress, setProgress] = useState(0)
+  const [isClosing, setIsClosing] = useState(false)
   const [completedCategories, setCompletedCategories] = useState({
     offense: false,
     defense: false,
@@ -143,11 +144,14 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
       
       setProgress(100)
       
-      // Wait a brief moment before completing
+      // Wait a brief moment, then fade out before completing
       setTimeout(() => {
-        if (onComplete) {
-          onComplete(finalResults)
-        }
+        setIsClosing(true)
+        setTimeout(() => {
+          if (onComplete) {
+            onComplete(finalResults)
+          }
+        }, 300) // Match animation duration
       }, 500)
     })
     })
@@ -161,9 +165,16 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
     setProgress(newProgress)
   }, [completedCategories])
 
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+    }, 300) // Match animation duration
+  }
+
   return (
-    <div className="analyze-loading-overlay" onClick={onClose}>
-      <div className="analyze-loading-dialog" onClick={(e) => e.stopPropagation()}>
+    <div className={`analyze-loading-overlay ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleClose}>
+      <div className={`analyze-loading-dialog ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={(e) => e.stopPropagation()}>
         <div className="analyze-loading-header">
           <div className="analyze-loading-icon">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -171,7 +182,7 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
               <path d="M12 2 L12 8 L16 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
-          <button className="analyze-loading-close" onClick={onClose}>
+          <button className="analyze-loading-close" onClick={handleClose}>
             ×
           </button>
         </div>

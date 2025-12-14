@@ -80,6 +80,21 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
   const [sortMode, setSortMode] = useState('name') // 'name', 'elixir', 'rarity', 'arena'
   const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
   const [editedDeckName, setEditedDeckName] = useState(deckName || 'My Favourite Deck')
+  const [isInitialMount, setIsInitialMount] = useState(true)
+  const [mountKey, setMountKey] = useState(0)
+
+  // Track initial mount - always animate cards on view open
+  useEffect(() => {
+    // Always enable animation when view opens
+    setIsInitialMount(true)
+    setMountKey(prev => prev + 1) // Force new key to ensure cards are treated as new elements
+    
+    // Disable animation after animations complete
+    const timer = setTimeout(() => {
+      setIsInitialMount(false)
+    }, 1000) // Disable after animations complete
+    return () => clearTimeout(timer)
+  }, []) // Empty dependency array means this runs only on mount
 
   // Helper function to check if a card is a champion (rarity 5)
   const isChampion = (cardName) => {
@@ -338,11 +353,11 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
               Delete Category
             </button>
           </div>
-          <div className="deck-slots-grid">
+          <div className={`deck-slots-grid ${isInitialMount ? 'initial-load' : ''}`} key={`slots-grid-${mountKey}`}>
             {deckCards.map((card, index) => (
               <div
-                key={index}
-                className={`deck-slot ${card.name ? 'filled' : 'empty'}`}
+                key={`slot-${index}-${mountKey}`}
+                className={`deck-slot ${card.name ? 'filled' : 'empty'} ${isInitialMount ? 'animate-in' : ''}`}
                 onDragOver={handleCardDragOver}
                 onDrop={(e) => handleCardDrop(e, index)}
               >
@@ -417,11 +432,11 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
               </div>
             </div>
           </div>
-          <div className="deck-editor-cards-grid">
-            {sortedAvailableCards.map((card) => (
+          <div className={`deck-editor-cards-grid ${isInitialMount ? 'initial-load' : ''}`} key={`cards-grid-${mountKey}`}>
+            {sortedAvailableCards.map((card, index) => (
                 <div
-                  key={card.card_name}
-                  className="editor-card-item"
+                  key={`${card.card_name}-${mountKey}`}
+                  className={`editor-card-item ${isInitialMount ? 'animate-in' : ''}`}
                   draggable
                   onDragStart={(e) => {
                     handleCardDragStart(e, { name: card.card_name, rarity: 'common' }, -1, false)

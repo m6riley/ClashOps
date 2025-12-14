@@ -5,6 +5,22 @@ import ElixirIcon from './assets/Elixir.svg'
 import CycleIcon from './assets/Cycle.svg'
 import OptimizeLoading from './OptimizeLoading'
 import { getOptimizeDeckUrl } from './config'
+import Trophy from './Trophy'
+import OffenseIcon from './OffenseIcon'
+import DefenseIcon from './DefenseIcon'
+import SynergyIcon from './SynergyIcon'
+import VersatilityIcon from './VersatilityIcon'
+import OptimizationsIcon from './OptimizationsIcon'
+import BeatdownIcon from './BeatdownIcon'
+import BridgeSpamIcon from './BridgeSpamIcon'
+import SiegeIcon from './SiegeIcon'
+import BaitIcon from './BaitIcon'
+import GraveyardIcon from './GraveyardIcon'
+import RoyalGiantIcon from './RoyalGiantIcon'
+import CycleArchetypeIcon from './CycleArchetypeIcon'
+import CardSwapsIcon from './CardSwapsIcon'
+import TowerTroopIcon from './TowerTroopIcon'
+import EvolutionsIcon from './EvolutionsIcon'
 
 function AnalysisView({ deck, onClose, allCards, analysisResults }) {
   const [expandedCategories, setExpandedCategories] = useState({
@@ -191,6 +207,57 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
       return categoryData[categoryKey]?.Roles || null
     }
   }
+
+  // Get icon component for archetype
+  const getArchetypeIcon = (archetypeName) => {
+    const nameLower = archetypeName.toLowerCase()
+    if (nameLower.includes('beatdown')) {
+      return <BeatdownIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('bridge spam') || nameLower.includes('bridgespam')) {
+      return <BridgeSpamIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('siege')) {
+      return <SiegeIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('bait')) {
+      return <BaitIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('graveyard')) {
+      return <GraveyardIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('royal giant') || nameLower.includes('royalgiant')) {
+      return <RoyalGiantIcon size={18} className="archetype-icon" />
+    }
+    if (nameLower.includes('cycle')) {
+      return <CycleArchetypeIcon size={18} className="archetype-icon" />
+    }
+    return null
+  }
+
+  // Remove emoji from archetype name
+  const cleanArchetypeName = (name) => {
+    if (!name) return name
+    // Remove emoji characters using comprehensive regex patterns
+    // This covers all major emoji ranges and variations
+    return name
+      // Remove emoji sequences (including combined emojis with zero-width joiners)
+      .replace(/[\u{1F300}-\u{1F9FF}]/gu, '') // Miscellaneous Symbols and Pictographs
+      .replace(/[\u{2600}-\u{26FF}]/gu, '') // Miscellaneous Symbols
+      .replace(/[\u{2700}-\u{27BF}]/gu, '') // Dingbats
+      .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+      .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map Symbols
+      .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Regional Indicator Symbols (flags)
+      .replace(/[\u{1F900}-\u{1F9FF}]/gu, '') // Supplemental Symbols and Pictographs
+      .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '') // Chess Symbols
+      .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '') // Symbols and Pictographs Extended-A
+      .replace(/[\u{200D}]/gu, '') // Zero Width Joiner
+      .replace(/[\u{FE0F}]/gu, '') // Variation Selector-16
+      .replace(/[\u{FE00}-\u{FE0F}]/gu, '') // Variation Selectors
+      .replace(/[\u{1F3FB}-\u{1F3FF}]/gu, '') // Skin tone modifiers
+      .replace(/\s+/g, ' ') // Clean up multiple spaces
+      .trim()
+  }
   
   const handleLoadOptimizations = async () => {
     if (!analysisResults || !deck) return
@@ -342,6 +409,8 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
   
   // Type out summaries with typing animation (in parallel)
   useEffect(() => {
+    if (!summaryTexts || Object.keys(summaryTexts).length === 0) return
+    
     const typingSpeed = 30 // milliseconds per character
     const categories = ['offense', 'defense', 'synergy', 'versatility']
     const charIndices = {
@@ -378,7 +447,7 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
     return () => {
       if (timeoutId) clearTimeout(timeoutId)
     }
-  }, [])
+  }, [summaryTexts])
 
   // Type out subcategory summaries with typing animation when category is first expanded
   useEffect(() => {
@@ -657,7 +726,7 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                   <div className="analysis-stat-item">
                     <img src={ElixirIcon} alt="Elixir" className="analysis-stat-icon" />
                     <span className="analysis-stat-label">Average Elixir Cost:</span>
-                    <span className="analysis-stat-value">{deck.elixirCost || 0}</span>
+                    <span className="analysis-stat-value">{typeof deck.elixirCost === 'number' ? deck.elixirCost.toFixed(1) : parseFloat(deck.elixirCost || 0).toFixed(1)}</span>
                   </div>
                   <div className="analysis-stat-item">
                     <img src={CycleIcon} alt="Cycle" className="analysis-stat-icon" />
@@ -700,11 +769,17 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             <div className="analysis-grid-item">
               <div className="analysis-score-stats">
                 <div className="analysis-score-item">
-                  <span className="analysis-score-label analysis-score-label-overall">🏆 Overall Score <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(overallScoreToLetterGrade(overallScore))}`}>{overallScoreToLetterGrade(overallScore)}</span></span>
+                  <span className="analysis-score-label analysis-score-label-overall">
+                    <Trophy size={20} className="trophy-icon" />
+                    Overall Score <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(overallScoreToLetterGrade(overallScore))}`}>{overallScoreToLetterGrade(overallScore)}</span>
+                  </span>
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></span>
+                    <span className="analysis-score-label">
+                      <OffenseIcon size={18} className="offense-icon" />
+                      Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span>
+                    </span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.offense)}%` }}></div>
                     </div>
@@ -712,7 +787,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></span>
+                    <span className="analysis-score-label">
+                      <DefenseIcon size={18} className="defense-icon" />
+                      Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span>
+                    </span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -725,7 +803,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></span>
+                    <span className="analysis-score-label">
+                      <SynergyIcon size={18} className="synergy-icon" />
+                      Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span>
+                    </span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -738,7 +819,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                 </div>
                 <div className="analysis-score-item">
                   <div className="analysis-score-item-content">
-                    <span className="analysis-score-label">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></span>
+                    <span className="analysis-score-label">
+                      <VersatilityIcon size={18} className="versatility-icon" />
+                      Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span>
+                    </span>
                     <div className="analysis-progress-bar">
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
@@ -755,7 +839,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
           <div className="analysis-categories-grid">
             <div className="analysis-grid-item">
               <div className="analysis-grid-item-title-container">
-                <h3 className="analysis-grid-item-title">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></h3>
+                <h3 className="analysis-grid-item-title">
+                  <OffenseIcon size={20} className="offense-icon" />
+                  Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span>
+                </h3>
                 <button 
                   className="analysis-info-btn"
                   onClick={(e) => {
@@ -857,7 +944,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             </div>
             <div className="analysis-grid-item">
               <div className="analysis-grid-item-title-container">
-                <h3 className="analysis-grid-item-title">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></h3>
+                <h3 className="analysis-grid-item-title">
+                  <DefenseIcon size={20} className="defense-icon" />
+                  Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span>
+                </h3>
                 <button 
                   className="analysis-info-btn"
                   onClick={(e) => {
@@ -959,7 +1049,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             </div>
             <div className="analysis-grid-item">
               <div className="analysis-grid-item-title-container">
-                <h3 className="analysis-grid-item-title">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></h3>
+                <h3 className="analysis-grid-item-title">
+                  <SynergyIcon size={20} className="synergy-icon" />
+                  Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span>
+                </h3>
                 <button 
                   className="analysis-info-btn"
                   onClick={(e) => {
@@ -1061,7 +1154,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             </div>
             <div className="analysis-grid-item">
               <div className="analysis-grid-item-title-container">
-                <h3 className="analysis-grid-item-title">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></h3>
+                <h3 className="analysis-grid-item-title">
+                  <VersatilityIcon size={20} className="versatility-icon" />
+                  Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span>
+                </h3>
                 <button 
                   className="analysis-info-btn"
                   onClick={(e) => {
@@ -1123,7 +1219,8 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                       return (
                       <div key={archetypeName} className="analysis-subcategory-item">
                         <h4 className="analysis-subcategory-title">
-                          {archetypeName}
+                          {getArchetypeIcon(archetypeName)}
+                          {cleanArchetypeName(archetypeName)}
                           {letterGrade && (
                             <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(letterGrade)}`}> {letterGrade}</span>
                           )}
@@ -1148,7 +1245,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             </div>
           </div>
           <div className="analysis-grid-item analysis-optimizations-grid-item">
-            <h3 className="analysis-grid-item-title">⚡ Optimizations</h3>
+            <h3 className="analysis-grid-item-title">
+              <OptimizationsIcon size={20} className="optimizations-icon" />
+              Optimizations
+            </h3>
             {!optimizationsLoaded && (
               <>
                 <div className="analysis-category-summary">
@@ -1168,7 +1268,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
             {optimizationsLoaded && (
               <div className="analysis-optimizations-subsections">
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">🔄 Recommended Card Swaps</h4>
+                  <h4 className="analysis-optimization-subsection-title">
+                    <CardSwapsIcon size={18} className="optimization-subsection-icon" />
+                    Recommended Card Swaps
+                  </h4>
                   {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Swaps'] && optimizationResults.Optimize['Recommended Swaps'].Swaps && optimizationResults.Optimize['Recommended Swaps'].Swaps.length > 0 && (
                     <div className="analysis-card-swaps-infographic">
                       <div className="analysis-card-swap-row">
@@ -1287,7 +1390,7 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                           <img src={ElixirIcon} alt="Elixir" className="analysis-stat-icon" />
                           <span className="analysis-stat-label">Average Elixir Cost:</span>
                           <span className={`analysis-stat-value analysis-stat-value-${elixirColor}`}>
-                            {averageElixir} <span className={`analysis-stat-symbol analysis-stat-symbol-${elixirColor}`}>{elixirSymbol}</span>
+                            {typeof averageElixir === 'number' ? averageElixir.toFixed(1) : parseFloat(averageElixir || 0).toFixed(1)} <span className={`analysis-stat-symbol analysis-stat-symbol-${elixirColor}`}>{elixirSymbol}</span>
                           </span>
                         </div>
                         <div className="analysis-stat-item">
@@ -1306,7 +1409,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                   </div>
                 </div>
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">🏰 Recommended Tower Troop</h4>
+                  <h4 className="analysis-optimization-subsection-title">
+                    <TowerTroopIcon size={18} className="optimization-subsection-icon" />
+                    Recommended Tower Troop
+                  </h4>
                   {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Tower Troop'] && optimizationResults.Optimize['Recommended Tower Troop']['Tower Troop'] && (
                     <div className="analysis-subcategory-cards">
                       <img
@@ -1325,7 +1431,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                   </div>
                 </div>
                 <div className="analysis-optimization-subsection">
-                  <h4 className="analysis-optimization-subsection-title">🔮 Recommended Evolutions</h4>
+                  <h4 className="analysis-optimization-subsection-title">
+                    <EvolutionsIcon size={18} className="optimization-subsection-icon" />
+                    Recommended Evolutions
+                  </h4>
                   {optimizationResults && optimizationResults.Optimize && optimizationResults.Optimize['Recommended Evolutions'] && optimizationResults.Optimize['Recommended Evolutions'].Evolutions && optimizationResults.Optimize['Recommended Evolutions'].Evolutions.length > 0 && (
                     <div className="analysis-subcategory-cards">
                       {optimizationResults.Optimize['Recommended Evolutions'].Evolutions.map((evo, index) => (

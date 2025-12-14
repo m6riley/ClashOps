@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './SubscriptionPrompt.css'
 
 function SubscriptionPrompt({ onClose, onSubscribe }) {
+  const [isClosing, setIsClosing] = useState(false)
+
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+    }, 300) // Match animation duration
+  }
+
+  const handleSubscribe = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onSubscribe()
+    }, 300) // Match animation duration
+  }
+
   return (
-    <div className="subscription-prompt-overlay" onClick={onClose}>
-      <div className="subscription-prompt-dialog" onClick={(e) => e.stopPropagation()}>
+    <div className={`subscription-prompt-overlay ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleClose}>
+      <div className={`subscription-prompt-dialog ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={(e) => e.stopPropagation()}>
         <div className="subscription-prompt-header">
           <div className="subscription-prompt-icon">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -13,7 +29,7 @@ function SubscriptionPrompt({ onClose, onSubscribe }) {
               <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <button className="subscription-prompt-close" onClick={onClose}>
+          <button className="subscription-prompt-close" onClick={handleClose}>
             ×
           </button>
         </div>
@@ -56,10 +72,10 @@ function SubscriptionPrompt({ onClose, onSubscribe }) {
           </div>
         </div>
         <div className="subscription-prompt-actions">
-          <button className="subscription-prompt-button subscription-prompt-button-primary" onClick={onSubscribe}>
+          <button className="subscription-prompt-button subscription-prompt-button-primary" onClick={handleSubscribe}>
             Subscribe to ClashOps Diamond
           </button>
-          <button className="subscription-prompt-button subscription-prompt-button-secondary" onClick={onClose}>
+          <button className="subscription-prompt-button subscription-prompt-button-secondary" onClick={handleClose}>
             Maybe Later
           </button>
         </div>

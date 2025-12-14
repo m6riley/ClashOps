@@ -3,6 +3,7 @@ import './OptimizeLoading.css'
 
 function OptimizeLoading({ onClose, onComplete, apiComplete }) {
   const [progress, setProgress] = useState(0)
+  const [isClosing, setIsClosing] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,17 +23,27 @@ function OptimizeLoading({ onClose, onComplete, apiComplete }) {
     // Only complete when both progress reaches 100 AND API call is complete
     if (progress === 100 && apiComplete) {
       const timeout = setTimeout(() => {
-        if (onComplete) {
-          onComplete()
-        }
+        setIsClosing(true)
+        setTimeout(() => {
+          if (onComplete) {
+            onComplete()
+          }
+        }, 300) // Match animation duration
       }, 500)
       return () => clearTimeout(timeout)
     }
   }, [progress, apiComplete, onComplete])
 
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+    }, 300) // Match animation duration
+  }
+
   return (
-    <div className="optimize-loading-overlay" onClick={onClose}>
-      <div className="optimize-loading-dialog" onClick={(e) => e.stopPropagation()}>
+    <div className={`optimize-loading-overlay ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleClose}>
+      <div className={`optimize-loading-dialog ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={(e) => e.stopPropagation()}>
         <div className="optimize-loading-header">
           <div className="optimize-loading-icon">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -40,7 +51,7 @@ function OptimizeLoading({ onClose, onComplete, apiComplete }) {
               <path d="M12 2 L12 8 L16 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
-          <button className="optimize-loading-close" onClick={onClose}>
+          <button className="optimize-loading-close" onClick={handleClose}>
             ×
           </button>
         </div>

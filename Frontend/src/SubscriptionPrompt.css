@@ -12,6 +12,14 @@
   backdrop-filter: blur(6px);
 }
 
+.subscription-prompt-overlay.fade-in {
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+.subscription-prompt-overlay.fade-out {
+  animation: fadeOutOverlay 0.3s ease-out;
+}
+
 .subscription-prompt-dialog {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border-radius: 20px;
@@ -21,6 +29,14 @@
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
   border: 2px solid rgba(255, 215, 0, 0.4);
   position: relative;
+}
+
+.subscription-prompt-dialog.fade-in {
+  animation: fadeInDialog 0.3s ease-out;
+}
+
+.subscription-prompt-dialog.fade-out {
+  animation: fadeOutDialog 0.3s ease-out;
 }
 
 .subscription-prompt-header {
@@ -199,5 +215,45 @@
   background: linear-gradient(135deg, #5a5a5a 0%, #4a4a4a 100%);
   box-shadow: 0 4px 12px rgba(102, 102, 102, 0.4);
   border-color: #777;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutOverlay {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInDialog {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOutDialog {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
 

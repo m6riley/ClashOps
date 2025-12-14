@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Notification.css'
 
 function Notification({ message, type, onClose, duration = 3000 }) {
+  const [isExiting, setIsExiting] = useState(false)
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      onClose()
+      setIsExiting(true)
+      // Wait for animation to complete before calling onClose
+      setTimeout(() => {
+        onClose()
+      }, 300) // Match animation duration
     }, duration)
 
     return () => clearTimeout(timer)
   }, [onClose, duration])
 
   return (
-    <div className={`notification notification-${type}`}>
+    <div className={`notification notification-${type} ${isExiting ? 'notification-exit' : 'notification-enter'}`}>
       <div className="notification-content">
         <div className="notification-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

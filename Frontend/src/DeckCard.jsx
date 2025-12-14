@@ -109,7 +109,7 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
       <div className="deck-stats">
         <div className="stat-item">
           <img src={ElixirIcon} alt="Elixir" className="elixir-icon" />
-          <span>{deck.elixirCost}</span>
+          <span>{typeof deck.elixirCost === 'number' ? deck.elixirCost.toFixed(1) : parseFloat(deck.elixirCost || 0).toFixed(1)}</span>
         </div>
         <div className="stat-item">
           <img src={CycleIcon} alt="Cycle" className="cycle-icon" />
@@ -173,7 +173,7 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
               <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
               <path d="M8 2 L8 8 L12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            Analyze (beta)
+            Analyze
           </button>
         </div>
       )}

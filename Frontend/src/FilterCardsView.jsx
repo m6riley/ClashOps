@@ -7,7 +7,22 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
   const [sortMode, setSortMode] = useState('name') // 'name', 'elixir', 'rarity', 'arena'
   const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
   const [cardVariantMode, setCardVariantMode] = useState(variantMode || 'basic') // 'basic', 'evolution', 'hero'
+  const [isInitialMount, setIsInitialMount] = useState(true)
+  const [mountKey, setMountKey] = useState(0) // Key to force re-render on mount
   
+  // Track initial mount - always animate cards on view open
+  useEffect(() => {
+    // Always enable animation when view opens
+    setIsInitialMount(true)
+    setMountKey(prev => prev + 1) // Force new key to ensure cards are treated as new elements
+    
+    // Disable animation after animations complete
+    const timer = setTimeout(() => {
+      setIsInitialMount(false)
+    }, 1000) // Disable after animations complete
+    return () => clearTimeout(timer)
+  }, []) // Empty dependency array means this runs only on mount
+
   // Sync with parent variant mode
   useEffect(() => {
     if (variantMode !== undefined) {
@@ -269,8 +284,8 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
         )}
       </div>
 
-      <div className="filter-cards-grid">
-        {sortedCards.map((card) => {
+      <div className={`filter-cards-grid ${isInitialMount ? 'initial-load' : ''}`} key={`grid-${mountKey}`}>
+        {sortedCards.map((card, index) => {
           // Check if this specific card variant (cardName + mode) is selected/excluded
           const isSelected = selectedCards.some(item => {
             const cardName = typeof item === 'string' ? item : item.cardName
@@ -284,8 +299,8 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
           })
           return (
             <div
-              key={`${card.card_name}-${cardVariantMode}`}
-              className={`filter-card-item ${isSelected ? 'selected' : ''} ${isExcluded ? 'excluded' : ''}`}
+              key={`${card.card_name}-${cardVariantMode}-${mountKey}`}
+              className={`filter-card-item ${isSelected ? 'selected' : ''} ${isExcluded ? 'excluded' : ''} ${isInitialMount ? 'animate-in' : ''}`}
               onClick={() => onCardToggle({ cardName: card.card_name, mode: cardVariantMode })}
             >
               <div className="filter-card-image-container">

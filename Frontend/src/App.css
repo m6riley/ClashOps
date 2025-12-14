@@ -113,6 +113,7 @@
   align-items: baseline;
   margin: 0 0 30px 0;
   width: 100%;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .page-title-actions {
@@ -235,6 +236,44 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  animation: slideInFade 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.decks-grid .deck-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.decks-grid .deck-card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.decks-grid .deck-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.decks-grid .deck-card:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.decks-grid .deck-card:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.decks-grid .deck-card:nth-child(6) {
+  animation-delay: 0.35s;
+}
+
+.decks-grid .deck-card:nth-child(7) {
+  animation-delay: 0.4s;
+}
+
+.decks-grid .deck-card:nth-child(8) {
+  animation-delay: 0.45s;
+}
+
+.decks-grid .deck-card:nth-child(n+9) {
+  animation-delay: 0.5s;
 }
 
 .features-row {
@@ -300,6 +339,7 @@
   margin-bottom: 60px;
   width: 100%;
   box-sizing: border-box;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .category-pair-row-single {
@@ -311,11 +351,97 @@
   flex-direction: column;
   min-width: 0;
   width: 100%;
+  animation: scaleIn 0.6s ease-out;
+}
+
+.category-section:nth-child(1) {
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+}
+
+.category-section:nth-child(2) {
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
 }
 
 .category-section-expanded {
   width: 100%;
   grid-column: 1 / -1; /* Span full width when expanded */
+  animation: expandIn 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  70% {
+    transform: scale(0.95) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    max-height: 5000px;
+  }
 }
 
 .category-section-expanded .decks-grid {
@@ -354,6 +480,24 @@
   min-width: 0;
   flex-shrink: 0;
   box-sizing: border-box;
+  animation: bounceIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.category-decks-grid .deck-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.category-decks-grid .deck-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.category-decks-grid .deck-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.category-decks-grid .deck-card:nth-child(4) {
+  animation-delay: 0.4s;
 }
 
 .uncategorized-separator {
