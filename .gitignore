@@ -157,6 +157,34 @@ Frontend/src/config.js
 Frontend/src/config.local.js
 
 ############################################################
+# FRONTEND / NODE.JS
+############################################################
+
+# Frontend logs
+Frontend/logs
+Frontend/*.log
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+Frontend/pnpm-debug.log*
+Frontend/lerna-debug.log*
+
+# Frontend dependencies and build
+Frontend/node_modules
+Frontend/dist
+Frontend/dist-ssr
+
+# Frontend editor files
+Frontend/.vscode/*
+!Frontend/.vscode/extensions.json
+Frontend/.idea
+Frontend/*.suo
+Frontend/*.ntvs*
+Frontend/*.njsproj
+Frontend/*.sln
+Frontend/*.sw?
+
+############################################################
 # AZURITE (local Azure Storage emulator)
 ############################################################
 
