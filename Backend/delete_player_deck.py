@@ -36,19 +36,35 @@ def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
         )
     # Delete deck from database
     try:
-        # Query for the deck using DeckID field
+        # First, verify the deck exists by querying for it
         query = f"PartitionKey eq '{PARTITION_KEY}' and DeckID eq '{deckID}'"
+        logging.info(f"Querying for deck with DeckID: {deckID}")
         decks = list(_playerDecks.query_entities(query))
         
         if not decks:
-            logging.warning(f"Deck with DeckID {deckID} not found")
-            return func.HttpResponse(
-                "Deck not found",
-                status_code=404,
-                mimetype="text/plain"
-            )
+            logging.warning(f"Deck with DeckID {deckID} not found via query")
+            # Since RowKey and DeckID are the same in save_player_deck, try direct deletion as fallback
+            logging.info(f"Attempting direct deletion using deckID as RowKey: {deckID}")
+            try:
+                _playerDecks.delete_entity(
+                    partition_key=PARTITION_KEY,
+                    row_key=deckID
+                )
+                logging.info(f"Successfully deleted deck using direct RowKey: {deckID}")
+                return func.HttpResponse(
+                    "Deck deleted successfully",
+                    status_code=200,
+                    mimetype="text/plain"
+                )
+            except Exception as direct_delete_error:
+                logging.error(f"Direct deletion also failed: {direct_delete_error}")
+                return func.HttpResponse(
+                    "Deck not found",
+                    status_code=404,
+                    mimetype="text/plain"
+                )
         
-        # Get the RowKey from the found deck and delete using it
+        # Get the RowKey from the found deck
         deck = decks[0]
         row_key = deck.get("RowKey")
         
@@ -60,12 +76,33 @@ def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="text/plain"
             )
         
+        logging.info(f"Found deck - PartitionKey: {PARTITION_KEY}, RowKey: {row_key}, DeckID: {deckID}")
+        logging.info(f"Deck entity keys: {list(deck.keys())}")
+        
+        # Delete the entity using PartitionKey and RowKey
         _playerDecks.delete_entity(
             partition_key=PARTITION_KEY,
             row_key=row_key
         )
+        
+        logging.info(f"Successfully deleted deck with RowKey: {row_key}")
+        
+        # Verify deletion by querying again
+        verify_query = f"PartitionKey eq '{PARTITION_KEY}' and DeckID eq '{deckID}'"
+        verify_decks = list(_playerDecks.query_entities(verify_query))
+        
+        if verify_decks:
+            logging.warning(f"Deck still exists after deletion attempt. RowKey: {row_key}, DeckID: {deckID}")
+            return func.HttpResponse(
+                "Deck deletion may have failed - deck still exists",
+                status_code=500,
+                mimetype="text/plain"
+            )
+        
+        logging.info(f"Deletion verified - deck no longer exists in table")
+        
     except Exception as e:
-        logging.error(f"Error deleting deck: {e}")
+        logging.error(f"Error deleting deck: {e}", exc_info=True)
         return func.HttpResponse(
             f"Error deleting deck: {e}",
             status_code=500,

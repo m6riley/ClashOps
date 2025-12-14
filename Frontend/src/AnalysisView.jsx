@@ -20,6 +20,8 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
     versatility: false
   })
   
+  const [openInfoPopup, setOpenInfoPopup] = useState(null) // 'offense', 'defense', 'synergy', 'versatility', or null
+  
   const [optimizationsLoaded, setOptimizationsLoaded] = useState(false)
   const [showOptimizeLoading, setShowOptimizeLoading] = useState(false)
   const [optimizationResults, setOptimizationResults] = useState(null)
@@ -141,6 +143,34 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
         [category]: newValue
       }
     })
+  }
+  
+  const toggleInfoPopup = (category) => {
+    setOpenInfoPopup(prev => prev === category ? null : category)
+  }
+  
+  // Category descriptions
+  const categoryDescriptions = {
+    offense: {
+      title: 'Offense',
+      description: 'Offense measures your deck\'s ability to deal damage and pressure opponents. This includes win conditions, support cards, and offensive spells.',
+      ranking: 'Ranked on a scale of 0-5 based on win condition strength, offensive support, spell damage, and pressure capabilities. Higher scores indicate stronger offensive potential.'
+    },
+    defense: {
+      title: 'Defense',
+      description: 'Defense evaluates how well your deck can stop opponent attacks and protect your towers. This includes defensive buildings, troops, and control spells.',
+      ranking: 'Ranked on a scale of 0-5 based on defensive buildings, air/ground coverage, crowd control, and defensive versatility. Higher scores indicate better defensive capabilities.'
+    },
+    synergy: {
+      title: 'Synergy',
+      description: 'Synergy measures how well your cards work together, including offensive and defensive combinations, card interactions, and overall deck cohesion.',
+      ranking: 'Ranked on a scale of 0-5 based on card combinations, elixir efficiency, and how well cards complement each other. Higher scores indicate better card synergy.'
+    },
+    versatility: {
+      title: 'Versatility',
+      description: 'Versatility assesses how well your deck adapts to different matchups and archetypes. This includes matchup coverage and adaptability to various playstyles.',
+      ranking: 'Ranked on a scale of 0-5 based on matchup coverage against different deck archetypes (Beatdown, Bridge Spam, Siege, Bait, Cycle, etc.). Higher scores indicate better versatility across matchups.'
+    }
   }
 
   // Extract subcategories from analysis results
@@ -723,7 +753,40 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
           </div>
           <div className="analysis-categories-grid">
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></h3>
+              <div className="analysis-grid-item-title-container">
+                <h3 className="analysis-grid-item-title">⚔️ Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span></h3>
+                <button 
+                  className="analysis-info-btn"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleInfoPopup('offense')
+                  }}
+                  title="Learn more about Offense"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                {openInfoPopup === 'offense' && (
+                  <div className="analysis-info-popup">
+                    <div className="analysis-info-popup-content">
+                      <button 
+                        className="analysis-info-popup-close"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleInfoPopup('offense')
+                        }}
+                      >
+                        ×
+                      </button>
+                      <h4 className="analysis-info-popup-title">{categoryDescriptions.offense.title}</h4>
+                      <p className="analysis-info-popup-description">{categoryDescriptions.offense.description}</p>
+                      <p className="analysis-info-popup-ranking"><strong>Ranking:</strong> {categoryDescriptions.offense.ranking}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="analysis-category-summary">
                 {typedSummaries.offense}
                 {typedSummaries.offense.length < summaryTexts.offense.length && <span className="typing-cursor">|</span>}
@@ -792,7 +855,40 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
               })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></h3>
+              <div className="analysis-grid-item-title-container">
+                <h3 className="analysis-grid-item-title">🛡️ Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span></h3>
+                <button 
+                  className="analysis-info-btn"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleInfoPopup('defense')
+                  }}
+                  title="Learn more about Defense"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                {openInfoPopup === 'defense' && (
+                  <div className="analysis-info-popup">
+                    <div className="analysis-info-popup-content">
+                      <button 
+                        className="analysis-info-popup-close"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleInfoPopup('defense')
+                        }}
+                      >
+                        ×
+                      </button>
+                      <h4 className="analysis-info-popup-title">{categoryDescriptions.defense.title}</h4>
+                      <p className="analysis-info-popup-description">{categoryDescriptions.defense.description}</p>
+                      <p className="analysis-info-popup-ranking"><strong>Ranking:</strong> {categoryDescriptions.defense.ranking}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="analysis-category-summary">
                 {typedSummaries.defense}
                 {typedSummaries.defense.length < summaryTexts.defense.length && <span className="typing-cursor">|</span>}
@@ -861,7 +957,40 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
               })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></h3>
+              <div className="analysis-grid-item-title-container">
+                <h3 className="analysis-grid-item-title">🔗 Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span></h3>
+                <button 
+                  className="analysis-info-btn"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleInfoPopup('synergy')
+                  }}
+                  title="Learn more about Synergy"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                {openInfoPopup === 'synergy' && (
+                  <div className="analysis-info-popup">
+                    <div className="analysis-info-popup-content">
+                      <button 
+                        className="analysis-info-popup-close"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleInfoPopup('synergy')
+                        }}
+                      >
+                        ×
+                      </button>
+                      <h4 className="analysis-info-popup-title">{categoryDescriptions.synergy.title}</h4>
+                      <p className="analysis-info-popup-description">{categoryDescriptions.synergy.description}</p>
+                      <p className="analysis-info-popup-ranking"><strong>Ranking:</strong> {categoryDescriptions.synergy.ranking}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="analysis-category-summary">
                 {typedSummaries.synergy}
                 {typedSummaries.synergy.length < summaryTexts.synergy.length && <span className="typing-cursor">|</span>}
@@ -930,7 +1059,40 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
               })()}
             </div>
             <div className="analysis-grid-item">
-              <h3 className="analysis-grid-item-title">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></h3>
+              <div className="analysis-grid-item-title-container">
+                <h3 className="analysis-grid-item-title">♟️ Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span></h3>
+                <button 
+                  className="analysis-info-btn"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleInfoPopup('versatility')
+                  }}
+                  title="Learn more about Versatility"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+                {openInfoPopup === 'versatility' && (
+                  <div className="analysis-info-popup">
+                    <div className="analysis-info-popup-content">
+                      <button 
+                        className="analysis-info-popup-close"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleInfoPopup('versatility')
+                        }}
+                      >
+                        ×
+                      </button>
+                      <h4 className="analysis-info-popup-title">{categoryDescriptions.versatility.title}</h4>
+                      <p className="analysis-info-popup-description">{categoryDescriptions.versatility.description}</p>
+                      <p className="analysis-info-popup-ranking"><strong>Ranking:</strong> {categoryDescriptions.versatility.ranking}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="analysis-category-summary">
                 {typedSummaries.versatility}
                 {typedSummaries.versatility.length < summaryTexts.versatility.length && <span className="typing-cursor">|</span>}

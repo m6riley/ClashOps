@@ -23,24 +23,93 @@
 }
 
 .optimize-loading-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 30px;
 }
 
+.optimize-loading-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  border-radius: 16px;
+  color: white;
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.optimize-loading-icon .optimize-loading-circle {
+  stroke-dasharray: 62.83;
+  stroke-dashoffset: 62.83;
+  animation: circleProgress 2s linear infinite;
+}
+
+@keyframes circleProgress {
+  0% {
+    stroke-dashoffset: 62.83;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.optimize-loading-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 36px;
+  cursor: pointer;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: color 0.2s;
+  border-radius: 50%;
+}
+
+.optimize-loading-close:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.optimize-loading-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .optimize-loading-title {
-  font-size: 28px;
-  font-weight: 700;
   background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0 0 10px 0;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
 }
 
 .optimize-loading-subtitle {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
   margin: 0;
+  text-align: center;
 }
 
 .optimize-loading-progress {
@@ -71,75 +140,4 @@
   text-align: center;
 }
 
-.neural-network-container {
-  width: 100%;
-  height: 300px;
-  margin: 30px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
-  padding: 20px;
-  overflow: hidden;
-}
-
-.neural-network-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.neural-connection {
-  stroke: rgba(168, 85, 247, 0.3);
-  stroke-width: 1.5;
-  fill: none;
-  animation: pulse-connection 2s ease-in-out infinite;
-}
-
-@keyframes pulse-connection {
-  0%, 100% {
-    stroke: rgba(168, 85, 247, 0.3);
-    stroke-width: 1.5;
-  }
-  50% {
-    stroke: rgba(168, 85, 247, 0.8);
-    stroke-width: 2.5;
-  }
-}
-
-.neural-node {
-  fill: rgba(168, 85, 247, 0.4);
-  stroke: rgba(168, 85, 247, 0.6);
-  stroke-width: 2;
-  animation: pulse-node 1.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
-}
-
-.neural-node-core {
-  fill: rgba(168, 85, 247, 0.8);
-  animation: pulse-core 1.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.8));
-}
-
-@keyframes pulse-node {
-  0%, 100% {
-    r: 12;
-    opacity: 0.6;
-  }
-  50% {
-    r: 14;
-    opacity: 1;
-  }
-}
-
-@keyframes pulse-core {
-  0%, 100% {
-    r: 6;
-    opacity: 0.8;
-  }
-  50% {
-    r: 10;
-    opacity: 1;
-  }
-}
 

@@ -1,4 +1,5 @@
 import logging
+import json
 import azure.functions as func
 from azure.functions import Blueprint
 from shared.table_utils import _playerDecks, PARTITION_KEY
@@ -86,9 +87,9 @@ def edit_player_deck(req: func.HttpRequest) -> func.HttpResponse:
         
         logging.info(f"Deck {deckID} updated successfully with new cards and category")
         return func.HttpResponse(
-            "Deck updated successfully",
+            json.dumps({"deckID": deckID, "message": "Deck updated successfully"}),
             status_code=200,
-            mimetype="text/plain"
+            mimetype="application/json"
         )
     except Exception as e:
         logging.error(f"Error updating deck: {e}")

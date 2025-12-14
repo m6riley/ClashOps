@@ -1,4 +1,5 @@
 import logging
+import json
 import azure.functions as func
 from azure.functions import Blueprint
 from shared.table_utils import _categories, PARTITION_KEY
@@ -56,8 +57,9 @@ def save_category(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             mimetype="text/plain"
         )
+    logging.info(f"Category saved successfully for user: {userID} with categoryID: {categoryID}")
     return func.HttpResponse(
-        "Category saved successfully",
+        json.dumps({"categoryID": categoryID, "message": "Category saved successfully"}),
         status_code=200,
-        mimetype="text/plain"
+        mimetype="application/json"
     )

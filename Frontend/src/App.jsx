@@ -31,8 +31,9 @@ function App() {
   const [notification, setNotification] = useState(null) // Track notification state
   const [confirmRemove, setConfirmRemove] = useState(null) // Track confirmation state: { deckId, index }
   const [cards, setCards] = useState([]) // All cards data
-  const [selectedFilterCards, setSelectedFilterCards] = useState([]) // Selected cards for filtering (must include)
-  const [excludedFilterCards, setExcludedFilterCards] = useState([]) // Excluded cards for filtering (must not include)
+  const [selectedFilterCards, setSelectedFilterCards] = useState([]) // Selected cards for filtering: [{ cardName, mode }]
+  const [excludedFilterCards, setExcludedFilterCards] = useState([]) // Excluded cards for filtering: [{ cardName, mode }]
+  const [filterVariantMode, setFilterVariantMode] = useState('basic') // Variant mode for filtering: 'basic', 'evolution', 'hero'
   const [showFilterView, setShowFilterView] = useState(false) // Show filter cards view
   const [initialFilterState, setInitialFilterState] = useState({ selected: [], excluded: [] }) // Initial filter state when view opens
   const [editingDeck, setEditingDeck] = useState(null) // Track which deck is being edited: { deck, index, isNew }
@@ -96,23 +97,55 @@ function App() {
   
   // Helper function to check if deck matches filter (contains all selected, excludes all excluded)
   const deckMatchesFilter = (deck) => {
-    // Check if deck contains all selected cards
+    // Check if deck contains all selected cards in their specified slots
     if (selectedFilterCards.length > 0) {
-      const hasAllSelected = selectedFilterCards.every(filterCard => 
-        deck.cardNames.some(cardName => 
-          cardName.toLowerCase() === filterCard.toLowerCase()
+      const hasAllSelected = selectedFilterCards.every(filterItem => {
+        const { cardName, mode } = filterItem
+        // Determine which slots to check based on the card's mode
+        let slotsToCheck = []
+        if (mode === 'evolution') {
+          slotsToCheck = [0, 1] // Evolution mode: check slots 0-1
+        } else if (mode === 'hero') {
+          slotsToCheck = [2, 3] // Hero mode: check slots 2-3
+        } else {
+          slotsToCheck = [0, 1, 2, 3, 4, 5, 6, 7] // Basic mode: check all slots
+        }
+        
+        // Get card names from the specified slots
+        const slotCardNames = slotsToCheck
+          .map(slotIndex => deck.cards[slotIndex]?.name)
+          .filter(name => name !== null && name !== undefined)
+        
+        return slotCardNames.some(cn => 
+          cn.toLowerCase() === cardName.toLowerCase()
         )
-      )
+      })
       if (!hasAllSelected) return false
     }
     
-    // Check if deck excludes all excluded cards
+    // Check if deck excludes all excluded cards from their specified slots
     if (excludedFilterCards.length > 0) {
-      const hasExcluded = excludedFilterCards.some(filterCard => 
-        deck.cardNames.some(cardName => 
-          cardName.toLowerCase() === filterCard.toLowerCase()
+      const hasExcluded = excludedFilterCards.some(filterItem => {
+        const { cardName, mode } = filterItem
+        // Determine which slots to check based on the card's mode
+        let slotsToCheck = []
+        if (mode === 'evolution') {
+          slotsToCheck = [0, 1] // Evolution mode: check slots 0-1
+        } else if (mode === 'hero') {
+          slotsToCheck = [2, 3] // Hero mode: check slots 2-3
+        } else {
+          slotsToCheck = [0, 1, 2, 3, 4, 5, 6, 7] // Basic mode: check all slots
+        }
+        
+        // Get card names from the specified slots
+        const slotCardNames = slotsToCheck
+          .map(slotIndex => deck.cards[slotIndex]?.name)
+          .filter(name => name !== null && name !== undefined)
+        
+        return slotCardNames.some(cn => 
+          cn.toLowerCase() === cardName.toLowerCase()
         )
-      )
+      })
       if (hasExcluded) return false
     }
     
@@ -167,31 +200,76 @@ function App() {
     }
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_player_decks?code=Fs5MiWYM1-js9PBh_N55rooaz3y9S0HDZnLHWw9liMigAzFuFhi4vg==', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userID: userId
+      // Fetch both decks and categories in parallel
+      const [decksResponse, categoriesResponse] = await Promise.all([
+        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_player_decks?code=Fs5MiWYM1-js9PBh_N55rooaz3y9S0HDZnLHWw9liMigAzFuFhi4vg==', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userID: userId
+          })
+        }),
+        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_categories?code=urwVxOOKhsAY4iuv4o5mXmePN70-4LOqVHu46vLohCXoAzFuS8M-Gw==', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userID: userId
+          })
         })
-      })
+      ])
       
-      if (!response.ok) {
-        const errorText = await response.text()
+        if (!decksResponse.ok) {
+        const errorText = await decksResponse.text()
         console.error('Error fetching player decks:', errorText)
         return
       }
       
-      const decksData = await response.json()
+      const decksData = await decksResponse.json()
       if (!Array.isArray(decksData)) {
         console.warn('Player decks data is not an array:', decksData)
         return
       }
       
+      // Process categories response
+      let categoriesData = []
+      if (categoriesResponse.ok) {
+        const categoriesJson = await categoriesResponse.json()
+        if (Array.isArray(categoriesJson)) {
+          categoriesData = categoriesJson
+        }
+      } else {
+        console.warn('Error fetching categories, continuing without categories')
+      }
+      
+      // Transform categories from backend format to frontend format
+      const transformedCategories = categoriesData.map(categoryEntity => ({
+        id: categoryEntity.CategoryID || categoryEntity.RowKey, // Use CategoryID or RowKey as id
+        name: categoryEntity.CategoryName || '',
+        icon: categoryEntity.CategoryIcon || '',
+        color: categoryEntity.CategoryColor || '#ffd700'
+      }))
+      
+      // Update categories state (merge with existing categories to avoid duplicates)
+      setCategories(prev => {
+        const existingIds = new Set(prev.map(c => c.id))
+        const newCategories = transformedCategories.filter(c => !existingIds.has(c.id))
+        return [...prev, ...newCategories]
+      })
+      
+      // Create a map of category IDs to category objects for quick lookup
+      const categoryMap = new Map()
+      transformedCategories.forEach(cat => {
+        categoryMap.set(cat.id, cat)
+      })
+      
       // Transform the fetched decks into the format expected by favouriteDecks
       const transformedDecks = []
       const deckNames = {}
+      const deckCategoryMap = {}
       
       decksData.forEach((deckEntity, index) => {
         // Parse cards from semicolon-separated string
@@ -240,17 +318,27 @@ function App() {
         const backendDeckName = deckEntity.DeckName || 'My Favourite Deck'
         deckNames[`${deckId}-${index}`] = backendDeckName
         
-        // Set category if exists
+        // Map category ID from backend to frontend category ID
+        // The deckEntity.CategoryID is the UUID from the backend
+        // We need to find the matching category and use its id
         if (deckEntity.CategoryID && deckEntity.CategoryID !== 'none') {
-          setDeckCategories(prev => ({
-            ...prev,
-            [deckId]: deckEntity.CategoryID
-          }))
+          const category = categoryMap.get(deckEntity.CategoryID)
+          if (category) {
+            // Use the category's id (which is the UUID from backend)
+            deckCategoryMap[deckId] = category.id
+              } else {
+            // Category not found, but still store the CategoryID in case category loads later
+            deckCategoryMap[deckId] = deckEntity.CategoryID
+          }
         }
       })
       
       setFavouriteDecks(transformedDecks)
       setFavouriteDeckNames(deckNames)
+      setDeckCategories(prev => ({
+        ...prev,
+        ...deckCategoryMap
+      }))
     } catch (error) {
       console.error('Error fetching player decks:', error)
     }
@@ -259,7 +347,7 @@ function App() {
   // Helper function to edit deck in backend
   const editDeckInBackend = async (deckId, cardNames, categoryId, deckName) => {
     if (!currentUserId || !isLoggedIn) {
-      return // Don't edit if not logged in
+      return null // Don't edit if not logged in
     }
     
     // Extract the actual backend deck ID (remove "fav-" prefix if present)
@@ -289,11 +377,15 @@ function App() {
       if (!response.ok) {
         const errorText = await response.text()
         console.error('Error editing deck in backend:', errorText)
-        // Don't show error to user - this is a background operation
+        return null
       }
+      
+      // Parse JSON response to get deckID
+      const data = await response.json()
+      return data.deckID // Return the backend UUID
     } catch (error) {
       console.error('Error editing deck in backend:', error)
-      // Don't show error to user - this is a background operation
+      return null
     }
   }
 
@@ -303,11 +395,15 @@ function App() {
       return // Don't delete if not logged in
     }
     
+    console.log('deleteDeckFromBackend called with deckId:', deckId)
+    
     // Extract the actual backend deck ID (remove "fav-" prefix if present)
     let backendDeckId = deckId
-    if (deckId.startsWith('fav-')) {
+    if (deckId && deckId.startsWith('fav-')) {
       backendDeckId = deckId.substring(4) // Remove "fav-" prefix
     }
+    
+    console.log('Extracted backendDeckId:', backendDeckId)
     
     try {
       const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_deck?code=-sN-SMxXtIlid3swrCpclKsRaHiKPJlvGMup1475FokWAzFuJVzqTA==', {
@@ -323,10 +419,14 @@ function App() {
       if (!response.ok) {
         const errorText = await response.text()
         console.error('Error deleting deck from backend:', errorText)
+        console.error('Requested deckID:', backendDeckId)
         // Don't show error to user - this is a background operation
+      } else {
+        console.log('Successfully deleted deck with ID:', backendDeckId)
       }
     } catch (error) {
       console.error('Error deleting deck from backend:', error)
+      console.error('Requested deckID:', backendDeckId)
       // Don't show error to user - this is a background operation
     }
   }
@@ -334,7 +434,7 @@ function App() {
   // Helper function to save deck to backend
   const saveDeckToBackend = async (cardNames, categoryId, deckName) => {
     if (!currentUserId || !isLoggedIn) {
-      return // Don't save if not logged in
+      return null // Don't save if not logged in
     }
     
     try {
@@ -359,11 +459,15 @@ function App() {
       if (!response.ok) {
         const errorText = await response.text()
         console.error('Error saving deck to backend:', errorText)
-        // Don't show error to user - this is a background operation
+        return null
       }
+      
+      // Parse JSON response to get deckID
+      const data = await response.json()
+      return data.deckID // Return the backend UUID
     } catch (error) {
       console.error('Error saving deck to backend:', error)
-      // Don't show error to user - this is a background operation
+      return null
     }
   }
 
@@ -397,10 +501,48 @@ function App() {
       return [...prev, favouriteDeck]
     })
     
-    // Save to backend
+    // Save to backend and get the actual UUID
     const categoryId = deckCategories[deckId] || null
     const deckName = 'My Favourite Deck' // Default name when adding to favorites
-    await saveDeckToBackend(originalDeck.cardNames, categoryId, deckName)
+    const backendDeckId = await saveDeckToBackend(originalDeck.cardNames, categoryId, deckName)
+    
+    // Update the deck ID with the actual backend UUID if we got one
+    if (backendDeckId) {
+      const actualDeckId = `fav-${backendDeckId}`
+      setFavouriteDecks(prev => {
+        const updated = [...prev]
+        const lastIndex = updated.length - 1
+        if (lastIndex >= 0) {
+          updated[lastIndex] = {
+            ...updated[lastIndex],
+            id: actualDeckId
+          }
+          // Update the deck name key to use the new ID
+          setFavouriteDeckNames(names => {
+            const newNames = { ...names }
+            const oldKey = `${favouriteDeckId}-${lastIndex}`
+            const newKey = `${actualDeckId}-${lastIndex}`
+            if (newNames[oldKey]) {
+              newNames[newKey] = newNames[oldKey]
+              delete newNames[oldKey]
+            }
+            return newNames
+          })
+          // Update category mapping
+          if (categoryId) {
+            setDeckCategories(prev => {
+              const newCategories = { ...prev }
+              if (newCategories[favouriteDeckId]) {
+                newCategories[actualDeckId] = newCategories[favouriteDeckId]
+                delete newCategories[favouriteDeckId]
+              }
+              return newCategories
+            })
+          }
+        }
+        return updated
+      })
+    }
     
     setNotification({
       message: `Deck added to favourites`,
@@ -417,6 +559,9 @@ function App() {
   const confirmRemoveFromFavourites = async () => {
     if (confirmRemove) {
       const { deckId: favouriteDeckId, index } = confirmRemove
+      
+      console.log('confirmRemoveFromFavourites called with favouriteDeckId:', favouriteDeckId, 'index:', index)
+      console.log('Current favouriteDecks:', favouriteDecks.map(d => ({ id: d.id, cardNames: d.cardNames })))
       
       // Delete from backend
       await deleteDeckFromBackend(favouriteDeckId)
@@ -466,20 +611,34 @@ function App() {
   }
 
   // Toggle card in filter selection (cycles: unselected -> selected -> excluded -> unselected)
-  const toggleFilterCard = (cardName) => {
-    const isSelected = selectedFilterCards.includes(cardName)
-    const isExcluded = excludedFilterCards.includes(cardName)
+  // Now accepts { cardName, mode } object to handle variants separately
+  const toggleFilterCard = (cardData) => {
+    // Handle both old string format and new object format
+    const cardName = typeof cardData === 'string' ? cardData : cardData.cardName
+    const cardMode = typeof cardData === 'string' ? filterVariantMode : (cardData.mode || filterVariantMode)
+    
+    // Check if this specific variant (cardName + mode) is selected/excluded
+    const isSelected = selectedFilterCards.some(item => 
+      item.cardName === cardName && item.mode === cardMode
+    )
+    const isExcluded = excludedFilterCards.some(item => 
+      item.cardName === cardName && item.mode === cardMode
+    )
     
     if (isSelected) {
-      // Move from selected to excluded
-      setSelectedFilterCards(prev => prev.filter(name => name !== cardName))
-      setExcludedFilterCards(prev => [...prev, cardName])
+      // Move from selected to excluded (keep the same mode)
+      setSelectedFilterCards(prev => prev.filter(item => 
+        !(item.cardName === cardName && item.mode === cardMode)
+      ))
+      setExcludedFilterCards(prev => [...prev, { cardName, mode: cardMode }])
     } else if (isExcluded) {
       // Move from excluded to unselected
-      setExcludedFilterCards(prev => prev.filter(name => name !== cardName))
+      setExcludedFilterCards(prev => prev.filter(item => 
+        !(item.cardName === cardName && item.mode === cardMode)
+      ))
     } else {
-      // Move from unselected to selected
-      setSelectedFilterCards(prev => [...prev, cardName])
+      // Move from unselected to selected (use the provided mode)
+      setSelectedFilterCards(prev => [...prev, { cardName, mode: cardMode }])
     }
   }
 
@@ -503,8 +662,13 @@ function App() {
   // Cancel filter view - revert to initial state
   const cancelFilter = () => {
     // Restore to the initial filter state when the view was opened
-    setSelectedFilterCards([...initialFilterState.selected])
-    setExcludedFilterCards([...initialFilterState.excluded])
+    // Convert old string format to new object format if needed
+    setSelectedFilterCards(initialFilterState.selected.map(item => 
+      typeof item === 'string' ? { cardName: item, mode: 'basic' } : item
+    ))
+    setExcludedFilterCards(initialFilterState.excluded.map(item => 
+      typeof item === 'string' ? { cardName: item, mode: 'basic' } : item
+    ))
     setShowFilterView(false)
   }
 
@@ -516,7 +680,7 @@ function App() {
 
   // Calculate average elixir cost (helper function for deck editing)
   const calculateAverageElixirCostForDeck = (cardNames) => {
-    const cardElixirMap = {}
+        const cardElixirMap = {}
     cards.forEach(card => {
       const cardName = card.card_name?.trim()
       const elixirCost = parseFloat(card.elixer_cost) || 0
@@ -612,8 +776,46 @@ function App() {
           }))
         }
         
-        // Save to backend
-        await saveDeckToBackend(cardNames, categoryId, deckName)
+        // Save to backend and get the actual UUID
+        const backendDeckId = await saveDeckToBackend(cardNames, categoryId, deckName)
+        
+        // Update the deck ID with the actual backend UUID if we got one
+        if (backendDeckId) {
+          const actualDeckId = `fav-${backendDeckId}`
+          setFavouriteDecks(prev => {
+            const updated = [...prev]
+            const lastIndex = updated.length - 1
+            if (lastIndex >= 0 && updated[lastIndex].id === favouriteDeckId) {
+              updated[lastIndex] = {
+                ...updated[lastIndex],
+                id: actualDeckId
+              }
+              // Update the deck name key to use the new ID
+              setFavouriteDeckNames(names => {
+                const newNames = { ...names }
+                const oldKey = `${favouriteDeckId}-${lastIndex}`
+                const newKey = `${actualDeckId}-${lastIndex}`
+                if (newNames[oldKey]) {
+                  newNames[newKey] = newNames[oldKey]
+                  delete newNames[oldKey]
+                }
+                return newNames
+              })
+              // Update category mapping
+              if (categoryId) {
+                setDeckCategories(prev => {
+                  const newCategories = { ...prev }
+                  if (newCategories[favouriteDeckId]) {
+                    newCategories[actualDeckId] = newCategories[favouriteDeckId]
+                    delete newCategories[favouriteDeckId]
+                  }
+                  return newCategories
+                })
+              }
+            }
+            return updated
+          })
+        }
         
         setNotification({
           message: `Deck created successfully`,
@@ -693,14 +895,119 @@ function App() {
     setEditingDeck(null)
   }
 
+  // Helper function to save category to backend
+  const saveCategoryToBackend = async (categoryName, categoryIcon, categoryColor) => {
+    if (!currentUserId || !isLoggedIn) {
+      return null // Don't save if not logged in
+    }
+    
+    try {
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_category?code=r6Yu-yfeMb_4fk_GfzgCUaThEmU3ZcCuTzZq6BNEYjI0AzFuWyVbJQ==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userID: currentUserId,
+          categoryName: categoryName,
+          categoryIcon: categoryIcon || '',
+          categoryColor: categoryColor
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error saving category to backend:', errorText)
+        return null
+      }
+      
+      // Parse JSON response to get categoryID
+      const data = await response.json()
+      return data.categoryID // Return the backend UUID
+    } catch (error) {
+      console.error('Error saving category to backend:', error)
+      return null
+    }
+  }
+
+  // Helper function to delete category from backend
+  const deleteCategoryFromBackend = async (categoryId) => {
+    if (!currentUserId || !isLoggedIn) {
+      return false // Don't delete if not logged in
+    }
+    
+    try {
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_category?code=ER4K3LwEwjrwsDgYuLxHQTqfcDZbyDDCo2nElBj4KMSDAzFukVLv9Q==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          categoryID: categoryId
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error deleting category from backend:', errorText)
+        return false
+      }
+      
+      return true
+    } catch (error) {
+      console.error('Error deleting category from backend:', error)
+      return false
+    }
+  }
+
+  // Helper function to edit category in backend
+  const editCategoryInBackend = async (categoryId, categoryName, categoryIcon, categoryColor) => {
+    if (!currentUserId || !isLoggedIn) {
+      return false // Don't edit if not logged in
+    }
+    
+    try {
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_category?code=267ubd78VAPnnerjTAiHasIpV1yfWjI8sctFRdb-Q61-AzFujAmoPA==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          categoryID: categoryId,
+          categoryName: categoryName,
+          categoryIcon: categoryIcon || '',
+          categoryColor: categoryColor
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error editing category in backend:', errorText)
+        return false
+      }
+      
+      return true
+    } catch (error) {
+      console.error('Error editing category in backend:', error)
+      return false
+    }
+  }
+
   // Handle save category (create or edit)
-  const handleSaveCategory = (categoryData) => {
+  const handleSaveCategory = async (categoryData) => {
     if (!categoryDialog) return
     
     if (categoryDialog.mode === 'create') {
-      // Create new category
+      // Save to backend and get the actual UUID
+      const backendCategoryId = await saveCategoryToBackend(
+        categoryData.name,
+        categoryData.icon || '',
+        categoryData.color
+      )
+      
+      // Create new category with backend UUID
       const newCategory = {
-        id: Date.now(), // Use timestamp as unique ID
+        id: backendCategoryId || Date.now(), // Use backend UUID if available, fallback to timestamp
         name: categoryData.name,
         color: categoryData.color,
         icon: categoryData.icon
@@ -712,8 +1019,23 @@ function App() {
       })
     } else if (categoryDialog.mode === 'edit' && categoryDialog.category) {
       // Update existing category
+      const categoryId = categoryDialog.category.id
+      
+      // Only call backend if category has a UUID (string ID with dashes)
+      // Old categories with numeric IDs won't be in the backend
+      if (typeof categoryId === 'string' && categoryId.includes('-')) {
+        // It's a UUID, update in backend
+        await editCategoryInBackend(
+          categoryId,
+          categoryData.name,
+          categoryData.icon || '',
+          categoryData.color
+        )
+      }
+      
+      // Update local state
       setCategories(prev => prev.map(cat => 
-        cat.id === categoryDialog.category.id
+        cat.id === categoryId
           ? { ...cat, ...categoryData }
           : cat
       ))
@@ -905,8 +1227,8 @@ function App() {
         console.warn('Decks data is not an array:', decksData)
         setDecks([])
       }
-    } catch (err) {
-      console.error('Error loading data:', err)
+      } catch (err) {
+        console.error('Error loading data:', err)
       if (err.name === 'AbortError') {
         setError('Request timed out. Please try again.')
       } else if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
@@ -918,11 +1240,11 @@ function App() {
       setFeatures([])
       setDecks([])
       setCards([])
-    } finally {
+      } finally {
       setInitialLoading(false)
-      setLoading(false)
+        setLoading(false)
+      }
     }
-  }
 
   return (
     <div className="App">
@@ -1077,12 +1399,14 @@ function App() {
                 onCancel={cancelFilter}
                 onClearFilters={clearFilters}
                 filteredDeckCount={getFilteredDecks().length}
+                variantMode={filterVariantMode}
+                onVariantModeChange={setFilterVariantMode}
               />
             ) : (
               <>
-                <div className="page-title-container">
+        <div className="page-title-container">
                   <div className="title-section">
-                    <h1 className="page-title">Deck Catalog</h1>
+          <h1 className="page-title">Deck Catalog</h1>
                     <p className="page-description">Browse the most powerful decks in the current meta.</p>
                   </div>
                   <div className="page-title-actions">
@@ -1098,42 +1422,42 @@ function App() {
                         <span className="filter-badge">{selectedFilterCards.length + excludedFilterCards.length}</span>
                       )}
                     </button>
-                    {!loading && !error && (() => {
-                      const currentDeckCount = expandedFeature
-                        ? (expandedFeature.filter_options 
-                            ? getDecksForFeature(expandedFeature.filter_options).length
+          {!loading && !error && (() => {
+            const currentDeckCount = expandedFeature
+              ? (expandedFeature.filter_options 
+                  ? getDecksForFeature(expandedFeature.filter_options).length
                             : getFilteredDecks().length)
                         : getFilteredDecks().length
-                      return (
-                        <div className="deck-count">
-                          <span className="deck-count-number">{currentDeckCount}</span>
-                          <span className="deck-count-text">unique decks</span>
-                        </div>
-                      )
-                    })()}
+            return (
+              <div className="deck-count">
+                <span className="deck-count-number">{currentDeckCount}</span>
+                <span className="deck-count-text">unique decks</span>
+              </div>
+            )
+          })()}
                   </div>
-                </div>
-                {loading && <div className="loading-message">Loading decks...</div>}
-                {error && <div className="error-message">Error: {error}</div>}
-                {!loading && !error && (
-              <>
-                {/* Expanded feature view */}
-                {expandedFeature && (() => {
-                  const allDecks = expandedFeature.filter_options 
-                    ? getDecksForFeature(expandedFeature.filter_options)
+        </div>
+        {loading && <div className="loading-message">Loading decks...</div>}
+        {error && <div className="error-message">Error: {error}</div>}
+        {!loading && !error && (
+          <>
+            {/* Expanded feature view */}
+            {expandedFeature && (() => {
+              const allDecks = expandedFeature.filter_options 
+                ? getDecksForFeature(expandedFeature.filter_options)
                     : getFilteredDecks()
-                  return (
-                    <div className="feature-section feature-section-expanded">
-                      <FeatureBanner 
-                        feature={expandedFeature}
-                        decks={allDecks}
-                        isExpanded={true}
-                        onSeeAll={() => setExpandedFeature(null)}
-                        onBack={() => setExpandedFeature(null)}
-                      />
-                      <div className="decks-grid">
-                        {allDecks.length > 0 ? (
-                          allDecks.map(deck => (
+              return (
+                <div className="feature-section feature-section-expanded">
+                  <FeatureBanner 
+                    feature={expandedFeature}
+                    decks={allDecks}
+                    isExpanded={true}
+                    onSeeAll={() => setExpandedFeature(null)}
+                    onBack={() => setExpandedFeature(null)}
+                  />
+                  <div className="decks-grid">
+                    {allDecks.length > 0 ? (
+                      allDecks.map(deck => (
                             <DeckCard 
                               key={deck.id} 
                               deck={deck} 
@@ -1141,19 +1465,19 @@ function App() {
                               onToggleFavourite={addToFavourites}
                               onAnalyze={handleAnalyzeDeck}
                             />
-                          ))
-                        ) : (
-                          <div className="no-decks-message">No decks available</div>
-                        )}
-                      </div>
-                    </div>
-                  )
-                })()}
-                
-                {/* Normal view - only show if no feature is expanded */}
-                {!expandedFeature && (
-                  <>
-                    {/* Feature sections - two per row */}
+                      ))
+                    ) : (
+                      <div className="no-decks-message">No decks available</div>
+                    )}
+                  </div>
+                </div>
+              )
+            })()}
+            
+            {/* Normal view - only show if no feature is expanded */}
+            {!expandedFeature && (
+              <>
+                {/* Feature sections - two per row */}
                     {groupedFeatures.map((featurePair, pairIndex) => {
                       const isLastPair = pairIndex === groupedFeatures.length - 1
                       const isSingleFeature = featurePair.length === 1
@@ -1161,22 +1485,22 @@ function App() {
                       
                       return (
                         <div key={pairIndex} className={`features-row ${shouldSpanFullWidth ? 'features-row-single' : ''}`}>
-                          {featurePair.map((feature, index) => {
+                    {featurePair.map((feature, index) => {
                             const maxDecks = shouldSpanFullWidth ? 4 : 2
                             const featureDecks = getDecksForFeature(feature.filter_options, maxDecks)
-                            return (
+                      return (
                               <div key={index} className={`feature-section ${shouldSpanFullWidth ? 'feature-section-single' : ''}`}>
-                                <FeatureBanner 
-                                  feature={feature} 
-                                  decks={featureDecks}
-                                  isExpanded={false}
-                                  onSeeAll={() => setExpandedFeature(feature)}
-                                  onBack={() => {}}
+                          <FeatureBanner 
+                            feature={feature} 
+                            decks={featureDecks}
+                            isExpanded={false}
+                            onSeeAll={() => setExpandedFeature(feature)}
+                            onBack={() => {}}
                                   hideSeeAll={featureDecks.length <= maxDecks}
-                                />
-                                {featureDecks.length > 0 && (
+                          />
+                          {featureDecks.length > 0 && (
                                   <div className={`feature-decks-grid ${shouldSpanFullWidth ? 'feature-decks-grid-single' : ''}`}>
-                                    {featureDecks.map(deck => (
+                              {featureDecks.map(deck => (
                                       <DeckCard 
                                         key={deck.id} 
                                         deck={deck} 
@@ -1184,32 +1508,32 @@ function App() {
                                         onToggleFavourite={addToFavourites}
                                         onAnalyze={handleAnalyzeDeck}
                                       />
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            )
-                          })}
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )
                     })}
-                    
-                    {/* Top Decks section */}
-                    <div className="feature-section">
-                      <FeatureBanner 
-                        feature={{
-                          featured_text: 'Top Decks',
-                          featured_type: 'All',
-                          featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
-                          filter_options: ''
-                        }}
-                        decks={[]}
-                        isExpanded={false}
-                        onSeeAll={() => {}}
-                        onBack={() => {}}
+                  </div>
+                      )
+                    })}
+                
+                {/* Top Decks section */}
+                <div className="feature-section">
+                  <FeatureBanner 
+                    feature={{
+                      featured_text: 'Top Decks',
+                      featured_type: 'All',
+                      featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
+                      filter_options: ''
+                    }}
+                    decks={[]}
+                    isExpanded={false}
+                    onSeeAll={() => {}}
+                    onBack={() => {}}
                         hideSeeAll={true}
-                      />
-                      <div className="decks-grid">
+                  />
+                  <div className="decks-grid">
                         {getFilteredDecks().length > 0 ? (
                           getFilteredDecks().map(deck => (
                             <DeckCard 
@@ -1219,16 +1543,16 @@ function App() {
                               onToggleFavourite={addToFavourites}
                               onAnalyze={handleAnalyzeDeck}
                             />
-                          ))
-                        ) : (
-                          <div className="no-decks-message">No decks available</div>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
+                      ))
+                    ) : (
+                      <div className="no-decks-message">No decks available</div>
+                    )}
+                  </div>
+                </div>
               </>
             )}
+          </>
+        )}
               </>
             )}
           </>
@@ -1275,20 +1599,58 @@ function App() {
                     }
                   }
                 }}
-                onDeleteCategory={(categoryId) => {
-                  // Convert categoryId to number for comparison (select returns string)
-                  const categoryIdNum = categoryId ? Number(categoryId) : null
+                onDeleteCategory={async (categoryId) => {
+                  // categoryId from select is always a string, but category.id could be string (UUID) or number
+                  // Find the category by comparing IDs (handling both string and number)
+                  const category = categories.find(cat => {
+                    // If both are strings, compare directly
+                    if (typeof cat.id === 'string' && typeof categoryId === 'string') {
+                      return cat.id === categoryId
+                    }
+                    // If cat.id is number, convert categoryId to number for comparison
+                    if (typeof cat.id === 'number') {
+                      return cat.id === Number(categoryId)
+                    }
+                    // If cat.id is string UUID, compare as strings
+                    return String(cat.id) === String(categoryId)
+                  })
                   
-                  if (categoryIdNum && window.confirm('Are you sure you want to delete this category? Decks in this category will be moved to "No Category".')) {
+                  if (!category) return
+                  
+                  // Use the actual category.id for filtering (could be number or string)
+                  const actualCategoryId = category.id
+                  
+                  if (window.confirm('Are you sure you want to delete this category? Decks in this category will be moved to "No Category".')) {
+                    // Delete from backend if category has a UUID (string ID with dashes)
+                    // Only call backend if the ID is a UUID string (not a number from Date.now())
+                    if (typeof actualCategoryId === 'string' && actualCategoryId.includes('-')) {
+                      // It's a UUID, delete from backend
+                      await deleteCategoryFromBackend(actualCategoryId)
+                    }
+                    
                     // Remove category from categories array
-                    setCategories(prev => prev.filter(cat => cat.id !== categoryIdNum))
+                    setCategories(prev => prev.filter(cat => cat.id !== actualCategoryId))
                     
                     // Remove category from all decks that have it
+                    // deckCategories stores category IDs, need to compare properly
                     setDeckCategories(prev => {
                       const newCategories = { ...prev }
                       Object.keys(newCategories).forEach(deckId => {
-                        if (newCategories[deckId] === categoryIdNum) {
-                          delete newCategories[deckId]
+                        const deckCategoryId = newCategories[deckId]
+                        // Compare considering both could be number or string
+                        if (typeof actualCategoryId === 'string' && typeof deckCategoryId === 'string') {
+                          if (deckCategoryId === actualCategoryId) {
+                            delete newCategories[deckId]
+                          }
+                        } else if (typeof actualCategoryId === 'number' && typeof deckCategoryId === 'number') {
+                          if (deckCategoryId === actualCategoryId) {
+                            delete newCategories[deckId]
+                          }
+                        } else {
+                          // Mixed types, compare as strings
+                          if (String(deckCategoryId) === String(actualCategoryId)) {
+                            delete newCategories[deckId]
+                          }
                         }
                       })
                       return newCategories
@@ -1298,12 +1660,18 @@ function App() {
                     if (editingDeck) {
                       if (editingDeck.isNew) {
                         // For new decks, clear categoryId from editingDeck state
-                        if (editingDeck.categoryId === categoryIdNum) {
+                        const editingCategoryId = editingDeck.categoryId
+                        if (editingCategoryId === actualCategoryId || 
+                            (typeof editingCategoryId === 'number' && typeof actualCategoryId === 'number' && editingCategoryId === actualCategoryId) ||
+                            String(editingCategoryId) === String(actualCategoryId)) {
                           setEditingDeck(prev => ({ ...prev, categoryId: null }))
                         }
                       } else {
                         // For existing decks, clear from deckCategories
-                        if (deckCategories[editingDeck.deck.id] === categoryIdNum) {
+                        const deckCategoryId = deckCategories[editingDeck.deck.id]
+                        if (deckCategoryId === actualCategoryId ||
+                            (typeof deckCategoryId === 'number' && typeof actualCategoryId === 'number' && deckCategoryId === actualCategoryId) ||
+                            String(deckCategoryId) === String(actualCategoryId)) {
                           setDeckCategories(prev => {
                             const newCategories = { ...prev }
                             delete newCategories[editingDeck.deck.id]
