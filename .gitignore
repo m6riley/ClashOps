@@ -152,6 +152,10 @@ obj/
 # Azure Functions settings
 appsettings.json
 
+# Frontend configuration with secrets
+Frontend/src/config.js
+Frontend/src/config.local.js
+
 ############################################################
 # AZURITE (local Azure Storage emulator)
 ############################################################

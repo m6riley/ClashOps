@@ -1,39 +1,39 @@
-// Configuration for API endpoints
-// IMPORTANT: This file contains sensitive function keys. Do not commit this file to version control.
-// Create a config.local.js file with your actual keys, or use environment variables.
+// Example configuration file for API endpoints
+// Copy this file to config.js and fill in your actual function keys
+// IMPORTANT: config.js should be in .gitignore and never committed to version control
 
 // Base URL for Azure Functions
 const BASE_URL = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api';
 
-// Function keys (move these to environment variables or config.local.js in production)
+// Function keys - Replace these with your actual function keys
 const FUNCTION_KEYS = {
   // Account management
-  add_account: 'Z7f1S2AuqLIj9H3HvicdkS351FORRERoGVx1RcvNu0TTAzFuQ0VEDg==',
-  get_account: '3DCBXjji828GQZGeMZrrF6Nz0mXya13nYAM06OX2u5VRAzFuBE9MwQ==',
-  edit_account: '9khy8ssiYDaWELHWSdKpqNRp2QIJs2p9EQ6FrShUjbjLAzFuDL3joQ==',
-  delete_account: 'b-81qak2fzOZYkkxtnZn822F9AFErgXNCZSCd4AS0xJ9AzFuuJCe6g==',
+  add_account: 'YOUR_ADD_ACCOUNT_FUNCTION_KEY',
+  get_account: 'YOUR_GET_ACCOUNT_FUNCTION_KEY',
+  edit_account: 'YOUR_EDIT_ACCOUNT_FUNCTION_KEY',
+  delete_account: 'YOUR_DELETE_ACCOUNT_FUNCTION_KEY',
   
   // Deck management
-  get_player_decks: 'Fs5MiWYM1-js9PBh_N55rooaz3y9S0HDZnLHWw9liMigAzFuFhi4vg==',
-  save_deck: 'vkAaPwqingNpw2T0GEWdVxr9bSyPpoAXjVpmPOJgeMcWAzFuAAeH6g==',
-  edit_deck: 'By-sQSXOalIwZ1O5UPZbs6aJBND6YaOg8m1y-wxtmliFAzFuJorCvQ==',
-  delete_deck: '-sN-SMxXtIlid3swrCpclKsRaHiKPJlvGMup1475FokWAzFuJVzqTA==',
+  get_player_decks: 'YOUR_GET_PLAYER_DECKS_FUNCTION_KEY',
+  save_deck: 'YOUR_SAVE_DECK_FUNCTION_KEY',
+  edit_deck: 'YOUR_EDIT_DECK_FUNCTION_KEY',
+  delete_deck: 'YOUR_DELETE_DECK_FUNCTION_KEY',
   
   // Category management
-  get_categories: 'urwVxOOKhsAY4iuv4o5mXmePN70-4LOqVHu46vLohCXoAzFuS8M-Gw==',
-  save_category: 'r6Yu-yfeMb_4fk_GfzgCUaThEmU3ZcCuTzZq6BNEYjI0AzFuWyVbJQ==',
-  edit_category: '267ubd78VAPnnerjTAiHasIpV1yfWjI8sctFRdb-Q61-AzFujAmoPA==',
-  delete_category: 'ER4K3LwEwjrwsDgYuLxHQTqfcDZbyDDCo2nElBj4KMSDAzFukVLv9Q==',
+  get_categories: 'YOUR_GET_CATEGORIES_FUNCTION_KEY',
+  save_category: 'YOUR_SAVE_CATEGORY_FUNCTION_KEY',
+  edit_category: 'YOUR_EDIT_CATEGORY_FUNCTION_KEY',
+  delete_category: 'YOUR_DELETE_CATEGORY_FUNCTION_KEY',
   
   // Data loading
-  get_features: 'DS5LZbckSVcYRHSC2lg1kspMj_9YIUOKwqKI2x2HaP7AAzFu758ciw==',
-  get_decks: '983cRvpPitpcxlgRcBzjsjLi0dPukNbj7KGxfbUbi-pHAzFuo-FZGw==',
-  get_cards: 'f2W9t18O5vc0q_U0c_DnSnyyKMZ4xfYMlVen22JUMrw5AzFuHFJHNQ==',
+  get_features: 'YOUR_GET_FEATURES_FUNCTION_KEY',
+  get_decks: 'YOUR_GET_DECKS_FUNCTION_KEY',
+  get_cards: 'YOUR_GET_CARDS_FUNCTION_KEY',
   
   // Analysis
-  analyze_deck: '7_jeBF2igCLBI7W7zE3oPnAg-dsDb813Ebtxl8Gr-I9XAzFuo3lS_g==',
-  create_report: 'fQPVXDrG1jtqXxYiCQJoORCgESgAoZ4tC2HjgaIHoz1HAzFuox97Vw==',
-  optimize_deck: 'xjYyGBJ553iiu6HPGz679RyIsVmt42ViHbZbYfOnpLiLAzFuofpdcg=='
+  analyze_deck: 'YOUR_ANALYZE_DECK_FUNCTION_KEY',
+  create_report: 'YOUR_CREATE_REPORT_FUNCTION_KEY',
+  optimize_deck: 'YOUR_OPTIMIZE_DECK_FUNCTION_KEY'
 };
 
 // Helper function to get function URL
@@ -68,3 +68,4 @@ export const getGetCardsUrl = () => getFunctionUrl('get_cards');
 export const getAnalyzeDeckUrl = () => getFunctionUrl('analyze_deck');
 export const getCreateReportUrl = () => getFunctionUrl('create_report');
 export const getOptimizeDeckUrl = () => getFunctionUrl('optimize_deck');
+

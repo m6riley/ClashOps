@@ -4,6 +4,7 @@ import { getCardImageUrl, getCardEvolutionImageUrl, getCardHeroImageUrl } from '
 import ElixirIcon from './assets/Elixir.svg'
 import CycleIcon from './assets/Cycle.svg'
 import OptimizeLoading from './OptimizeLoading'
+import { getOptimizeDeckUrl } from './config'
 
 function AnalysisView({ deck, onClose, allCards, analysisResults }) {
   const [expandedCategories, setExpandedCategories] = useState({
@@ -218,7 +219,7 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
       const synergyData = getCategoryData('synergy')
       const versatilityData = getCategoryData('versatility')
 
-      const functionUrl = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/optimize_deck?code=xjYyGBJ553iiu6HPGz679RyIsVmt42ViHbZbYfOnpLiLAzFuofpdcg=='
+      const functionUrl = getOptimizeDeckUrl()
 
       const response = await fetch(functionUrl, {
         method: 'POST',

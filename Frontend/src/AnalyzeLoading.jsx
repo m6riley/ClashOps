@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './AnalyzeLoading.css'
+import { getAnalyzeDeckUrl, getCreateReportUrl } from './config'
 
 function AnalyzeLoading({ deck, onClose, onComplete }) {
   const [progress, setProgress] = useState(0)
@@ -41,8 +42,8 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
     })
 
     const categories = ['offense', 'defense', 'synergy', 'versatility']
-    const analyzeFunctionUrl = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/analyze_deck?code=7_jeBF2igCLBI7W7zE3oPnAg-dsDb813Ebtxl8Gr-I9XAzFuo3lS_g=='
-    const createReportUrl = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/create_report?code=fQPVXDrG1jtqXxYiCQJoORCgESgAoZ4tC2HjgaIHoz1HAzFuox97Vw=='
+    const analyzeFunctionUrl = getAnalyzeDeckUrl()
+    const createReportUrl = getCreateReportUrl()
 
     // First, ensure the report exists by calling create_report
     // This is idempotent - if report already exists, it just returns success

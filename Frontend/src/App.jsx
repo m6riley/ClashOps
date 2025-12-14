@@ -17,6 +17,19 @@ import PaymentForm from './PaymentForm'
 import AnalyzeLoading from './AnalyzeLoading'
 import AnalysisView from './AnalysisView'
 import InitialLoading from './InitialLoading'
+import {
+  getGetPlayerDecksUrl,
+  getGetCategoriesUrl,
+  getEditDeckUrl,
+  getDeleteDeckUrl,
+  getSaveDeckUrl,
+  getSaveCategoryUrl,
+  getDeleteCategoryUrl,
+  getEditCategoryUrl,
+  getGetFeaturesUrl,
+  getGetDecksUrl,
+  getGetCardsUrl
+} from './config'
 
 function App() {
   const [decks, setDecks] = useState([])
@@ -202,7 +215,7 @@ function App() {
     try {
       // Fetch both decks and categories in parallel
       const [decksResponse, categoriesResponse] = await Promise.all([
-        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_player_decks?code=Fs5MiWYM1-js9PBh_N55rooaz3y9S0HDZnLHWw9liMigAzFuFhi4vg==', {
+        fetch(getGetPlayerDecksUrl(), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -211,7 +224,7 @@ function App() {
             userID: userId
           })
         }),
-        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_categories?code=urwVxOOKhsAY4iuv4o5mXmePN70-4LOqVHu46vLohCXoAzFuS8M-Gw==', {
+        fetch(getGetCategoriesUrl(), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -361,7 +374,7 @@ function App() {
       const cardsString = cardNames.join(';')
       const categoryID = categoryId || 'none'
       
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_deck?code=By-sQSXOalIwZ1O5UPZbs6aJBND6YaOg8m1y-wxtmliFAzFuJorCvQ==', {
+      const response = await fetch(getEditDeckUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -406,7 +419,7 @@ function App() {
     console.log('Extracted backendDeckId:', backendDeckId)
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_deck?code=-sN-SMxXtIlid3swrCpclKsRaHiKPJlvGMup1475FokWAzFuJVzqTA==', {
+      const response = await fetch(getDeleteDeckUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -443,7 +456,7 @@ function App() {
       const categoryID = categoryId || 'none'
       const deckNameValue = deckName || 'My Favourite Deck'
       
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_deck?code=vkAaPwqingNpw2T0GEWdVxr9bSyPpoAXjVpmPOJgeMcWAzFuAAeH6g==', {
+      const response = await fetch(getSaveDeckUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -902,7 +915,7 @@ function App() {
     }
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_category?code=r6Yu-yfeMb_4fk_GfzgCUaThEmU3ZcCuTzZq6BNEYjI0AzFuWyVbJQ==', {
+      const response = await fetch(getSaveCategoryUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -937,7 +950,7 @@ function App() {
     }
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_category?code=ER4K3LwEwjrwsDgYuLxHQTqfcDZbyDDCo2nElBj4KMSDAzFukVLv9Q==', {
+      const response = await fetch(getDeleteCategoryUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -967,7 +980,7 @@ function App() {
     }
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_category?code=267ubd78VAPnnerjTAiHasIpV1yfWjI8sctFRdb-Q61-AzFujAmoPA==', {
+      const response = await fetch(getEditCategoryUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1089,7 +1102,7 @@ function App() {
       
       // Load features, decks, and cards in parallel
       const [featuresResponse, decksResponse, cardsResponse] = await Promise.all([
-        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_features?code=DS5LZbckSVcYRHSC2lg1kspMj_9YIUOKwqKI2x2HaP7AAzFu758ciw==', {
+        fetch(getGetFeaturesUrl(), {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -1098,7 +1111,7 @@ function App() {
           mode: 'cors',
           signal: controller.signal
         }),
-        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_decks?code=983cRvpPitpcxlgRcBzjsjLi0dPukNbj7KGxfbUbi-pHAzFuo-FZGw==', {
+        fetch(getGetDecksUrl(), {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -1107,7 +1120,7 @@ function App() {
           mode: 'cors',
           signal: controller.signal
         }),
-        fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_cards?code=f2W9t18O5vc0q_U0c_DnSnyyKMZ4xfYMlVen22JUMrw5AzFuHFJHNQ==', {
+        fetch(getGetCardsUrl(), {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

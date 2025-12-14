@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Configuration files with secrets
+src/config.js
+src/config.local.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

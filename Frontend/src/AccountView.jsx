@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
 import './AccountView.css'
+import {
+  getAddAccountUrl,
+  getGetAccountUrl,
+  getEditAccountUrl,
+  getDeleteAccountUrl
+} from './config'
 
 function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout }) {
   const [isSignUp, setIsSignUp] = useState(true) // Toggle between sign up and login
@@ -51,7 +57,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     setIsLoading(true)
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/add_account?code=Z7f1S2AuqLIj9H3HvicdkS351FORRERoGVx1RcvNu0TTAzFuQ0VEDg==', {
+      const response = await fetch(getAddAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +125,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     setIsLoading(true)
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_account?code=3DCBXjji828GQZGeMZrrF6Nz0mXya13nYAM06OX2u5VRAzFuBE9MwQ==', {
+      const response = await fetch(getGetAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -259,7 +265,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     
     try {
       // First, verify the current password
-      const verifyResponse = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_account?code=3DCBXjji828GQZGeMZrrF6Nz0mXya13nYAM06OX2u5VRAzFuBE9MwQ==', {
+      const verifyResponse = await fetch(getGetAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -293,7 +299,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       }
       
       // Current password is correct, now update to new password
-      const updateResponse = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_account?code=9khy8ssiYDaWELHWSdKpqNRp2QIJs2p9EQ6FrShUjbjLAzFuDL3joQ==', {
+      const updateResponse = await fetch(getEditAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -357,7 +363,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     }
     
     try {
-      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_account?code=b-81qak2fzOZYkkxtnZn822F9AFErgXNCZSCd4AS0xJ9AzFuuJCe6g==', {
+      const response = await fetch(getDeleteAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
