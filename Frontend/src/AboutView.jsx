@@ -1,43 +1,10 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './AboutView.css'
 import Swords from './Swords'
-import { getCardImageUrl } from './cardUtils'
 
 function AboutView({ decks = [] }) {
   const [visibleSections, setVisibleSections] = useState(new Set(['intro']))
   const sectionRefs = useRef({})
-  const [currentCardSet, setCurrentCardSet] = useState(0)
-  const [animationKey, setAnimationKey] = useState(0)
-
-  // Extract card sets from top decks
-  const cardSets = useMemo(() => {
-    if (!decks || decks.length === 0) {
-      // Fallback to default cards if no decks available
-      return [
-        ['Hog Rider', 'Mega Knight', 'Wizard', 'Valkyrie', 'Musketeer', 'Knight', 'Archers', 'Giant'],
-        ['P.E.K.K.A', 'Electro Wizard', 'Ice Wizard', 'Princess', 'Bandit', 'Royal Ghost', 'Miner', 'Lumberjack'],
-        ['Golem', 'Lava Hound', 'Giant Skeleton', 'Sparky', 'Inferno Dragon', 'Electro Dragon', 'Baby Dragon', 'Mega Minion']
-      ]
-    }
-
-    // Get top decks (sorted by score if available, or just take first 5)
-    const topDecks = [...decks]
-      .sort((a, b) => (b.score || 0) - (a.score || 0))
-      .slice(0, 5)
-
-    // Extract card names from each deck
-    const sets = topDecks.map(deck => {
-      if (deck.cardNames && deck.cardNames.length > 0) {
-        return deck.cardNames.slice(0, 8) // Take up to 8 cards per deck
-      }
-      return []
-    }).filter(set => set.length > 0) // Remove empty sets
-
-    // If we have sets, return them; otherwise use fallback
-    return sets.length > 0 ? sets : [
-      ['Hog Rider', 'Mega Knight', 'Wizard', 'Valkyrie', 'Musketeer', 'Knight', 'Archers', 'Giant']
-    ]
-  }, [decks])
 
   useEffect(() => {
     const observerOptions = {
@@ -84,31 +51,6 @@ function AboutView({ decks = [] }) {
     }
   }
 
-
-  // Cycle through card sets when deck catalog section is visible
-  useEffect(() => {
-    if (!visibleSections.has('deck-catalog') || cardSets.length === 0) return
-
-    // Calculate total animation time: 
-    // - Last card delay: (cardCount - 1) * 0.3s
-    // - Animation duration: 0.8s
-    // - Display time: 2.2s
-    // - Fade out: 0.4s
-    const currentSet = cardSets[currentCardSet]
-    if (!currentSet || currentSet.length === 0) return
-    
-    const cardCount = currentSet.length
-    const lastCardDelay = (cardCount - 1) * 0.3
-    const cycleDuration = lastCardDelay + 0.8 + 2.2 + 0.4 + 0.3 // +0.3s pause before next cycle
-    
-    const timeoutId = setTimeout(() => {
-      setCurrentCardSet((prev) => (prev + 1) % cardSets.length)
-      setAnimationKey((prev) => prev + 1) // Force re-render to restart animation
-    }, cycleDuration * 1000)
-
-    return () => clearTimeout(timeoutId)
-  }, [visibleSections, currentCardSet, cardSets])
-
   return (
     <div className="about-view">
       <div className="page-title-container about-hero">
@@ -132,52 +74,6 @@ function AboutView({ decks = [] }) {
             want to analyze your deck's strengths and weaknesses, or need to organize your 
             favorite decks, ClashOps has you covered.
           </p>
-        </section>
-
-        <section 
-          className={`about-section deck-catalog-section ${visibleSections.has('deck-catalog') ? 'visible' : ''}`}
-          ref={(el) => setSectionRef('deck-catalog', el)}
-        >
-          <div className="deck-catalog-content">
-            <div className="deck-catalog-text">
-              <h2 className="about-section-title">Deck Catalog</h2>
-              <p className="about-text">
-                Browse through a curated collection of top-performing decks, refreshed every season 
-                to keep you up-to-date with the latest meta. Discover new strategies, explore different 
-                playstyles, and find the perfect deck for your gameplay. Each deck in our catalog is 
-                carefully selected based on performance metrics and community feedback, ensuring you 
-                have access to the most effective strategies in Clash Royale.
-              </p>
-            </div>
-            <div className="deck-fall-animation" key={animationKey}>
-              <div className="deck-stack">
-                <div className="deck-stack-card deck-stack-card-1"></div>
-                <div className="deck-stack-card deck-stack-card-2"></div>
-                <div className="deck-stack-card deck-stack-card-3"></div>
-              </div>
-              <div className="falling-cards">
-                {cardSets.length > 0 && cardSets[currentCardSet] && cardSets[currentCardSet].map((cardName, index) => (
-                  <div
-                    key={`${cardName}-${animationKey}`}
-                    className="falling-card"
-                    style={{
-                      '--index': index,
-                      '--delay': `${index * 0.3}s`
-                    }}
-                  >
-                    <img
-                      src={getCardImageUrl(cardName)}
-                      alt={cardName}
-                      className="falling-card-image"
-                      onError={(e) => {
-                        e.target.style.display = 'none'
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
 
         <section 

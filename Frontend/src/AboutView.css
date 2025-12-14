@@ -93,6 +93,259 @@
   gap: 40px;
 }
 
+/* LLM Workflow Animation */
+.llm-workflow-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: workflowFadeIn 0.8s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes workflowFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.workflow-deck-section,
+.workflow-prompt-section,
+.workflow-output-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.workflow-deck-label,
+.workflow-prompt-label,
+.workflow-output-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.workflow-deck-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: 160px;
+}
+
+.workflow-card {
+  aspect-ratio: 3 / 4;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: workflowCardAppear 0.4s ease-out forwards;
+  animation-delay: calc(0.5s + var(--index) * 0.1s);
+}
+
+@keyframes workflowCardAppear {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.workflow-card-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(99, 102, 241, 0.2) 50%, rgba(20, 184, 166, 0.2) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 6px;
+}
+
+.workflow-arrow {
+  flex-shrink: 0;
+  opacity: 0;
+  animation: arrowFadeIn 0.6s ease-out forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes arrowFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.workflow-arrow svg {
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+}
+
+.workflow-prompt-box {
+  width: 100%;
+  max-width: 250px;
+  min-height: 80px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.workflow-prompt-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+  animation: promptScan 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+@keyframes promptScan {
+  0%, 100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+}
+
+.workflow-prompt-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 40px;
+}
+
+.workflow-typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #a855f7;
+  margin-left: 2px;
+  animation: cursorBlink 1s infinite;
+  vertical-align: baseline;
+}
+
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.workflow-llm-indicator {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.llm-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  opacity: 0.5;
+  animation: llmPulse 1.5s ease-in-out infinite;
+}
+
+.llm-pulse-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.llm-pulse-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.llm-pulse-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes llmPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+  }
+}
+
+.workflow-output-box {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workflow-output-item {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.workflow-output-bar {
+  height: 100%;
+  width: var(--width, 0%);
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  border-radius: 4px;
+  transition: width 1s ease-out;
+  opacity: 0;
+  animation: outputBarAppear 0.5s ease-out forwards;
+  animation-delay: calc(2.5s + var(--delay));
+}
+
+@keyframes outputBarAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+.analysis-optimization-section.visible .llm-workflow-animation {
+  animation-play-state: running;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .llm-workflow-animation {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .workflow-arrow {
+    transform: rotate(90deg);
+  }
+
+  .workflow-deck-section,
+  .workflow-prompt-section,
+  .workflow-output-section {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 /* Analysis Animation - Dashboard */
 .analysis-animation {
   position: relative;
