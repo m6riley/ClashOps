@@ -44,7 +44,7 @@ function InitialLoading({ onComplete }) {
       <div className="initial-loading-content">
         <div className="initial-loading-logo-container">
           <div className="initial-loading-logo">
-            <svg className="logo-icon" viewBox="0 0 120 120" fill="none">
+            <svg className="logo-icon" viewBox="0 -30 120 150" fill="none">
               <defs>
                 <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#FFD700" />
