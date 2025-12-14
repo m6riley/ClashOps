@@ -32,9 +32,19 @@ This script will:
 
 ## Environment Variables (REQUIRED for Azure Functions to work)
 
-**You MUST set these environment variables in Cloudflare Pages** for the Azure Functions to work. Without them, the app will use placeholder keys and all API calls will fail.
+**You MUST set these environment variables in Cloudflare Pages** for the Azure Functions to work. 
 
-Go to Cloudflare Pages → Your Project → Settings → Environment Variables and add:
+### Where to Add Environment Variables:
+
+1. Go to **Cloudflare Dashboard** → **Pages** → **Your Project**
+2. Click **Settings**
+3. Scroll down to **Environment Variables** section
+4. Click **Add variable** for each one below
+5. Make sure to set them for **Production** environment (or all environments)
+
+**Important:** With the Pages Function proxy setup, these are **runtime** environment variables available to the `functions/api/[...path].js` Worker. This keeps your keys server-side and secure.
+
+### Required Environment Variables:
 
 - `ADD_ACCOUNT_KEY`
 - `GET_ACCOUNT_KEY`
