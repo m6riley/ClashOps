@@ -77,7 +77,7 @@
 
 .deck-editor-content {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1.2fr 1.8fr;
   gap: 30px;
   flex: 1;
   min-height: 0;
@@ -92,7 +92,7 @@
 }
 
 .deck-editor-name-section {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .deck-editor-name-input-wrapper {
@@ -102,12 +102,12 @@
 
 .deck-editor-name-input {
   width: 100%;
-  padding: 14px 50px 14px 18px;
+  padding: 10px 50px 10px 18px;
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border: 2px solid #4a4a4a;
   border-radius: 10px;
   color: #ffd700;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   outline: none;
   transition: all 0.2s;
@@ -141,26 +141,43 @@
 }
 
 .deck-editor-category-section {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.deck-editor-category-select-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .deck-editor-category-select {
   width: 100%;
-  padding: 14px 18px;
+  padding: 10px 50px 10px 18px;
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border: 2px solid #4a4a4a;
   border-radius: 10px;
   color: #ffd700;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   outline: none;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   font-family: inherit;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.deck-editor-category-chevron-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 215, 0, 0.6);
+  pointer-events: none;
 }
 
 .deck-editor-category-select:hover {
@@ -190,17 +207,18 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 12px 14px;
+  padding: 10px 14px;
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   border: 2px solid #4a4a4a;
   border-radius: 10px;
   color: #ffd700;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
+  width: 100%;
 }
 
 .deck-editor-category-buttons-row .deck-editor-category-button {
@@ -361,20 +379,27 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 12px;
-  flex: 1;
-  min-height: 0;
+  gap: 8px;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 500px;
+  max-height: 350px;
+  overflow: visible;
+  padding-left: 4px;
 }
 
 .deck-slot {
   aspect-ratio: 3 / 4;
   border-radius: 12px;
-  border: 3px dashed #4a4a4a;
+  border: 1px dashed #4a4a4a;
   background-color: #1a1a1a;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.2s;
   cursor: pointer;
+  padding: 6px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .deck-slot.empty {
@@ -397,6 +422,8 @@
   height: 100%;
   position: relative;
   cursor: grab;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .deck-slot-card:active {
@@ -425,15 +452,15 @@
 
 .deck-slot-remove {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 24px;
-  height: 24px;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
   background-color: rgba(244, 67, 54, 0.9);
   border: none;
   border-radius: 50%;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
@@ -476,6 +503,12 @@
   color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
   font-weight: 500;
+}
+
+.deck-slot-plus-icon {
+  color: #ffd700;
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
 
 .deck-editor-cards-grid {

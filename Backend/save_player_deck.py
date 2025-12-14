@@ -32,6 +32,7 @@ def save_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     cards = body.get("cards")
     userID = body.get("userID")
     categoryID = body.get("categoryID")
+    deckName = body.get("deckName", "My Favourite Deck")  # Default to "My Favourite Deck" if not provided
     if not cards or not userID or not categoryID:
         logging.warning("Missing field in request")
         return func.HttpResponse(
@@ -44,9 +45,11 @@ def save_player_deck(req: func.HttpRequest) -> func.HttpResponse:
         _playerDecks.create_entity({
             "PartitionKey": PARTITION_KEY,
             "RowKey": deckID,
+            "DeckID": deckID,  # Add DeckID field for easier lookup
             "Cards": cards,
             "UserID": userID,
             "CategoryID": categoryID,
+            "DeckName": deckName,
         })
         logging.info(f"Deck saved successfully for user: {userID} and category: {categoryID}")
         return func.HttpResponse(

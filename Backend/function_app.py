@@ -13,6 +13,7 @@ from edit_account import edit_account_bp
 from save_category import save_category_bp
 from delete_category import delete_category_bp
 from delete_player_deck import delete_player_deck_bp
+from edit_player_deck import edit_player_deck_bp
 from get_player_decks import get_player_decks_bp
 from get_categories import get_categories_bp
 from save_player_deck import save_player_deck_bp
@@ -39,6 +40,7 @@ app.register_functions(save_player_deck_bp)
 app.register_functions(save_category_bp)
 app.register_functions(delete_category_bp)
 app.register_functions(delete_player_deck_bp)
+app.register_functions(edit_player_deck_bp)
 app.register_functions(get_player_decks_bp)
 app.register_functions(get_categories_bp)
 app.register_functions(get_features_bp)

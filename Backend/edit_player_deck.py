@@ -4,18 +4,19 @@ from azure.functions import Blueprint
 from shared.table_utils import _playerDecks, PARTITION_KEY
 
 # Azure Functions Blueprint
-delete_player_deck_bp = Blueprint()
+edit_player_deck_bp = Blueprint()
 
 # ---------------------------------------------------------------------------
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@delete_player_deck_bp.route(route="delete_deck", auth_level=func.AuthLevel.FUNCTION)
-def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
+@edit_player_deck_bp.route(route="edit_deck", auth_level=func.AuthLevel.FUNCTION)
+def edit_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
-    HTTP-triggered Azure Function for deleting a deck from the database.
+    HTTP-triggered Azure Function for editing a deck in the database.
     """
-    logging.info("Delete deck request received")
+    logging.info("Edit deck request received")
+
     # Parse and validate request body
     try:
         body = req.get_json()
@@ -26,15 +27,29 @@ def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400,
             mimetype="text/plain"
         )
+    
     deckID = body.get("deckID")
+    cards = body.get("cards")
+    categoryID = body.get("categoryID")
+    deckName = body.get("deckName")
+    
     if not deckID:
-        logging.warning("Missing field in request")
+        logging.warning("Missing deckID field in request")
         return func.HttpResponse(
-            "Missing field in request",
+            "Missing 'deckID' field in request body",
             status_code=400,
             mimetype="text/plain"
         )
-    # Delete deck from database
+    
+    if cards is None or categoryID is None:
+        logging.warning("Missing cards or categoryID field in request")
+        return func.HttpResponse(
+            "Missing 'cards' and/or 'categoryID' field in request body",
+            status_code=400,
+            mimetype="text/plain"
+        )
+    
+    # Find and update deck in database
     try:
         # Query for the deck using DeckID field
         query = f"PartitionKey eq '{PARTITION_KEY}' and DeckID eq '{deckID}'"
@@ -48,7 +63,7 @@ def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="text/plain"
             )
         
-        # Get the RowKey from the found deck and delete using it
+        # Get the deck entity
         deck = decks[0]
         row_key = deck.get("RowKey")
         
@@ -60,19 +75,26 @@ def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
                 mimetype="text/plain"
             )
         
-        _playerDecks.delete_entity(
-            partition_key=PARTITION_KEY,
-            row_key=row_key
+        # Update the deck entity with new values
+        deck["Cards"] = cards
+        deck["CategoryID"] = categoryID
+        if deckName is not None:
+            deck["DeckName"] = deckName
+        
+        # Update the entity in the table (using upsert to ensure all fields are preserved)
+        _playerDecks.upsert_entity(entity=deck)
+        
+        logging.info(f"Deck {deckID} updated successfully with new cards and category")
+        return func.HttpResponse(
+            "Deck updated successfully",
+            status_code=200,
+            mimetype="text/plain"
         )
     except Exception as e:
-        logging.error(f"Error deleting deck: {e}")
+        logging.error(f"Error updating deck: {e}")
         return func.HttpResponse(
-            f"Error deleting deck: {e}",
+            f"Error updating deck: {e}",
             status_code=500,
             mimetype="text/plain"
         )
-    return func.HttpResponse(
-        "Deck deleted successfully",
-        status_code=200,
-        mimetype="text/plain"
-    )
+

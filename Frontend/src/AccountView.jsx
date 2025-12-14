@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './AccountView.css'
 
-function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification }) {
+function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout }) {
   const [isSignUp, setIsSignUp] = useState(true) // Toggle between sign up and login
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -78,6 +78,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       }
       
       // Success - account created
+      const data = await response.json()
+      const accountId = data.id || data.account_id
+      
       if (onNotification) {
         onNotification({
           message: 'Account created successfully! You are now logged in.',
@@ -85,6 +88,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
         })
       }
       setIsLoggedIn(true)
+      if (onLogin && accountId) {
+        onLogin(accountId)
+      }
       setPassword('')
       setConfirmPassword('')
       setError('')
@@ -147,7 +153,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       
       // Success - account verified
       const data = await response.json()
-      const accountId = data.account_id
+      const accountId = data.id || data.account_id
       
       if (onNotification) {
         onNotification({
@@ -156,6 +162,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
         })
       }
       setIsLoggedIn(true)
+      if (onLogin && accountId) {
+        onLogin(accountId)
+      }
       setPassword('')
       setError('')
     } catch (err) {
@@ -172,6 +181,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
 
   const handleLogout = () => {
     setIsLoggedIn(false)
+    if (onLogout) {
+      onLogout()
+    }
     setEmail('')
     setPassword('')
     setConfirmPassword('')

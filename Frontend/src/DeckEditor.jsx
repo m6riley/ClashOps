@@ -289,40 +289,43 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
           </div>
           
           <div className="deck-editor-category-section">
-            <select
-              className="deck-editor-category-select"
-              value={selectedCategory || ''}
-              onChange={(e) => onCategoryChange && onCategoryChange(e.target.value || null)}
-            >
-              <option value="">No Category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <div className="deck-editor-category-buttons-row">
-              <button
-                className="deck-editor-category-button deck-editor-category-create"
-                onClick={() => onCreateCategory && onCreateCategory()}
+            <div className="deck-editor-category-select-wrapper">
+              <select
+                className="deck-editor-category-select"
+                value={selectedCategory || ''}
+                onChange={(e) => onCategoryChange && onCategoryChange(e.target.value || null)}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                Create Category
-              </button>
-              <button
-                className="deck-editor-category-button deck-editor-category-edit"
-                onClick={() => onEditCategory && onEditCategory(selectedCategory)}
-                disabled={!selectedCategory}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                Edit Category
-              </button>
+                <option value="">No Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <svg className="deck-editor-category-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
+            <button
+              className="deck-editor-category-button deck-editor-category-create"
+              onClick={() => onCreateCategory && onCreateCategory()}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4v16m8-8H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Create Category
+            </button>
+            <button
+              className="deck-editor-category-button deck-editor-category-edit"
+              onClick={() => onEditCategory && onEditCategory(selectedCategory)}
+              disabled={!selectedCategory}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Edit Category
+            </button>
             <button
               className="deck-editor-category-button deck-editor-category-delete"
               onClick={() => onDeleteCategory && onDeleteCategory(selectedCategory)}
@@ -364,7 +367,9 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
                 ) : (
                   <div className="deck-slot-empty-content">
                     <div className="deck-slot-number">{index + 1}</div>
-                    <span className="deck-slot-empty-text">Drop card here</span>
+                    <svg className="deck-slot-plus-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4v16m8-8H4" stroke="#ffd700" strokeWidth="3" strokeLinecap="round"/>
+                    </svg>
                   </div>
                 )}
               </div>

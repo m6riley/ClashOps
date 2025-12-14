@@ -26,20 +26,22 @@ function App() {
   const [error, setError] = useState(null)
   const [expandedFeature, setExpandedFeature] = useState(null) // Track which feature is expanded
   const [activeTab, setActiveTab] = useState('catalog') // Track active tab: 'catalog', 'favourites', or 'account'
-  const [favouriteDecks, setFavouriteDecks] = useState([]) // Track favourite deck IDs
-  const [favouriteDeckNames, setFavouriteDeckNames] = useState({}) // Track favourite deck names: { 'deckId-index': 'name' }
+  const [favouriteDecks, setFavouriteDecks] = useState([]) // Track favourite deck objects (separate copies)
+  const [favouriteDeckNames, setFavouriteDeckNames] = useState({}) // Track favourite deck names: { 'favouriteDeckId-index': 'name' }
   const [notification, setNotification] = useState(null) // Track notification state
   const [confirmRemove, setConfirmRemove] = useState(null) // Track confirmation state: { deckId, index }
   const [cards, setCards] = useState([]) // All cards data
   const [selectedFilterCards, setSelectedFilterCards] = useState([]) // Selected cards for filtering (must include)
   const [excludedFilterCards, setExcludedFilterCards] = useState([]) // Excluded cards for filtering (must not include)
   const [showFilterView, setShowFilterView] = useState(false) // Show filter cards view
+  const [initialFilterState, setInitialFilterState] = useState({ selected: [], excluded: [] }) // Initial filter state when view opens
   const [editingDeck, setEditingDeck] = useState(null) // Track which deck is being edited: { deck, index, isNew }
   const [categories, setCategories] = useState([]) // User-created categories: [{ id, name, color, icon }]
   const [deckCategories, setDeckCategories] = useState({}) // Map deck IDs to category IDs: { deckId: categoryId }
   const [categoryDialog, setCategoryDialog] = useState(null) // Track category dialog: { mode: 'create' | 'edit', category: category | null }
   const [expandedCategory, setExpandedCategory] = useState(null) // Track which category is expanded (similar to expandedFeature)
   const [isLoggedIn, setIsLoggedIn] = useState(false) // Track if user is logged in
+  const [currentUserId, setCurrentUserId] = useState(null) // Track current user ID
   const [showLoginPrompt, setShowLoginPrompt] = useState(false) // Show login prompt dialog
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false) // Show subscription prompt dialog
   const [showPaymentForm, setShowPaymentForm] = useState(false) // Show payment form dialog
@@ -137,21 +139,269 @@ function App() {
     return decks.filter(deckMatchesFilter)
   }
 
+  // Helper function to check if a deck is already in favorites (by comparing card names)
+  const isDeckInFavourites = (deckId) => {
+    const deck = decks.find(d => d.id === deckId)
+    if (!deck || !deck.cardNames) return false
+    
+    // Check if any favorite deck has the same card names (in any order)
+    return favouriteDecks.some(favDeck => {
+      if (!favDeck.cardNames || favDeck.cardNames.length !== deck.cardNames.length) return false
+      const favCardNames = [...favDeck.cardNames].sort()
+      const deckCardNames = [...deck.cardNames].sort()
+      return JSON.stringify(favCardNames) === JSON.stringify(deckCardNames)
+    })
+  }
+
+  // Fetch player decks from backend
+  const fetchPlayerDecks = async (userId) => {
+    if (!userId) {
+      return
+    }
+    
+    // Wait for cards to be loaded before processing decks
+    if (!cards || cards.length === 0) {
+      // If cards aren't loaded yet, wait a bit and try again
+      setTimeout(() => fetchPlayerDecks(userId), 500)
+      return
+    }
+    
+    try {
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_player_decks?code=Fs5MiWYM1-js9PBh_N55rooaz3y9S0HDZnLHWw9liMigAzFuFhi4vg==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userID: userId
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error fetching player decks:', errorText)
+        return
+      }
+      
+      const decksData = await response.json()
+      if (!Array.isArray(decksData)) {
+        console.warn('Player decks data is not an array:', decksData)
+        return
+      }
+      
+      // Transform the fetched decks into the format expected by favouriteDecks
+      const transformedDecks = []
+      const deckNames = {}
+      
+      decksData.forEach((deckEntity, index) => {
+        // Parse cards from semicolon-separated string
+        const cardsString = deckEntity.Cards || ''
+        const cardNames = cardsString.split(';').map(name => name.trim()).filter(name => name)
+        
+        if (cardNames.length === 0) {
+          return // Skip empty decks
+        }
+        
+        // Calculate elixir cost and cycle
+        const elixirCost = calculateAverageElixirCostForDeck(cardNames)
+        const cycle = calculateFourCardCycleForDeck(cardNames)
+        
+        // Create deck cards array
+        const deckCards = cardNames.map(cardName => {
+          const card = cards.find(c => c.card_name === cardName)
+          return {
+            name: cardName,
+            rarity: card ? card.rarity : 'common'
+          }
+        })
+        
+        // Fill to 8 cards
+        while (deckCards.length < 8) {
+          deckCards.push({ name: null, rarity: 'common' })
+        }
+        
+        // Use DeckID as the deck ID (prefixed with fav- to match our format)
+        // Fallback to RowKey for backwards compatibility with old decks
+        const backendDeckId = deckEntity.DeckID || deckEntity.RowKey || `backend-${index}`
+        const deckId = `fav-${backendDeckId}`
+        
+        const transformedDeck = {
+          id: deckId,
+          cards: deckCards.slice(0, 8),
+          cardNames: cardNames,
+          elixirCost: elixirCost,
+          cycle: cycle,
+          score: 0 // Decks from backend don't have scores
+        }
+        
+        transformedDecks.push(transformedDeck)
+        
+        // Set deck name from backend (or default to "My Favourite Deck")
+        const backendDeckName = deckEntity.DeckName || 'My Favourite Deck'
+        deckNames[`${deckId}-${index}`] = backendDeckName
+        
+        // Set category if exists
+        if (deckEntity.CategoryID && deckEntity.CategoryID !== 'none') {
+          setDeckCategories(prev => ({
+            ...prev,
+            [deckId]: deckEntity.CategoryID
+          }))
+        }
+      })
+      
+      setFavouriteDecks(transformedDecks)
+      setFavouriteDeckNames(deckNames)
+    } catch (error) {
+      console.error('Error fetching player decks:', error)
+    }
+  }
+
+  // Helper function to edit deck in backend
+  const editDeckInBackend = async (deckId, cardNames, categoryId, deckName) => {
+    if (!currentUserId || !isLoggedIn) {
+      return // Don't edit if not logged in
+    }
+    
+    // Extract the actual backend deck ID (remove "fav-" prefix if present)
+    let backendDeckId = deckId
+    if (deckId.startsWith('fav-')) {
+      backendDeckId = deckId.substring(4) // Remove "fav-" prefix
+    }
+    
+    try {
+      // Format cards as semicolon-separated string
+      const cardsString = cardNames.join(';')
+      const categoryID = categoryId || 'none'
+      
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_deck?code=By-sQSXOalIwZ1O5UPZbs6aJBND6YaOg8m1y-wxtmliFAzFuJorCvQ==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deckID: backendDeckId,
+          cards: cardsString,
+          categoryID: categoryID,
+          deckName: deckName
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error editing deck in backend:', errorText)
+        // Don't show error to user - this is a background operation
+      }
+    } catch (error) {
+      console.error('Error editing deck in backend:', error)
+      // Don't show error to user - this is a background operation
+    }
+  }
+
+  // Helper function to delete deck from backend
+  const deleteDeckFromBackend = async (deckId) => {
+    if (!currentUserId || !isLoggedIn) {
+      return // Don't delete if not logged in
+    }
+    
+    // Extract the actual backend deck ID (remove "fav-" prefix if present)
+    let backendDeckId = deckId
+    if (deckId.startsWith('fav-')) {
+      backendDeckId = deckId.substring(4) // Remove "fav-" prefix
+    }
+    
+    try {
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_deck?code=-sN-SMxXtIlid3swrCpclKsRaHiKPJlvGMup1475FokWAzFuJVzqTA==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deckID: backendDeckId
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error deleting deck from backend:', errorText)
+        // Don't show error to user - this is a background operation
+      }
+    } catch (error) {
+      console.error('Error deleting deck from backend:', error)
+      // Don't show error to user - this is a background operation
+    }
+  }
+
+  // Helper function to save deck to backend
+  const saveDeckToBackend = async (cardNames, categoryId, deckName) => {
+    if (!currentUserId || !isLoggedIn) {
+      return // Don't save if not logged in
+    }
+    
+    try {
+      // Format cards as semicolon-separated string
+      const cardsString = cardNames.join(';')
+      const categoryID = categoryId || 'none'
+      const deckNameValue = deckName || 'My Favourite Deck'
+      
+      const response = await fetch('https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_deck?code=vkAaPwqingNpw2T0GEWdVxr9bSyPpoAXjVpmPOJgeMcWAzFuAAeH6g==', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cards: cardsString,
+          userID: currentUserId,
+          categoryID: categoryID,
+          deckName: deckNameValue
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Error saving deck to backend:', errorText)
+        // Don't show error to user - this is a background operation
+      }
+    } catch (error) {
+      console.error('Error saving deck to backend:', error)
+      // Don't show error to user - this is a background operation
+    }
+  }
+
   // Add deck to favourites (allows duplicates)
-  const addToFavourites = (deckId) => {
+  const addToFavourites = async (deckId) => {
     if (!isLoggedIn) {
       setShowLoginPrompt(true)
       return
     }
+    
+    // Find the original deck
+    const originalDeck = decks.find(d => d.id === deckId)
+    if (!originalDeck) return
+    
+    // Create a deep copy of the deck with a new unique ID
+    const favouriteDeckId = `fav-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const favouriteDeck = {
+      ...originalDeck,
+      id: favouriteDeckId,
+      cards: originalDeck.cards.map(card => ({ ...card })), // Deep copy cards array
+      cardNames: [...originalDeck.cardNames] // Copy cardNames array
+    }
+    
     setFavouriteDecks(prev => {
       const newIndex = prev.length
       // Set default name for the new favourite deck
       setFavouriteDeckNames(names => ({
         ...names,
-        [`${deckId}-${newIndex}`]: 'My Favourite Deck'
+        [`${favouriteDeckId}-${newIndex}`]: 'My Favourite Deck'
       }))
-      return [...prev, deckId]
+      return [...prev, favouriteDeck]
     })
+    
+    // Save to backend
+    const categoryId = deckCategories[deckId] || null
+    const deckName = 'My Favourite Deck' // Default name when adding to favorites
+    await saveDeckToBackend(originalDeck.cardNames, categoryId, deckName)
+    
     setNotification({
       message: `Deck added to favourites`,
       type: 'success'
@@ -159,14 +409,18 @@ function App() {
   }
 
   // Show confirmation dialog for removing deck from favourites
-  const requestRemoveFromFavourites = (deckId, index) => {
-    setConfirmRemove({ deckId, index })
+  const requestRemoveFromFavourites = (favouriteDeckId, index) => {
+    setConfirmRemove({ deckId: favouriteDeckId, index })
   }
 
   // Actually remove deck from favourites (after confirmation)
-  const confirmRemoveFromFavourites = () => {
+  const confirmRemoveFromFavourites = async () => {
     if (confirmRemove) {
-      const { deckId, index } = confirmRemove
+      const { deckId: favouriteDeckId, index } = confirmRemove
+      
+      // Delete from backend
+      await deleteDeckFromBackend(favouriteDeckId)
+      
       setFavouriteDecks(prev => {
         const newFavourites = [...prev]
         newFavourites.splice(index, 1)
@@ -175,15 +429,16 @@ function App() {
       // Remove the name for this deck
       setFavouriteDeckNames(prev => {
         const newNames = { ...prev }
-        delete newNames[`${deckId}-${index}`]
+        delete newNames[`${favouriteDeckId}-${index}`]
         // Reindex remaining names
         const reindexed = {}
         Object.keys(newNames).forEach(key => {
-          const [id, oldIdx] = key.split('-')
-          const numOldIdx = parseInt(oldIdx)
-          if (numOldIdx > index) {
-            reindexed[`${id}-${numOldIdx - 1}`] = newNames[key]
-          } else if (numOldIdx < index) {
+          const parts = key.split('-')
+          const oldIdx = parseInt(parts[parts.length - 1])
+          if (oldIdx > index) {
+            const idParts = parts.slice(0, -1)
+            reindexed[`${idParts.join('-')}-${oldIdx - 1}`] = newNames[key]
+          } else if (oldIdx < index) {
             reindexed[key] = newNames[key]
           }
         })
@@ -203,10 +458,10 @@ function App() {
   }
 
   // Update favourite deck name
-  const updateFavouriteDeckName = (deckId, index, newName) => {
+  const updateFavouriteDeckName = (favouriteDeckId, index, newName) => {
     setFavouriteDeckNames(prev => ({
       ...prev,
-      [`${deckId}-${index}`]: newName || 'My Favourite Deck'
+      [`${favouriteDeckId}-${index}`]: newName || 'My Favourite Deck'
     }))
   }
 
@@ -233,8 +488,23 @@ function App() {
     setShowFilterView(false)
   }
 
-  // Cancel filter view
+  // Store initial filter state when filter view opens
+  useEffect(() => {
+    if (showFilterView) {
+      // Capture the current filter state when the view opens
+      setInitialFilterState({
+        selected: [...selectedFilterCards],
+        excluded: [...excludedFilterCards]
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFilterView]) // Only run when showFilterView changes to true
+
+  // Cancel filter view - revert to initial state
   const cancelFilter = () => {
+    // Restore to the initial filter state when the view was opened
+    setSelectedFilterCards([...initialFilterState.selected])
+    setExcludedFilterCards([...initialFilterState.excluded])
     setShowFilterView(false)
   }
 
@@ -292,7 +562,7 @@ function App() {
   }
 
   // Handle save edited deck
-  const handleSaveEditedDeck = (updatedDeck, savedDeckName) => {
+  const handleSaveEditedDeck = async (updatedDeck, savedDeckName) => {
     if (editingDeck) {
       const cardNames = updatedDeck.cardNames
       const elixirCost = calculateAverageElixirCostForDeck(cardNames)
@@ -315,23 +585,35 @@ function App() {
         // Add to decks array
         setDecks(prevDecks => [...prevDecks, newDeck])
         
+        // Create a favorite deck copy
+        const favouriteDeckId = `fav-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        const favouriteDeck = {
+          ...newDeck,
+          id: favouriteDeckId,
+          cards: newDeck.cards.map(card => ({ ...card })),
+          cardNames: [...newDeck.cardNames]
+        }
+        
         // Add to favourites
         const newIndex = favouriteDecks.length
-        setFavouriteDecks(prev => [...prev, newDeckId])
+        setFavouriteDecks(prev => [...prev, favouriteDeck])
         
         // Set deck name
         setFavouriteDeckNames(prev => ({
           ...prev,
-          [`${newDeckId}-${newIndex}`]: deckName
+          [`${favouriteDeckId}-${newIndex}`]: deckName
         }))
         
         // Set category if selected
         if (categoryId) {
           setDeckCategories(prev => ({
             ...prev,
-            [newDeckId]: categoryId
+            [favouriteDeckId]: categoryId
           }))
         }
+        
+        // Save to backend
+        await saveDeckToBackend(cardNames, categoryId, deckName)
         
         setNotification({
           message: `Deck created successfully`,
@@ -341,22 +623,47 @@ function App() {
         // Updating existing deck
         const deckId = editingDeck.deck.id
         
-        // Update the deck data in the main decks array
-        setDecks(prevDecks => {
-          const deckIndex = prevDecks.findIndex(d => d.id === deckId)
-          if (deckIndex !== -1) {
-            const newDecks = [...prevDecks]
-            newDecks[deckIndex] = {
-              ...newDecks[deckIndex],
-              cards: updatedDeck.cards,
-              cardNames: cardNames,
-              elixirCost: elixirCost,
-              cycle: cycle
+        // Check if this is a favorite deck (ID starts with "fav-")
+        const isFavouriteDeck = typeof deckId === 'string' && deckId.startsWith('fav-')
+        
+        if (isFavouriteDeck) {
+          // Update the favorite deck (not the original)
+          setFavouriteDecks(prevFavourites => {
+            const favouriteIndex = prevFavourites.findIndex(d => d.id === deckId)
+            if (favouriteIndex !== -1) {
+              const newFavourites = [...prevFavourites]
+              newFavourites[favouriteIndex] = {
+                ...newFavourites[favouriteIndex],
+                cards: updatedDeck.cards,
+                cardNames: cardNames,
+                elixirCost: elixirCost,
+                cycle: cycle
+              }
+              return newFavourites
             }
-            return newDecks
-          }
-          return prevDecks
-        })
+            return prevFavourites
+          })
+          
+          // Update deck in backend
+          await editDeckInBackend(deckId, cardNames, categoryId, deckName)
+        } else {
+          // Update the deck data in the main decks array (for catalog decks)
+          setDecks(prevDecks => {
+            const deckIndex = prevDecks.findIndex(d => d.id === deckId)
+            if (deckIndex !== -1) {
+              const newDecks = [...prevDecks]
+              newDecks[deckIndex] = {
+                ...newDecks[deckIndex],
+                cards: updatedDeck.cards,
+                cardNames: cardNames,
+                elixirCost: elixirCost,
+                cycle: cycle
+              }
+              return newDecks
+            }
+            return prevDecks
+          })
+        }
         
         // Update category if changed
         if (categoryId) {
@@ -830,7 +1137,7 @@ function App() {
                             <DeckCard 
                               key={deck.id} 
                               deck={deck} 
-                              isFavourite={favouriteDecks.includes(deck.id)}
+                              isFavourite={isDeckInFavourites(deck.id)}
                               onToggleFavourite={addToFavourites}
                               onAnalyze={handleAnalyzeDeck}
                             />
@@ -873,7 +1180,7 @@ function App() {
                                       <DeckCard 
                                         key={deck.id} 
                                         deck={deck} 
-                                        isFavourite={favouriteDecks.includes(deck.id)}
+                                        isFavourite={isDeckInFavourites(deck.id)}
                                         onToggleFavourite={addToFavourites}
                                         onAnalyze={handleAnalyzeDeck}
                                       />
@@ -908,7 +1215,7 @@ function App() {
                             <DeckCard 
                               key={deck.id} 
                               deck={deck} 
-                              isFavourite={favouriteDecks.includes(deck.id)}
+                              isFavourite={isDeckInFavourites(deck.id)}
                               onToggleFavourite={addToFavourites}
                               onAnalyze={handleAnalyzeDeck}
                             />
@@ -1045,18 +1352,15 @@ function App() {
                   const decksByCategory = {}
                   const uncategorizedDecks = []
                   
-                  favouriteDecks.forEach((deckId, index) => {
-                    const deck = decks.find(d => d.id === deckId)
-                    if (deck) {
-                      const categoryId = deckCategories[deckId]
-                      if (categoryId) {
-                        if (!decksByCategory[categoryId]) {
-                          decksByCategory[categoryId] = []
-                        }
-                        decksByCategory[categoryId].push({ deck, index })
-                      } else {
-                        uncategorizedDecks.push({ deck, index })
+                  favouriteDecks.forEach((deck, index) => {
+                    const categoryId = deckCategories[deck.id]
+                    if (categoryId) {
+                      if (!decksByCategory[categoryId]) {
+                        decksByCategory[categoryId] = []
                       }
+                      decksByCategory[categoryId].push({ deck, index })
+                    } else {
+                      uncategorizedDecks.push({ deck, index })
                     }
                   })
                   
@@ -1194,6 +1498,15 @@ function App() {
             setIsSubscribed={setIsSubscribed}
             onSubscribe={() => setShowPaymentForm(true)}
             onNotification={setNotification}
+            onLogin={(userId) => {
+              setCurrentUserId(userId)
+              fetchPlayerDecks(userId)
+            }}
+            onLogout={() => {
+              setCurrentUserId(null)
+              setFavouriteDecks([])
+              setFavouriteDeckNames({})
+            }}
           />
         )}
           </>

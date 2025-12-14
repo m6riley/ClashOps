@@ -76,7 +76,7 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
           <button 
             className="filter-cards-button filter-cards-confirm" 
             onClick={onConfirm}
-            disabled={filteredDeckCount === 0 || (selectedCards.length === 0 && excludedCards.length === 0)}
+            disabled={filteredDeckCount === 0}
           >
             Confirm ({filteredDeckCount} unique decks)
           </button>
