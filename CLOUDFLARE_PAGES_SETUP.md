@@ -30,9 +30,11 @@ This script will:
 1. Build the frontend (install dependencies and run build)
 2. Deploy using wrangler
 
-## Environment Variables (Optional)
+## Environment Variables (REQUIRED for Azure Functions to work)
 
-If you want to use environment variables for function keys instead of committing them, set these in Cloudflare Pages:
+**You MUST set these environment variables in Cloudflare Pages** for the Azure Functions to work. Without them, the app will use placeholder keys and all API calls will fail.
+
+Go to Cloudflare Pages → Your Project → Settings → Environment Variables and add:
 
 - `ADD_ACCOUNT_KEY`
 - `GET_ACCOUNT_KEY`
