@@ -1268,13 +1268,16 @@ function App() {
       setDecks([])
       setCards([])
       } finally {
-      setInitialLoading(false)
         setLoading(false)
-        // Trigger deck count animation when data is loaded
-        if (activeTab === 'catalog') {
-          setShouldAnimateDeckCount(true)
-          setTimeout(() => setShouldAnimateDeckCount(false), 2500)
-        }
+        // Wait 2 seconds at 100% before hiding the loading screen
+        setTimeout(() => {
+          setInitialLoading(false)
+          // Trigger deck count animation when data is loaded
+          if (activeTab === 'catalog') {
+            setShouldAnimateDeckCount(true)
+            setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+          }
+        }, 2000)
       }
     }
 

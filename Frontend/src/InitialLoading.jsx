@@ -3,41 +3,52 @@ import './InitialLoading.css'
 
 function InitialLoading({ onComplete }) {
   const [progress, setProgress] = useState(0)
+  const [azureStarted, setAzureStarted] = useState(false)
+  const [azureComplete, setAzureComplete] = useState(false)
 
+  // Start Azure calls when progress reaches 70%
+  useEffect(() => {
+    if (progress >= 70 && !azureStarted && onComplete) {
+      setAzureStarted(true)
+      // Start Azure calls in the background
+      Promise.resolve(onComplete()).then(() => {
+        setAzureComplete(true)
+      }).catch(() => {
+        setAzureComplete(true) // Complete even on error
+      })
+    }
+  }, [progress, azureStarted, onComplete])
+
+  // Progress bar animation
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          return 100
+        if (azureComplete && prev < 100) {
+          // Animate to 100% when Azure completes
+          return Math.min(prev + 2, 100)
         }
-        // Slower progress at the end for more realistic feel
-        const remaining = 100 - prev
+        
+        if (prev >= 95 && !azureComplete) {
+          // Cap at 95% and wait for Azure to complete
+          return prev
+        }
+        
+        // Faster progress
+        const remaining = 95 - prev
         let increment
         if (remaining > 20) {
-          increment = Math.random() * 4 + 2 // 2-6% when far from completion
+          increment = Math.random() * 2.5 + 1.5 // 1.5-4% when far from completion
         } else if (remaining > 10) {
-          increment = Math.random() * 2 + 1 // 1-3% when getting close
+          increment = Math.random() * 1.2 + 0.6 // 0.6-1.8% when getting close
         } else {
-          increment = Math.random() * 0.5 + 0.3 // 0.3-0.8% when very close
+          increment = Math.random() * 0.5 + 0.25 // 0.25-0.75% when very close
         }
-        return Math.min(prev + increment, 100)
+        return Math.min(prev + increment, 95)
       })
     }, 150) // Update every 150ms
     
     return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    if (progress >= 100) {
-      const timeout = setTimeout(() => {
-        if (onComplete) {
-          onComplete()
-        }
-      }, 500)
-      return () => clearTimeout(timeout)
-    }
-  }, [progress, onComplete])
+  }, [azureComplete])
 
   return (
     <div className="initial-loading-overlay">

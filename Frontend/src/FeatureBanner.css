@@ -29,8 +29,8 @@
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
+  left: 0;
+  width: 150%;
   height: 100%;
   background: linear-gradient(
     90deg,
@@ -42,6 +42,7 @@
     transparent 80%,
     transparent 100%
   );
+  transform: translateX(-100%);
   animation: shimmer 4s ease-in-out infinite;
 }
 
@@ -70,18 +71,21 @@
 
 @keyframes shimmer {
   0% {
-    left: -100%;
+    transform: translateX(-100%);
     opacity: 0;
   }
   1% {
     opacity: 1;
   }
+  50% {
+    opacity: 1;
+  }
   99% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 1;
   }
   100% {
-    left: 100%;
+    transform: translateX(100%);
     opacity: 0;
   }
 }

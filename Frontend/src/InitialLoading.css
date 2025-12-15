@@ -35,8 +35,8 @@
 }
 
 .initial-loading-logo {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   position: relative;
   animation: logoFloat 3s ease-in-out infinite;
   overflow: visible;
@@ -311,8 +311,8 @@
   }
   
   .initial-loading-logo {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
   }
   
   .initial-loading-progress-container {
