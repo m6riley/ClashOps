@@ -12,7 +12,7 @@ This setup uses **Cloudflare Pages Functions** to proxy Azure Function requests.
 ## How It Works
 
 1. Frontend calls `/api/functionName` (e.g., `/api/add_account`)
-2. Pages Function at `functions/api/[[path]].js` intercepts the request
+2. Pages Function at `functions/api/[[catchall]].js` intercepts the request
 3. Function reads the key from environment variables
 4. Function proxies the request to Azure Functions with the key
 5. Response is returned to the frontend
@@ -60,7 +60,7 @@ Or configure in Cloudflare Pages:
 
 ## Files
 
-- `functions/api/[[path]].js` - Pages Function that proxies requests (at repo root)
+- `functions/api/[[catchall]].js` - Pages Function that proxies requests (at repo root)
 - `Frontend/src/config.example.js` - Updated to use `/api` proxy in production
 - `wrangler.toml` - Configures static assets deployment
 
