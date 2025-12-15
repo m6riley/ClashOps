@@ -6,11 +6,25 @@
 
 export async function onRequest(context) {
   const { request, env, params } = context;
-  const functionName = params.path[0];
+  
+  // For functions/api/[[path]].js, params.path is an array of segments after /api/
+  // e.g., /api/add_account -> params.path = ["add_account"]
+  const pathSegments = params.path || [];
+  const functionName = pathSegments[0];
+  
+  if (!functionName) {
+    return new Response(
+      JSON.stringify({ error: 'Function name is required' }), 
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
   
   // Get the Azure Function URL from environment variable
   // Format: ADD_ACCOUNT_URL, GET_ACCOUNT_URL, etc.
-  const envVarName = functionName.toUpperCase().replace(/_/g, '_') + '_URL';
+  const envVarName = functionName.toUpperCase().replace(/-/g, '_') + '_URL';
   const azureUrl = env[envVarName];
   
   if (!azureUrl) {
