@@ -12,7 +12,7 @@ save_player_deck_bp = Blueprint()
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@save_player_deck_bp.route(route="save_deck", auth_level=func.AuthLevel.FUNCTION)
+@save_player_deck_bp.route(route="save_player_deck", auth_level=func.AuthLevel.FUNCTION)
 def save_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for saving a deck to the database.

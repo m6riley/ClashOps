@@ -11,9 +11,9 @@ const FUNCTION_KEYS = {
   edit_account: 'YOUR_EDIT_ACCOUNT_FUNCTION_KEY',
   delete_account: 'YOUR_DELETE_ACCOUNT_FUNCTION_KEY',
   get_player_decks: 'YOUR_GET_PLAYER_DECKS_FUNCTION_KEY',
-  save_deck: 'YOUR_SAVE_DECK_FUNCTION_KEY',
-  edit_deck: 'YOUR_EDIT_DECK_FUNCTION_KEY',
-  delete_deck: 'YOUR_DELETE_DECK_FUNCTION_KEY',
+  save_player_deck: 'YOUR_SAVE_PLAYER_DECK_FUNCTION_KEY',
+  edit_player_deck: 'YOUR_EDIT_PLAYER_DECK_FUNCTION_KEY',
+  delete_player_deck: 'YOUR_DELETE_PLAYER_DECK_FUNCTION_KEY',
   get_categories: 'YOUR_GET_CATEGORIES_FUNCTION_KEY',
   save_category: 'YOUR_SAVE_CATEGORY_FUNCTION_KEY',
   edit_category: 'YOUR_EDIT_CATEGORY_FUNCTION_KEY',
@@ -48,9 +48,9 @@ export const getEditAccountUrl = () => getFunctionUrl('edit_account');
 export const getDeleteAccountUrl = () => getFunctionUrl('delete_account');
 
 export const getGetPlayerDecksUrl = () => getFunctionUrl('get_player_decks');
-export const getSaveDeckUrl = () => getFunctionUrl('save_deck');
-export const getEditDeckUrl = () => getFunctionUrl('edit_deck');
-export const getDeleteDeckUrl = () => getFunctionUrl('delete_deck');
+export const getSaveDeckUrl = () => getFunctionUrl('save_player_deck');
+export const getEditDeckUrl = () => getFunctionUrl('edit_player_deck');
+export const getDeleteDeckUrl = () => getFunctionUrl('delete_player_deck');
 
 export const getGetCategoriesUrl = () => getFunctionUrl('get_categories');
 export const getSaveCategoryUrl = () => getFunctionUrl('save_category');

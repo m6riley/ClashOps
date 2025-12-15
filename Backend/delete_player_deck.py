@@ -10,7 +10,7 @@ delete_player_deck_bp = Blueprint()
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@delete_player_deck_bp.route(route="delete_deck", auth_level=func.AuthLevel.FUNCTION)
+@delete_player_deck_bp.route(route="delete_player_deck", auth_level=func.AuthLevel.FUNCTION)
 def delete_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for deleting a deck from the database.

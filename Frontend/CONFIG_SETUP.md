@@ -23,7 +23,7 @@ This project uses a configuration file to store Azure Function URLs and keys sec
 
 You need to provide function keys for:
 - Account management: `add_account`, `get_account`, `edit_account`, `delete_account`
-- Deck management: `get_player_decks`, `save_deck`, `edit_deck`, `delete_deck`
+- Deck management: `get_player_decks`, `save_player_deck`, `edit_player_deck`, `delete_player_deck`
 - Category management: `get_categories`, `save_category`, `edit_category`, `delete_category`
 - Data loading: `get_features`, `get_decks`, `get_cards`
 - Analysis: `analyze_deck`, `create_report`, `optimize_deck`

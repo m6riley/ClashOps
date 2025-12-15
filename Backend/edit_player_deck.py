@@ -11,7 +11,7 @@ edit_player_deck_bp = Blueprint()
 # Azure Function Route
 # ---------------------------------------------------------------------------
 
-@edit_player_deck_bp.route(route="edit_deck", auth_level=func.AuthLevel.FUNCTION)
+@edit_player_deck_bp.route(route="edit_player_deck", auth_level=func.AuthLevel.FUNCTION)
 def edit_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for editing a deck in the database.

@@ -19,9 +19,9 @@ https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/
 
 ### Deck Management (4)
 - `GET_PLAYER_DECKS_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_player_decks?code=YOUR_KEY`
-- `SAVE_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_deck?code=YOUR_KEY`
-- `EDIT_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_deck?code=YOUR_KEY`
-- `DELETE_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_deck?code=YOUR_KEY`
+- `SAVE_PLAYER_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/save_player_deck?code=YOUR_KEY`
+- `EDIT_PLAYER_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/edit_player_deck?code=YOUR_KEY`
+- `DELETE_PLAYER_DECK_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/delete_player_deck?code=YOUR_KEY`
 
 ### Category Management (4)
 - `GET_CATEGORIES_URL` = `https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api/get_categories?code=YOUR_KEY`
