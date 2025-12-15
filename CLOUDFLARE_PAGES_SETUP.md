@@ -1,12 +1,14 @@
 # Cloudflare Pages Configuration
 
-## Option 1: Separate Build and Deploy Commands (Recommended)
+## Option 1: Git-Based Deployment (Recommended for Functions)
 
-In your Cloudflare Pages dashboard, configure the following:
+For Cloudflare Pages to detect Functions and enable environment variables, use **git-based automatic deployments**:
+
+**Where to configure:** Cloudflare Dashboard → Workers & Pages → Your Project → Settings → Builds & deployments
 
 **Build command:**
 ```
-cd Frontend && npm install && npm run build
+cd Frontend && npm install && npm run build && cd .. && cp -r functions Frontend/dist/
 ```
 
 **Build output directory:**
@@ -16,10 +18,22 @@ Frontend/dist
 
 **Deploy command:**
 ```
-npx wrangler versions upload
+echo "Deployment handled by Cloudflare Pages"
 ```
 
-## Option 2: Combined Build and Deploy Script
+**See `CLOUDFLARE_PAGES_DASHBOARD_SETUP.md` for detailed step-by-step instructions.**
+
+**Important:** 
+- The `functions/` directory at the **repo root** will be automatically detected by Cloudflare Pages
+- We copy functions to build output as a backup, but Pages should detect them from repo root
+- The deploy command above is minimal and won't interfere with Functions detection
+- This enables Functions and allows you to add environment variables
+
+## Option 2: Manual Deployment with Wrangler
+
+**Note:** Manual deployment with `wrangler pages deploy` may not properly enable Functions. Use Option 1 (git-based) instead.
+
+If you must use manual deployment:
 
 **Deploy command:**
 ```
@@ -28,7 +42,10 @@ npx wrangler versions upload
 
 This script will:
 1. Build the frontend (install dependencies and run build)
-2. Deploy using wrangler
+2. Copy functions directory to build output
+3. Deploy using wrangler pages deploy
+
+**Warning:** Manual deployments may not enable environment variables. Use git-based deployments (Option 1) instead.
 
 ## Environment Variables (REQUIRED for Azure Functions to work)
 

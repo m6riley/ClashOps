@@ -1,5 +1,4 @@
 name = "clashops"
 compatibility_date = "2025-12-14"
 
-[assets]
-directory = "./Frontend/dist"
+pages_build_output_dir = "./Frontend/dist"
