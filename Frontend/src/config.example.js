@@ -1,24 +1,43 @@
 // Configuration file for API endpoints
 // This uses Cloudflare Pages Functions as a proxy to keep Azure Function keys server-side
 
-// Base URL for API (uses Pages Function proxy)
-// In production, this will be your Cloudflare Pages domain
-// In development, you can use the direct Azure Function URL if needed
-const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api'  // Uses Pages Function proxy
-  : 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api';
+// Base URL for API
+const AZURE_BASE_URL = 'https://clashopsfunctionapp-ghhmfad4f3ctgdcs.canadacentral-01.azurewebsites.net/api';
+
+// Function keys for local development (create a local config.js to override with real keys)
+const FUNCTION_KEYS = {
+  add_account: 'YOUR_ADD_ACCOUNT_FUNCTION_KEY',
+  get_account: 'YOUR_GET_ACCOUNT_FUNCTION_KEY',
+  edit_account: 'YOUR_EDIT_ACCOUNT_FUNCTION_KEY',
+  delete_account: 'YOUR_DELETE_ACCOUNT_FUNCTION_KEY',
+  get_player_decks: 'YOUR_GET_PLAYER_DECKS_FUNCTION_KEY',
+  save_deck: 'YOUR_SAVE_DECK_FUNCTION_KEY',
+  edit_deck: 'YOUR_EDIT_DECK_FUNCTION_KEY',
+  delete_deck: 'YOUR_DELETE_DECK_FUNCTION_KEY',
+  get_categories: 'YOUR_GET_CATEGORIES_FUNCTION_KEY',
+  save_category: 'YOUR_SAVE_CATEGORY_FUNCTION_KEY',
+  edit_category: 'YOUR_EDIT_CATEGORY_FUNCTION_KEY',
+  delete_category: 'YOUR_DELETE_CATEGORY_FUNCTION_KEY',
+  get_features: 'YOUR_GET_FEATURES_FUNCTION_KEY',
+  get_decks: 'YOUR_GET_DECKS_FUNCTION_KEY',
+  get_cards: 'YOUR_GET_CARDS_FUNCTION_KEY',
+  analyze_deck: 'YOUR_ANALYZE_DECK_FUNCTION_KEY',
+  create_report: 'YOUR_CREATE_REPORT_FUNCTION_KEY',
+  optimize_deck: 'YOUR_OPTIMIZE_DECK_FUNCTION_KEY'
+};
 
 // Helper function to get function URL
-// Now uses the Pages Function proxy instead of direct Azure Function calls
 export const getFunctionUrl = (functionName) => {
-  if (process.env.NODE_ENV === 'production') {
-    // Use Pages Function proxy (keys are server-side)
-    return `${BASE_URL}/${functionName}`;
+  if (import.meta.env.DEV) {
+    // Local development: use direct Azure Function URL with keys
+    const key = FUNCTION_KEYS[functionName];
+    if (!key || key.startsWith('YOUR_')) {
+      console.warn(`⚠️  Function key for ${functionName} not set. Create a local config.js file with real keys.`);
+    }
+    return `${AZURE_BASE_URL}/${functionName}?code=${key || 'PLACEHOLDER'}`;
   } else {
-    // Development: use direct Azure Function URL
-    // For local dev, you'll need to set up the proxy or use direct URLs
-    // You can create a local config.js with direct URLs for development
-    return `${BASE_URL}/${functionName}`;
+    // Production: use Pages Function proxy (keys are server-side in environment variables)
+    return `/api/${functionName}`;
   }
 };
 
