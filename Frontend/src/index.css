@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+html {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
+  min-height: 100vh;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -12,9 +17,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
 }
 
 #root {
   min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
 }
 

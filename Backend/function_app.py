@@ -5,6 +5,7 @@ from analyze_deck import analyze_deck_bp
 from create_report import create_report_bp
 from optimize_deck import optimize_deck_bp
 from refresh_decks import refresh_decks_bp
+from refresh_decks_http import refresh_decks_http_bp
 from refresh_reports import refresh_reports_bp
 from add_account import add_account_bp
 from get_account import get_account_bp
@@ -32,6 +33,7 @@ app.register_functions(analyze_deck_bp)
 app.register_functions(create_report_bp)
 app.register_functions(optimize_deck_bp)
 app.register_functions(refresh_decks_bp)
+app.register_functions(refresh_decks_http_bp)
 app.register_functions(refresh_reports_bp)
 app.register_functions(add_account_bp)
 app.register_functions(get_account_bp)

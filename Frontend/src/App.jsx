@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 import Swords from './Swords'
+import crownIcon from './assets/ClashOps-PNG.png'
 import DeckCard from './DeckCard'
 import FeatureBanner from './FeatureBanner'
 import Notification from './Notification'
@@ -1360,13 +1361,21 @@ function App() {
 
       {/* Background decorative element */}
       <div className="background-swords">
-        <Swords size={400} />
+        <img 
+          src={crownIcon} 
+          alt="ClashOps Crown" 
+          style={{ width: '400px', height: 'auto', border: 'none', outline: 'none' }}
+        />
       </div>
       
       {/* Header */}
       <header className="header">
         <div className="logo">
-          <Swords size={32} />
+          <img 
+            src={crownIcon} 
+            alt="ClashOps Crown" 
+            style={{ width: '32px', height: 'auto', border: 'none', outline: 'none' }}
+          />
           <span className="logo-text">Clash<span className="logo-accent">Ops</span></span>
         </div>
         <nav className="nav">
@@ -1397,17 +1406,6 @@ function App() {
           </a>
           <a 
             href="#" 
-            className={`nav-link ${activeTab === 'account' ? 'active' : ''}`}
-            onClick={(e) => {
-              e.preventDefault()
-              setActiveTab('account')
-              setExpandedFeature(null)
-            }}
-          >
-            Account
-          </a>
-          <a 
-            href="#" 
             className={`nav-link ${activeTab === 'about' ? 'active' : ''}`}
             onClick={(e) => {
               e.preventDefault()
@@ -1416,6 +1414,17 @@ function App() {
             }}
           >
             About
+          </a>
+          <a 
+            href="#" 
+            className={`nav-link ${activeTab === 'account' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault()
+              setActiveTab('account')
+              setExpandedFeature(null)
+            }}
+          >
+            Account
           </a>
         </nav>
       </header>
