@@ -741,18 +741,38 @@
   height: 8px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
+  /* Store the container width as a CSS variable for the fill to use */
+  --progress-bar-width: 100%;
 }
 
 .analysis-progress-bar-fill {
   height: 100%;
-  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
   border-radius: 4px;
   transition: width 0.1s linear;
   position: relative;
   z-index: 1;
   width: 0%;
+  overflow: hidden;
+  /* Gradient that transitions through all grade colors based on score ranges (0-5 scale) */
+  /* The gradient spans the full container width, not just the fill width */
+  /* Colors blend smoothly at transition points for a true gradient effect */
+  /* F: 0-0.357 (0-7.14%), D: 0.357-1.429 (7.14-28.57%), C: 1.429-2.5 (28.57-50%), B: 2.5-3.571 (50-71.43%), A: 3.571-4.643 (71.43-92.86%), S: 4.643-5 (92.86-100%) */
+  background: linear-gradient(
+    90deg,
+    #ef4444 0%,      /* F - Red starts */
+    #f97316 7.14%,   /* Smooth transition to Orange (D) */
+    #eab308 28.57%,  /* Smooth transition to Yellow (C) */
+    #15803d 50%,     /* Smooth transition to Dark Green (B) */
+    #86efac 71.43%,  /* Smooth transition to Light Green (A) */
+    #a855f7 92.86%,  /* Smooth transition to Purple (S) */
+    #a855f7 100%     /* Purple to end */
+  );
+  /* Make the gradient span the full width of the parent container */
+  /* Use the CSS variable set by JavaScript to size the gradient to the container width */
+  background-size: var(--progress-bar-width, 100%) 100%;
+  background-position: 0 0;
 }
 
 .analysis-deck-cards {

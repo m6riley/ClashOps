@@ -1,7 +1,8 @@
 .App {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%) !important;
+  background-attachment: fixed;
   color: white;
   padding: 20px 40px;
   overflow-x: hidden;
@@ -105,6 +106,7 @@
   padding-bottom: 40px;
   width: 100%;
   box-sizing: border-box;
+  background: transparent;
 }
 
 .page-title-container {

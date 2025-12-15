@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import './AnalysisView.css'
 import { getCardImageUrl, getCardEvolutionImageUrl, getCardHeroImageUrl } from './cardUtils'
 import ElixirIcon from './assets/Elixir.svg'
@@ -65,6 +65,33 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
     towerTroop: '',
     evolutions: ''
   })
+
+  // Refs for progress bars to set CSS variables for gradient sizing
+  const offenseBarRef = useRef(null)
+  const defenseBarRef = useRef(null)
+  const synergyBarRef = useRef(null)
+  const versatilityBarRef = useRef(null)
+
+  // Update CSS variables for progress bar widths
+  useEffect(() => {
+    const updateBarWidth = (ref, varName) => {
+      if (ref.current) {
+        const width = ref.current.offsetWidth
+        ref.current.style.setProperty(varName, `${width}px`)
+      }
+    }
+
+    const updateAllBars = () => {
+      updateBarWidth(offenseBarRef, '--progress-bar-width')
+      updateBarWidth(defenseBarRef, '--progress-bar-width')
+      updateBarWidth(synergyBarRef, '--progress-bar-width')
+      updateBarWidth(versatilityBarRef, '--progress-bar-width')
+    }
+
+    updateAllBars()
+    window.addEventListener('resize', updateAllBars)
+    return () => window.removeEventListener('resize', updateAllBars)
+  }, [])
   
   // Extract summary texts from analysis results
   const summaryTexts = useMemo(() => {
@@ -780,8 +807,11 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                       <OffenseIcon size={18} className="offense-icon" />
                       Offense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.offense))}`}>{scoreToLetterGrade(randomScores.offense)}</span>
                     </span>
-                    <div className="analysis-progress-bar">
-                      <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.offense)}%` }}></div>
+                    <div className="analysis-progress-bar" ref={offenseBarRef}>
+                      <div 
+                        className="analysis-progress-bar-fill"
+                        style={{ width: `${scoreToPercentage(animatedScores.offense)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -791,13 +821,16 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                       <DefenseIcon size={18} className="defense-icon" />
                       Defense <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.defense))}`}>{scoreToLetterGrade(randomScores.defense)}</span>
                     </span>
-                    <div className="analysis-progress-bar">
+                    <div className="analysis-progress-bar" ref={defenseBarRef}>
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
                           <div key={tick} className="analysis-progress-bar-tick" style={{ left: `${(tick / 5) * 100}%` }}></div>
                         ))}
                       </div>
-                      <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.defense)}%` }}></div>
+                      <div 
+                        className="analysis-progress-bar-fill"
+                        style={{ width: `${scoreToPercentage(animatedScores.defense)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -807,13 +840,16 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                       <SynergyIcon size={18} className="synergy-icon" />
                       Synergy <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.synergy))}`}>{scoreToLetterGrade(randomScores.synergy)}</span>
                     </span>
-                    <div className="analysis-progress-bar">
+                    <div className="analysis-progress-bar" ref={synergyBarRef}>
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
                           <div key={tick} className="analysis-progress-bar-tick" style={{ left: `${(tick / 5) * 100}%` }}></div>
                         ))}
                       </div>
-                      <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.synergy)}%` }}></div>
+                      <div 
+                        className="analysis-progress-bar-fill"
+                        style={{ width: `${scoreToPercentage(animatedScores.synergy)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -823,13 +859,16 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
                       <VersatilityIcon size={18} className="versatility-icon" />
                       Versatility <span className={`analysis-score-value-inline analysis-grade-${gradeToClassName(scoreToLetterGrade(randomScores.versatility))}`}>{scoreToLetterGrade(randomScores.versatility)}</span>
                     </span>
-                    <div className="analysis-progress-bar">
+                    <div className="analysis-progress-bar" ref={versatilityBarRef}>
                       <div className="analysis-progress-bar-ticks">
                         {[0, 1, 2, 3, 4, 5].map((tick) => (
                           <div key={tick} className="analysis-progress-bar-tick" style={{ left: `${(tick / 5) * 100}%` }}></div>
                         ))}
                       </div>
-                      <div className="analysis-progress-bar-fill" style={{ width: `${scoreToPercentage(animatedScores.versatility)}%` }}></div>
+                      <div 
+                        className="analysis-progress-bar-fill"
+                        style={{ width: `${scoreToPercentage(animatedScores.versatility)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </div>
