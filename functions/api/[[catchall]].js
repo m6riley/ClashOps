@@ -7,9 +7,9 @@
 export async function onRequest(context) {
   const { request, env, params } = context;
   
-  // For functions/api/[[path]].js, params.path is an array of segments after /api/
-  // e.g., /api/add_account -> params.path = ["add_account"]
-  const pathSegments = params.path || [];
+  // For functions/api/[[catchall]].js, params.catchall is an array of segments after /api/
+  // e.g., /api/add_account -> params.catchall = ["add_account"]
+  const pathSegments = params.catchall || [];
   const functionName = pathSegments[0];
   
   if (!functionName) {
