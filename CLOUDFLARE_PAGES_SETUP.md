@@ -42,7 +42,7 @@ This script will:
 4. Click **Add variable** for each one below
 5. Make sure to set them for **Production** environment (or all environments)
 
-**Important:** With the Pages Function proxy setup, these are **runtime** environment variables available to the `functions/api/[...path].js` Worker. This keeps your keys server-side and secure.
+**Important:** With the Pages Function proxy setup, these are **runtime** environment variables available to the `functions/api/[...path].js` Worker (located at repo root). This keeps your keys server-side and secure.
 
 ### Required Environment Variables:
 
