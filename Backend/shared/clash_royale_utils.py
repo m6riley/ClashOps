@@ -21,7 +21,7 @@ _CLASH_ROYALE_KEY = os.getenv("CLASH_ROYALE_KEY")
 _BASE_URL = "https://api.clashroyale.com/v1"
 
 # Number of top clans to fetch
-_TOP_CLANS = 3
+_TOP_CLANS = 100
 
 # Location ID for clan rankings (global)
 _LOCATION_ID = 57000006

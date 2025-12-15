@@ -7,7 +7,6 @@ and upload the results to Azure Blob Storage.
 """
 import logging
 import time
-import uuid
 import azure.functions as func
 from azure.functions import Blueprint
 
@@ -51,63 +50,51 @@ def refresh_decks(myTimer: func.TimerRequest) -> None:
         logging.warning("No clan data found. Exiting.")
         return
 
-    logging.info(f"Found {len(clans)} top clans to process")
+        logging.info(f"Found {len(clans)} top clans to process")
 
-    # Dictionary: canonical_key -> deck_data
-    deck_dict = {}
+        # Dictionary: frozenset(deck_cards) -> deck_data
+        deck_dict = {}
+        deck_id_counter = 1
 
-    # ---------------------------------------------------------
-    # FETCH & PROCESS CLANS
-    # ---------------------------------------------------------
-    for clan in clans:
-        clan_name = clan.get("name", "Unknown")
-        clan_tag = clan.get("tag", "")
+        # ---------------------------------------------------------
+        # FETCH & PROCESS CLANS
+        # ---------------------------------------------------------
+        for clan in clans:
+            clan_name = clan.get("name", "Unknown")
+            clan_tag = clan.get("tag", "")
 
-        logging.info(f"Processing clan: {clan_name} ({clan_tag})")
+            logging.info(f"Processing clan: {clan_name} ({clan_tag})")
 
-        members = get_clan_members(clan_tag)
-        if not members:
-            logging.info(f"No members found for clan: {clan_name}")
-            continue
-
-        logging.info(f"Processing {len(members)} members from {clan_name}")
-
-        for member in members:
-            player_tag = member.get("tag", "")
-            if not player_tag:
+            members = get_clan_members(clan_tag)
+            if not members:
+                logging.info(f"No members found for clan: {clan_name}")
                 continue
 
-            player_data = get_player_data(player_tag)
-            if not player_data:
-                logging.debug(f"Could not fetch data for player: {player_tag}")
-                continue
+            logging.info(f"Processing {len(members)} members from {clan_name}")
 
-            # Get (canonical_key, deck_payload)
-            canonical_key, deck_payload = process_player_deck(player_data)
+            for member in members:
+                player_tag = member.get("tag", "")
+                if not player_tag:
+                    continue
 
-            # -------------------------------
-            # NEW UNIQUE DECK
-            # -------------------------------
-            if canonical_key not in deck_dict:
-                deck_payload["deck_id"] = str(uuid.uuid4())
-                deck_payload["score"] = 1  # first sighting
-                deck_dict[canonical_key] = deck_payload
+                player_data = get_player_data(player_tag)
+                if not player_data:
+                    logging.debug(f"Could not fetch data for player: {player_tag}")
+                    continue
 
-            # -------------------------------
-            # DECK SEEN BEFORE
-            # -------------------------------
-            else:
-                existing = deck_dict[canonical_key]
-                existing["score"] += 1  # always increment by 1
+                # Process player deck and update deck_dict
+                deck_id_counter = process_player_deck(player_data, deck_dict, deck_id_counter)
 
-            time.sleep(PLAYER_DELAY)
+                time.sleep(PLAYER_DELAY)
 
     # ---------------------------------------------------------
-    # SORT & UPLOAD
+    # CONVERT & SORT
     # ---------------------------------------------------------
+    # Convert deck_dict (frozenset keys) to list of deck dictionaries
+    decks_list = list(deck_dict.values())
 
     sorted_decks = sorted(
-        deck_dict.values(),
+        decks_list,
         key=lambda d: d["score"],
         reverse=True
     )

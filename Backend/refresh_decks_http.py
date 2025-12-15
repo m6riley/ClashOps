@@ -6,7 +6,6 @@ aggregate deck usage statistics, and upload the results to Azure Blob Storage.
 """
 import logging
 import time
-import uuid
 import json
 import azure.functions as func
 from azure.functions import Blueprint
@@ -48,8 +47,9 @@ def refresh_decks_http(req: func.HttpRequest) -> func.HttpResponse:
 
         logging.info(f"Found {len(clans)} top clans to process")
 
-        # Dictionary: canonical_key -> deck_data
+        # Dictionary: frozenset(deck_cards) -> deck_data
         deck_dict = {}
+        deck_id_counter = 1
 
         # ---------------------------------------------------------
         # FETCH & PROCESS CLANS
@@ -77,32 +77,19 @@ def refresh_decks_http(req: func.HttpRequest) -> func.HttpResponse:
                     logging.debug(f"Could not fetch data for player: {player_tag}")
                     continue
 
-                # Get (canonical_key, deck_payload)
-                canonical_key, deck_payload = process_player_deck(player_data)
-
-                # -------------------------------
-                # NEW UNIQUE DECK
-                # -------------------------------
-                if canonical_key not in deck_dict:
-                    deck_payload["deck_id"] = str(uuid.uuid4())
-                    deck_payload["score"] = 1  # first sighting
-                    deck_dict[canonical_key] = deck_payload
-
-                # -------------------------------
-                # DECK SEEN BEFORE
-                # -------------------------------
-                else:
-                    existing = deck_dict[canonical_key]
-                    existing["score"] += 1  # always increment by 1
+                # Process player deck and update deck_dict
+                deck_id_counter = process_player_deck(player_data, deck_dict, deck_id_counter)
 
                 time.sleep(PLAYER_DELAY)
 
         # ---------------------------------------------------------
-        # SORT & UPLOAD
+        # CONVERT & SORT
         # ---------------------------------------------------------
+        # Convert deck_dict (frozenset keys) to list of deck dictionaries
+        decks_list = list(deck_dict.values())
 
         sorted_decks = sorted(
-            deck_dict.values(),
+            decks_list,
             key=lambda d: d["score"],
             reverse=True
         )
