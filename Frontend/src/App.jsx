@@ -1486,7 +1486,7 @@ function App() {
                     currentDeckCount
                   )}
                 </span>
-                <span className="deck-count-text">unique decks</span>
+                <span className="deck-count-text">Unique Decks</span>
               </div>
             )
           })()}
@@ -1507,10 +1507,18 @@ function App() {
                     feature={expandedFeature}
                     decks={allDecks}
                     isExpanded={true}
-                    onSeeAll={() => setExpandedFeature(null)}
-                    onBack={() => setExpandedFeature(null)}
+                    onSeeAll={() => {
+                      setExpandedFeature(null)
+                      setShouldAnimateDeckCount(true)
+                      setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+                    }}
+                    onBack={() => {
+                      setExpandedFeature(null)
+                      setShouldAnimateDeckCount(true)
+                      setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+                    }}
                   />
-                  <div className="decks-grid">
+                  <div key={`expanded-${expandedFeature.featured_text}`} className="decks-grid">
                     {allDecks.length > 0 ? (
                       allDecks.map(deck => (
                             <DeckCard 
@@ -1551,7 +1559,11 @@ function App() {
                             feature={feature} 
                             decks={featureDecks}
                             isExpanded={false}
-                            onSeeAll={() => setExpandedFeature(feature)}
+                            onSeeAll={() => {
+                              setExpandedFeature(feature)
+                              setShouldAnimateDeckCount(true)
+                              setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+                            }}
                             onBack={() => {}}
                                   hideSeeAll={!hasMoreDecks}
                           />
@@ -1814,7 +1826,7 @@ function App() {
                   {!loading && !error && (
                     <div className="deck-count">
                       <span className="deck-count-number">{favouriteDecks.length}</span>
-                      <span className="deck-count-text">favourite decks</span>
+                      <span className="deck-count-text">Favourite Decks</span>
                     </div>
                   )}
                 </div>
@@ -1954,7 +1966,7 @@ function App() {
                       
                       {/* Empty state */}
                       {favouriteDecks.length === 0 && (
-                        <div className="no-decks-message">No favourite decks yet. Add decks to your favourites from the Deck Catalog.</div>
+                        <div className="no-decks-message">No Favourite Decks yet. Add decks to your favourites from the Deck Catalog.</div>
                       )}
                     </>
                   )

@@ -23,6 +23,11 @@ function InitialLoading({ onComplete }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
+        // Once we reach 100%, stay there
+        if (prev >= 100) {
+          return 100
+        }
+        
         if (azureComplete && prev < 100) {
           // Animate to 100% when Azure completes
           return Math.min(prev + 2, 100)
