@@ -1,7 +1,7 @@
 import React from 'react'
 import './CategoryBanner.css'
 
-function CategoryBanner({ category, isExpanded, onSeeAll, onBack, hideSeeAll = false }) {
+function CategoryBanner({ category, isExpanded, onSeeAll, onBack, hideSeeAll = false, getCategoryIconUrl }) {
   const gradientColors = {
     '#ef4444': ['#ef4444', '#dc2626', '#b91c1c'], // Red
     '#3b82f6': ['#3b82f6', '#2563eb', '#1d4ed8'], // Blue
@@ -40,7 +40,7 @@ function CategoryBanner({ category, isExpanded, onSeeAll, onBack, hideSeeAll = f
         {category.icon && (
           <div className="category-image-section">
             <img 
-              src={`/category_icons/${category.icon}${category.icon.includes('.') ? '' : '.png'}`}
+              src={getCategoryIconUrl ? getCategoryIconUrl(category.icon) : `/category_icons/${category.icon}${category.icon.includes('.') ? '' : '.png'}`}
               alt={category.name}
               className="category-icon-image"
               onError={(e) => {

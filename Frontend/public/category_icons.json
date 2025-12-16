@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Giant",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/giant.png"
+  },
+  {
+    "name": "Goblin Giant",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/goblin-giant.png"
+  },
+  {
+    "name": "Electro Giant",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/electro-giant.png"
+  },
+  {
+    "name": "Elixir Golem",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/elixir-golem.png"
+  },
+  {
+    "name": "Golem",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/golem.png"
+  },
+  {
+    "name": "Sparky",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/sparky.png"
+  },
+  {
+    "name": "Graveyard",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/graveyard.png"
+  },
+  {
+    "name": "Royal Giant",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/royal-giant.png"
+  },
+  {
+    "name": "Royal Hogs",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/royal-hogs.png"
+  },
+  {
+    "name": "Hog Rider",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/hog-rider.png"
+  },
+  {
+    "name": "Three Musketeers",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/three-musketeers.png"
+  },
+  {
+    "name": "Pekka",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/pekka.png"
+  },
+  {
+    "name": "Mega Knight",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/mega-knight.png"
+  },
+  {
+    "name": "Goblin Barrel",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/goblin-barrel.png"
+  },
+  {
+    "name": "Goblin Drill",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/goblin-drill.png"
+  },
+  {
+    "name": "Miner",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/miner.png"
+  },
+  {
+    "name": "Balloon",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/balloon.png"
+  },
+  {
+    "name": "Lava Hound",
+    "url": "https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/lava-hound.png"
+  }
+]

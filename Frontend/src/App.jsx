@@ -79,6 +79,7 @@ function App() {
   const [analyzingDeck, setAnalyzingDeck] = useState(null) // Deck being analyzed
   const [analysisResults, setAnalysisResults] = useState(null) // Analysis results from API
   const [isSubscribed, setIsSubscribed] = useState(false) // Track subscription status
+  const [categoryIcons, setCategoryIcons] = useState([]) // Category icon URLs from JSON file
 
   // Handle analyze deck click
   const handleAnalyzeDeck = (deck) => {
@@ -122,6 +123,17 @@ function App() {
   }
 
   // Cards, features, and decks are now loaded from Azure Functions during initial loading
+  
+  // Helper function to get category icon URL from icon name
+  const getCategoryIconUrl = (iconName) => {
+    if (!iconName) return null
+    const iconData = categoryIcons.find(icon => icon.name === iconName)
+    if (iconData) {
+      return iconData.url
+    }
+    // Fallback to old folder structure for backward compatibility
+    return `/category_icons/${iconName}${iconName.includes('.') ? '' : '.png'}`
+  }
   
   // Helper function to check if deck matches filter (contains all selected, excludes all excluded)
   const deckMatchesFilter = (deck) => {
@@ -1137,8 +1149,8 @@ function App() {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
       
-      // Load features, decks, and cards in parallel
-      const [featuresResponse, decksResponse, cardsResponse] = await Promise.all([
+      // Load features, decks, cards, and category icons in parallel
+      const [featuresResponse, decksResponse, cardsResponse, iconsResponse] = await Promise.all([
         fetch(getGetFeaturesUrl(), {
           method: 'GET',
           headers: {
@@ -1165,6 +1177,13 @@ function App() {
           },
           mode: 'cors',
           signal: controller.signal
+        }),
+        fetch('/category_icons.json', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          signal: controller.signal
         })
       ])
       
@@ -1182,6 +1201,20 @@ function App() {
       } else {
         console.warn('Features data is not an array:', featuresData)
         setFeatures([])
+      }
+      
+      // Handle category icons response
+      if (iconsResponse && iconsResponse.ok) {
+        try {
+          const iconsData = await iconsResponse.json()
+          setCategoryIcons(iconsData)
+        } catch (e) {
+          console.warn('Failed to parse category icons JSON:', e)
+          setCategoryIcons([])
+        }
+      } else {
+        console.warn('Failed to load category icons')
+        setCategoryIcons([])
       }
       
       // Handle cards response
@@ -1906,6 +1939,7 @@ function App() {
                           category={expandedCategory}
                           isExpanded={true}
                           onBack={() => setExpandedCategory(null)}
+                          getCategoryIconUrl={getCategoryIconUrl}
                         />
                         <div className="decks-grid">
                           {categoryDecks.length > 0 ? (
@@ -1959,6 +1993,7 @@ function App() {
                                     isExpanded={false}
                                     onSeeAll={() => setExpandedCategory(category)}
                                     hideSeeAll={categoryDecks.length <= maxDecks}
+                                    getCategoryIconUrl={getCategoryIconUrl}
                                   />
                                   {displayDecks.length > 0 && (
                                     <div className={`category-decks-grid ${shouldSpanFullWidth ? 'category-decks-grid-single' : ''}`}>

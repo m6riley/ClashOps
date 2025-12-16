@@ -24,39 +24,24 @@ function CategoryDialog({ category, onSave, onCancel }) {
   const [availableIcons, setAvailableIcons] = useState([])
   const [isClosing, setIsClosing] = useState(false)
 
-  // Load available icons from category_icons folder
+  // Load available icons from category_icons.json file
   useEffect(() => {
-    // Since we can't dynamically list files in the browser, we'll try to load
-    // icons based on common naming patterns. The user can add PNG files to
-    // the category_icons folder and they'll be detected if they match these names.
-    const iconNames = [
-      'sword', 'shield', 'crown', 'star', 'heart', 'gem', 'fire', 'ice',
-      'lightning', 'arrow', 'bow', 'axe', 'hammer', 'wand', 'potion', 'book',
-      'Furnace_Pose02_4k_FX' // Include the existing icon
-    ]
-    
-    // Check which icons actually exist by trying to load them
-    const checkIcons = async () => {
-      const existingIcons = []
-      for (const iconName of iconNames) {
-        try {
-          const img = new Image()
-          await new Promise((resolve, reject) => {
-            img.onload = () => resolve()
-            img.onerror = () => reject()
-            // Try both with and without .png extension
-            img.src = `/category_icons/${iconName}${iconName.includes('.') ? '' : '.png'}`
-            setTimeout(() => reject(), 500) // Timeout after 500ms
-          })
-          existingIcons.push(iconName)
-        } catch (e) {
-          // Icon doesn't exist, skip it
+    const loadIcons = async () => {
+      try {
+        const response = await fetch('/category_icons.json')
+        if (!response.ok) {
+          throw new Error('Failed to load category icons')
         }
+        const iconsData = await response.json()
+        // Store icons as objects with name and url
+        setAvailableIcons(iconsData)
+      } catch (error) {
+        console.error('Error loading category icons:', error)
+        setAvailableIcons([])
       }
-      setAvailableIcons(existingIcons)
     }
     
-    checkIcons()
+    loadIcons()
   }, [])
 
   // Initialize form with category data if editing
@@ -147,23 +132,27 @@ function CategoryDialog({ category, onSave, onCancel }) {
               >
                 <span className="category-icon-placeholder">—</span>
               </button>
-              {availableIcons.map((iconName) => (
-                <button
-                  key={iconName}
-                  className={`category-icon-option ${selectedIcon === iconName ? 'selected' : ''}`}
-                  onClick={() => setSelectedIcon(iconName)}
-                  title={iconName.replace(/_/g, ' ').replace(/\.[^/.]+$/, '')}
-                >
-                  <img
-                    src={`/category_icons/${iconName}${iconName.includes('.') ? '' : '.png'}`}
-                    alt={iconName}
-                    className="category-icon-image"
-                    onError={(e) => {
-                      e.target.style.display = 'none'
-                    }}
-                  />
-                </button>
-              ))}
+              {availableIcons.map((icon) => {
+                const iconName = typeof icon === 'string' ? icon : icon.name
+                const iconUrl = typeof icon === 'string' ? `/category_icons/${iconName}${iconName.includes('.') ? '' : '.png'}` : icon.url
+                return (
+                  <button
+                    key={iconName}
+                    className={`category-icon-option ${selectedIcon === iconName ? 'selected' : ''}`}
+                    onClick={() => setSelectedIcon(iconName)}
+                    title={iconName.replace(/_/g, ' ').replace(/\.[^/.]+$/, '')}
+                  >
+                    <img
+                      src={iconUrl}
+                      alt={iconName}
+                      className="category-icon-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                      }}
+                    />
+                  </button>
+                )
+              })}
             </div>
             {availableIcons.length === 0 && (
               <p className="category-dialog-hint">
