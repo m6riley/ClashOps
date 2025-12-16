@@ -7,6 +7,12 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
   const [sortMode, setSortMode] = useState('name') // 'name', 'elixir', 'rarity', 'arena'
   const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
   const [cardVariantMode, setCardVariantMode] = useState(variantMode || 'basic') // 'basic', 'evolution', 'hero'
+  const [cardTypeFilters, setCardTypeFilters] = useState({
+    troop: false,
+    spell: false,
+    building: false
+  }) // Object tracking which types are selected
+  const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false)
   const [isInitialMount, setIsInitialMount] = useState(true)
   const [mountKey, setMountKey] = useState(0) // Key to force re-render on mount
   
@@ -29,6 +35,23 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
       setCardVariantMode(variantMode)
     }
   }, [variantMode])
+  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isTypeDropdownOpen && !event.target.closest('.filter-cards-type-dropdown')) {
+        setIsTypeDropdownOpen(false)
+      }
+    }
+    
+    if (isTypeDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isTypeDropdownOpen])
   
   // Notify parent when variant mode changes
   const handleVariantModeChange = (newMode) => {
@@ -97,7 +120,27 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
     return true
   })
 
-  const filteredCards = variantFilteredCards.filter(card => 
+  // Filter by card type
+  const typeFilteredCards = variantFilteredCards.filter(card => {
+    // If no types are selected, show all cards
+    const hasAnySelected = Object.values(cardTypeFilters).some(selected => selected === true)
+    if (!hasAnySelected) return true
+    
+    const cardType = card.type?.toLowerCase()
+    if (!cardType) return false // Exclude cards without type when filtering is active
+    
+    // Check if this card type is selected
+    return cardTypeFilters[cardType] === true
+  })
+  
+  const toggleCardTypeFilter = (type) => {
+    setCardTypeFilters(prev => ({
+      ...prev,
+      [type]: !prev[type]
+    }))
+  }
+
+  const filteredCards = typeFilteredCards.filter(card => 
     card.card_name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -184,32 +227,87 @@ function FilterCardsView({ cards, selectedCards, excludedCards, onCardToggle, on
               className="filter-cards-search-input"
             />
           </div>
-          <div className="filter-cards-sort">
-            <div className="sort-controls">
-              <button 
-                className="sort-mode-button"
-                onClick={toggleSortMode}
-                title={`Sort by: ${getSortModeLabel()}`}
-              >
-                <span className="sort-label">Sort by:</span>
-                <span className="sort-mode-value">{getSortModeLabel()}</span>
-              </button>
-              <button 
-                className="sort-direction-button"
-                onClick={toggleSortDirection}
-                title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
-              >
-                {sortDirection === 'asc' ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 14l5-5 5 5H7z" fill="currentColor"/>
-                  </svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
-                  </svg>
-                )}
-              </button>
+          <div className="filter-cards-controls-group">
+            <div className="filter-cards-sort">
+              <div className="sort-controls">
+                <button 
+                  className="sort-mode-button"
+                  onClick={toggleSortMode}
+                  title={`Sort by: ${getSortModeLabel()}`}
+                >
+                  <span className="sort-label">Sort by:</span>
+                  <span className="sort-mode-value">{getSortModeLabel()}</span>
+                </button>
+                <button 
+                  className="sort-direction-button"
+                  onClick={toggleSortDirection}
+                  title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+                >
+                  {sortDirection === 'asc' ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 14l5-5 5 5H7z" fill="currentColor"/>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
+            <div className="filter-cards-type">
+            <div className="filter-cards-type-dropdown">
+              <button
+                className="filter-cards-type-dropdown-button"
+                onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
+                title="Filter by card type"
+              >
+                <span className="filter-cards-type-dropdown-label">Type</span>
+                <span className="filter-cards-type-dropdown-arrow">
+                  {isTypeDropdownOpen ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 14l5-5 5 5H7z" fill="currentColor"/>
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+                    </svg>
+                  )}
+                </span>
+              </button>
+              {isTypeDropdownOpen && (
+                <div className="filter-cards-type-dropdown-menu">
+                  <label className={`filter-cards-type-option ${cardTypeFilters.troop ? 'active' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={cardTypeFilters.troop}
+                      onChange={() => toggleCardTypeFilter('troop')}
+                      className="filter-cards-type-checkbox"
+                    />
+                    <span>Troop</span>
+                  </label>
+                  <label className={`filter-cards-type-option ${cardTypeFilters.spell ? 'active' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={cardTypeFilters.spell}
+                      onChange={() => toggleCardTypeFilter('spell')}
+                      className="filter-cards-type-checkbox"
+                    />
+                    <span>Spell</span>
+                  </label>
+                  <label className={`filter-cards-type-option ${cardTypeFilters.building ? 'active' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={cardTypeFilters.building}
+                      onChange={() => toggleCardTypeFilter('building')}
+                      className="filter-cards-type-checkbox"
+                    />
+                    <span>Building</span>
+                  </label>
+                </div>
+              )}
+            </div>
+          </div>
           </div>
         </div>
         <div className="filter-cards-variant-toggle">

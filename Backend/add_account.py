@@ -7,6 +7,7 @@ a new account if one doesn't already exist.
 """
 import logging
 import uuid
+import json
 import azure.functions as func
 from azure.functions import Blueprint
 
@@ -109,9 +110,13 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
         _accounts.create_entity(entity=account_entity)
         logging.info(f"Account added successfully for email: {email} with UserID: {user_id}")
         return func.HttpResponse(
-            "Account added successfully",
+            json.dumps({
+                "message": "Account added successfully",
+                "id": user_id,
+                "account_id": user_id
+            }),
             status_code=200,
-            mimetype="text/plain"
+            mimetype="application/json"
         )
     except Exception as e:
         # Check if it's a conflict error (account already exists)

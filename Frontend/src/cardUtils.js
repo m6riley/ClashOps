@@ -40,3 +40,12 @@ export function getCardHeroImageUrl(cardName) {
   return `https://cdns3.royaleapi.com/cdn-cgi/image/w=150,h=180,format=auto/static/img/cards/v6-aa179c9e/${apiName}-hero.png`
 }
 
+/**
+ * Gets the card type from card data
+ * @param {Object} card - Card object with type property
+ * @returns {string|undefined} The card type (e.g., 'troop', 'spell', 'building') or undefined if not available
+ */
+export function getCardType(card) {
+  return card?.type
+}
+

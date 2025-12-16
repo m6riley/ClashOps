@@ -78,7 +78,7 @@ function App() {
   const [showAnalysisView, setShowAnalysisView] = useState(false) // Show analysis view
   const [analyzingDeck, setAnalyzingDeck] = useState(null) // Deck being analyzed
   const [analysisResults, setAnalysisResults] = useState(null) // Analysis results from API
-  const [isSubscribed, setIsSubscribed] = useState(true) // Track subscription status (auto-subscribed for dev)
+  const [isSubscribed, setIsSubscribed] = useState(false) // Track subscription status
 
   // Handle analyze deck click
   const handleAnalyzeDeck = (deck) => {
@@ -181,12 +181,23 @@ function App() {
   }
 
   // Helper function to filter decks by featured card
-  const getDecksForFeature = (featureCardName, limit = null) => {
-    let filtered = decks.filter(deck => 
-      deck.cardNames.some(cardName => 
+  const getDecksForFeature = (featureCardName, limit = null, featureType = null) => {
+    let filtered = decks.filter(deck => {
+      const cardIndex = deck.cardNames.findIndex(cardName => 
         cardName.toLowerCase() === featureCardName.toLowerCase()
       )
-    )
+      
+      // If card not found in deck, exclude it
+      if (cardIndex === -1) return false
+      
+      // If feature type is "Hero", card must be in slots 3 or 4 (indices 2 or 3)
+      if (featureType && featureType.toLowerCase() === 'hero') {
+        return cardIndex === 2 || cardIndex === 3
+      }
+      
+      // For other feature types, card can be anywhere
+      return true
+    })
     // Apply card filter if any cards are selected
     if (selectedFilterCards.length > 0) {
       filtered = filtered.filter(deckMatchesFilter)
@@ -1170,6 +1181,8 @@ function App() {
       
       const cardsData = await cardsResponse.json()
       if (Array.isArray(cardsData)) {
+        // Cards data includes: card_name, elixer_cost, rarity, type, and other CSV columns
+        // The 'type' field indicates the card type (e.g., 'troop', 'spell', 'building')
         setCards(cardsData) // Store all cards data for filter view
       } else {
         console.warn('Cards data is not an array:', cardsData)
@@ -1483,7 +1496,7 @@ function App() {
           {!loading && !error && (() => {
             const currentDeckCount = expandedFeature
               ? (expandedFeature.filter_options 
-                  ? getDecksForFeature(expandedFeature.filter_options).length
+                  ? getDecksForFeature(expandedFeature.filter_options, null, expandedFeature.featured_type).length
                             : getFilteredDecks().length)
                         : getFilteredDecks().length
             return (
@@ -1508,7 +1521,7 @@ function App() {
             {/* Expanded feature view */}
             {expandedFeature && (() => {
               const allDecks = expandedFeature.filter_options 
-                ? getDecksForFeature(expandedFeature.filter_options)
+                ? getDecksForFeature(expandedFeature.filter_options, null, expandedFeature.featured_type)
                     : getFilteredDecks()
               return (
                 <div className="category-section category-section-expanded">
@@ -1559,8 +1572,8 @@ function App() {
                         <div key={pairIndex} className={`category-pair-row ${shouldSpanFullWidth ? 'category-pair-row-single' : ''}`}>
                     {featurePair.map((feature, index) => {
                             const maxDecks = shouldSpanFullWidth ? 4 : 2
-                            const featureDecks = getDecksForFeature(feature.filter_options, maxDecks)
-                            const allFeatureDecks = getDecksForFeature(feature.filter_options)
+                            const featureDecks = getDecksForFeature(feature.filter_options, maxDecks, feature.featured_type)
+                            const allFeatureDecks = getDecksForFeature(feature.filter_options, null, feature.featured_type)
                             const hasMoreDecks = allFeatureDecks.length > maxDecks
                       return (
                               <div key={index} className={`category-section ${shouldSpanFullWidth ? 'category-section-single' : ''}`}>

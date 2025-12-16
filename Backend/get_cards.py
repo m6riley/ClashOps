@@ -15,6 +15,13 @@ get_cards_bp = Blueprint()
 def get_cards(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP-triggered Azure Function for getting all cards from the cards CSV blob.
+    
+    Returns all columns from the CSV including:
+    - card_name: Name of the card
+    - elixer_cost: Elixir cost of the card
+    - rarity: Rarity level of the card
+    - type: Type of the card (e.g., troop, spell, building)
+    - Any other columns present in the CSV
     """
     logging.info("Get cards request received")
     try:
