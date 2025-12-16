@@ -7,6 +7,9 @@
 html {
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
   min-height: 100vh;
+  height: 100%;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -16,12 +19,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  height: 100%;
   overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
+  background-attachment: fixed;
 }
 
 #root {
   min-height: 100vh;
+  height: 100%;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2418 50%, #1a1610 100%);
+  background-attachment: fixed;
 }
 

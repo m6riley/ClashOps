@@ -349,27 +349,13 @@ function AboutView({ decks = [] }) {
           </div>
           <div className={`credit-profile ${visibleSections.has('credits') ? 'visible' : ''}`}>
             <div className="profile-picture-placeholder">
-              <img 
-                src="/matthew-palmer.jpg" 
-                alt="Matthew Palmer"
-                className="profile-picture-image"
-                onError={(e) => {
-                  // Hide image and show SVG fallback
-                  e.target.style.display = 'none'
-                }}
-                onLoad={(e) => {
-                  // Hide SVG when image loads successfully
-                  const svg = e.target.parentElement.querySelector('svg')
-                  if (svg) svg.style.display = 'none'
-                }}
-              />
-              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="profile-picture-fallback">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="40" cy="40" r="40" fill="rgba(255, 255, 255, 0.1)"/>
                 <circle cx="40" cy="30" r="12" fill="rgba(255, 255, 255, 0.3)"/>
                 <path d="M20 65 Q20 50 40 50 Q60 50 60 65" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="8" fill="none" strokeLinecap="round"/>
               </svg>
             </div>
-            <div className="profile-name">Matther Palmer</div>
+            <div className="profile-name">Matthew Palmer</div>
             <div className="profile-role">Frontend</div>
             <div className="profile-university">University of British Columbia</div>
           </div>
