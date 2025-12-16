@@ -7,7 +7,7 @@ function FeatureBanner({ feature, decks, isExpanded, onSeeAll, onBack, hideSeeAl
       <div className="feature-banner-content">
         <div className="feature-text-section">
           <div className="feature-type">{feature.featured_type}</div>
-          <div className="feature-name">{feature.featured_text}</div>
+          <div className="feature-name">{feature.featured_title || feature.featured_text}</div>
           {isExpanded ? (
             <div className="feature-back" onClick={onBack}>
               ← Back
@@ -22,7 +22,7 @@ function FeatureBanner({ feature, decks, isExpanded, onSeeAll, onBack, hideSeeAl
           <div className="feature-image-section">
             <img 
               src={feature.featured_image} 
-              alt={feature.featured_text}
+              alt={feature.featured_title || feature.featured_text}
               className="feature-character-image"
             />
           </div>

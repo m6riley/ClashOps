@@ -28,7 +28,11 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
 
         # Parse CSV rows into dictionaries
         reader = csv.DictReader(io.StringIO(csv_text))
-        features_list = list[dict[str | Any, str | Any]](reader)
+        # Trim whitespace from keys and values
+        features_list = []
+        for row in reader:
+            trimmed_row = {k.strip(): v.strip() if isinstance(v, str) else v for k, v in row.items()}
+            features_list.append(trimmed_row)
 
     except Exception as e:
         logging.error(f"Error getting features from blob: {e}")

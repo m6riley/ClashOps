@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Swords from './Swords'
 import crownIcon from './assets/ClashOps-PNG.png'
@@ -697,6 +697,17 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showFilterView]) // Only run when showFilterView changes to true
+
+  // Ref for expanded feature banner (kept for potential future use, but no auto-scroll)
+  const expandedFeatureRef = useRef(null)
+
+  // Keep page at top when feature is expanded (no auto-scroll)
+  useEffect(() => {
+    if (expandedFeature) {
+      // Scroll to top immediately without animation to prevent janky scrolling
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }, [expandedFeature])
 
   // Cancel filter view - revert to initial state
   const cancelFilter = () => {
@@ -1476,9 +1487,24 @@ function App() {
             ) : (
               <>
         <div className="page-title-container">
-                  <div className="title-section">
-          <h1 className="page-title">Deck Catalog</h1>
-                    <p className="page-description">Discover the top decks in the arena, refreshed every season.</p>
+                  <div className={`title-section ${expandedFeature ? 'title-section-with-image' : ''}`}>
+                    <div className="title-text-content">
+                      <h1 className="page-title">{expandedFeature ? (expandedFeature.featured_title || expandedFeature.featured_text) : 'Deck Catalog'}</h1>
+                      <p className="page-description">
+                        {expandedFeature 
+                          ? (expandedFeature.featured_text || expandedFeature[' featured_text'] || 'Browse all decks for this feature.')
+                          : 'Discover the top decks in the arena, refreshed every season.'}
+                      </p>
+                    </div>
+                    {expandedFeature && expandedFeature.featured_image && (
+                      <div className="title-featured-image">
+                        <img 
+                          src={expandedFeature.featured_image} 
+                          alt={expandedFeature.featured_title || expandedFeature.featured_text}
+                          className="featured-image-in-title"
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="page-title-actions">
                     <button 
@@ -1524,23 +1550,20 @@ function App() {
                 ? getDecksForFeature(expandedFeature.filter_options, null, expandedFeature.featured_type)
                     : getFilteredDecks()
               return (
-                <div className="category-section category-section-expanded">
-                  <FeatureBanner 
-                    feature={expandedFeature}
-                    decks={allDecks}
-                    isExpanded={true}
-                    onSeeAll={() => {
-                      setExpandedFeature(null)
-                      setShouldAnimateDeckCount(true)
-                      setTimeout(() => setShouldAnimateDeckCount(false), 2500)
-                    }}
-                    onBack={() => {
-                      setExpandedFeature(null)
-                      setShouldAnimateDeckCount(true)
-                      setTimeout(() => setShouldAnimateDeckCount(false), 2500)
-                    }}
-                  />
-                  <div key={`expanded-${expandedFeature.featured_text}`} className="decks-grid">
+                <div className="category-section category-section-expanded" ref={expandedFeatureRef}>
+                  <div className="feature-back-button-container">
+                    <button 
+                      className="feature-back-button"
+                      onClick={() => {
+                        setExpandedFeature(null)
+                        setShouldAnimateDeckCount(true)
+                        setTimeout(() => setShouldAnimateDeckCount(false), 2500)
+                      }}
+                    >
+                      ← Back to Deck Catalog
+                    </button>
+                  </div>
+                  <div key={`expanded-${expandedFeature.featured_title || expandedFeature.featured_text}`} className="decks-grid">
                     {allDecks.length > 0 ? (
                       allDecks.map(deck => (
                             <DeckCard 
@@ -1613,7 +1636,7 @@ function App() {
                 <div className="category-section">
                   <FeatureBanner 
                     feature={{
-                      featured_text: 'Top Decks',
+                      featured_title: 'Top Decks',
                       featured_type: 'All',
                       featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
                       filter_options: ''
