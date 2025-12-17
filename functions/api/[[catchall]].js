@@ -50,7 +50,15 @@ export async function onRequest(context) {
     const queryString = url.search;
     
     // Append query parameters to Azure Function URL
-    const proxiedUrl = queryString ? `${azureUrl}${queryString}` : azureUrl;
+    // Check if azureUrl already has query parameters (from function key)
+    // If it does, use '&' instead of '?' to append additional params
+    let proxiedUrl = azureUrl;
+    if (queryString) {
+      const separator = azureUrl.includes('?') ? '&' : '?';
+      // Remove leading '?' from queryString since we're adding our own separator
+      const queryParams = queryString.substring(1);
+      proxiedUrl = `${azureUrl}${separator}${queryParams}`;
+    }
     
     const response = await fetch(proxiedUrl, {
       method,
