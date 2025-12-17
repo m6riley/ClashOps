@@ -2161,10 +2161,36 @@ function App() {
             setIsSubscribed={setIsSubscribed}
             onSubscribe={() => setShowPaymentForm(true)}
             onNotification={showNotification}
-            onLogin={(userId) => {
+            onLogin={async (userId) => {
               setCurrentUserId(userId)
               setIsSubscribed(false) // Reset subscription status on login, will be updated by AccountView's useEffect
               fetchPlayerDecks(userId)
+              
+              // Immediately check subscription status after login
+              try {
+                const { getGetSubscriptionStatusUrl } = await import('./config')
+                const baseUrl = getGetSubscriptionStatusUrl()
+                const separator = baseUrl.includes('?') ? '&' : '?'
+                const response = await fetch(`${baseUrl}${separator}userId=${userId}`)
+                
+                if (response.ok) {
+                  const data = await response.json()
+                  const isActive = data.hasSubscription && (
+                    data.status === 'active' || 
+                    data.status === 'trialing' || 
+                    data.status === 'incomplete'
+                  )
+                  setIsSubscribed(isActive)
+                  console.log('Subscription status checked on login:', {
+                    hasSubscription: data.hasSubscription,
+                    status: data.status,
+                    isActive
+                  })
+                }
+              } catch (error) {
+                console.error('Error checking subscription status on login:', error)
+                // Don't set to false on error - let AccountView's useEffect handle it
+              }
             }}
             onLogout={() => {
               setCurrentUserId(null)

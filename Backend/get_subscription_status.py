@@ -65,6 +65,7 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
         
         account = accounts[0]
         subscription_id = account.get("StripeSubscriptionID")
+        stored_status = account.get("SubscriptionStatus")
         
         if not subscription_id:
             # No subscription
@@ -74,36 +75,63 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
             }
             return create_success_response(response_data)
         
-        # Get latest subscription status from Stripe
-        subscription = get_subscription(subscription_id)
-        
-        # Update account with latest subscription status from Stripe
-        # This ensures we have the most up-to-date status
-        account['SubscriptionStatus'] = subscription.status
-        if hasattr(subscription, 'current_period_end') and subscription.current_period_end:
-            account['SubscriptionCurrentPeriodEnd'] = subscription.current_period_end
-        
-        # Update account in database
+        # Try to get latest subscription status from Stripe
+        # If Stripe API fails, fall back to stored status in database
         try:
-            accounts_table.update_entity(account)
-        except Exception as e:
-            logging.warning(f"Could not update account with latest subscription status: {e}")
-            # Continue anyway - not critical for this request
-        
-        # Get payment method details
-        payment_method_last4 = account.get("PaymentMethodLast4", "")
-        
-        response_data = {
-            "hasSubscription": True,
-            "subscriptionId": subscription.id,
-            "status": subscription.status,
-            "currentPeriodEnd": subscription.current_period_end if hasattr(subscription, 'current_period_end') and subscription.current_period_end else None,
-            "cancelAtPeriodEnd": subscription.cancel_at_period_end if hasattr(subscription, 'cancel_at_period_end') else False,
-            "paymentMethodLast4": payment_method_last4
-        }
-        
-        logging.info(f"Retrieved subscription status for user {user_id}")
-        return create_success_response(response_data)
+            subscription = get_subscription(subscription_id)
+            
+            # Update account with latest subscription status from Stripe
+            # This ensures we have the most up-to-date status
+            account['SubscriptionStatus'] = subscription.status
+            if hasattr(subscription, 'current_period_end') and subscription.current_period_end:
+                account['SubscriptionCurrentPeriodEnd'] = subscription.current_period_end
+            
+            # Update account in database
+            try:
+                accounts_table.update_entity(account)
+            except Exception as e:
+                logging.warning(f"Could not update account with latest subscription status: {e}")
+                # Continue anyway - not critical for this request
+            
+            # Get payment method details
+            payment_method_last4 = account.get("PaymentMethodLast4", "")
+            
+            response_data = {
+                "hasSubscription": True,
+                "subscriptionId": subscription.id,
+                "status": subscription.status,
+                "currentPeriodEnd": subscription.current_period_end if hasattr(subscription, 'current_period_end') and subscription.current_period_end else None,
+                "cancelAtPeriodEnd": subscription.cancel_at_period_end if hasattr(subscription, 'cancel_at_period_end') else False,
+                "paymentMethodLast4": payment_method_last4
+            }
+            
+            logging.info(f"Retrieved subscription status for user {user_id}: {subscription.status}")
+            return create_success_response(response_data)
+            
+        except Exception as stripe_error:
+            # If Stripe API call fails, use stored status from database
+            logging.warning(f"Failed to retrieve subscription from Stripe: {stripe_error}. Using stored status.")
+            
+            if stored_status:
+                # Return stored status as fallback
+                response_data = {
+                    "hasSubscription": True,
+                    "subscriptionId": subscription_id,
+                    "status": stored_status,
+                    "currentPeriodEnd": account.get("SubscriptionCurrentPeriodEnd"),
+                    "cancelAtPeriodEnd": False,
+                    "paymentMethodLast4": account.get("PaymentMethodLast4", "")
+                }
+                logging.info(f"Returning stored subscription status for user {user_id}: {stored_status}")
+                return create_success_response(response_data)
+            else:
+                # No stored status, assume no subscription
+                response_data = {
+                    "hasSubscription": False,
+                    "status": None
+                }
+                logging.warning(f"No stored subscription status for user {user_id}, returning no subscription")
+                return create_success_response(response_data)
         
     except Exception as e:
         return create_error_response(f"Error getting subscription status: {e}")

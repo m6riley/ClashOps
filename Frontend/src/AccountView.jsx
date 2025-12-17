@@ -221,26 +221,44 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
           // Construct URL properly - check if it already has query params
           const baseUrl = getGetSubscriptionStatusUrl()
           const separator = baseUrl.includes('?') ? '&' : '?'
-          const response = await fetch(`${baseUrl}${separator}userId=${currentUserId}`)
+          const url = `${baseUrl}${separator}userId=${currentUserId}`
+          
+          console.log('Fetching subscription status for userId:', currentUserId)
+          const response = await fetch(url)
           
           if (response.ok) {
             const data = await response.json()
-            const isActive = data.hasSubscription && (data.status === 'active' || data.status === 'trialing' || data.status === 'incomplete')
+            console.log('Subscription status response:', data)
+            
+            // Check if user has an active subscription
+            // Status can be: 'active', 'trialing', 'incomplete', 'incomplete_expired', 'past_due', 'canceled', 'unpaid'
+            const isActive = data.hasSubscription && (
+              data.status === 'active' || 
+              data.status === 'trialing' || 
+              data.status === 'incomplete' // incomplete means payment is being processed
+            )
+            
             setIsSubscribed(isActive)
-            console.log('Subscription status fetched:', {
+            console.log('Subscription status updated:', {
               hasSubscription: data.hasSubscription,
               status: data.status,
-              isActive
+              isActive,
+              subscriptionId: data.subscriptionId
             })
           } else {
-            console.warn('Failed to fetch subscription status:', response.status, response.statusText)
-            // On error, assume not subscribed to be safe
-            setIsSubscribed(false)
+            const errorText = await response.text()
+            console.error('Failed to fetch subscription status:', {
+              status: response.status,
+              statusText: response.statusText,
+              error: errorText
+            })
+            // On error, don't change subscription status - keep current state
+            // This prevents clearing a valid subscription due to temporary API issues
           }
         } catch (error) {
           console.error('Error fetching subscription status:', error)
-          // On error, assume not subscribed to be safe
-          setIsSubscribed(false)
+          // On network error, don't change subscription status - keep current state
+          // This prevents clearing a valid subscription due to network issues
         }
       }
       fetchSubscriptionStatus()
@@ -248,7 +266,8 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       // Reset subscription status when logged out
       setIsSubscribed(false)
     }
-  }, [isLoggedIn, currentUserId, setIsSubscribed])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn, currentUserId]) // Removed setIsSubscribed from deps to avoid infinite loops
 
   const handleCancelSubscription = async () => {
     if (!currentUserId) {
