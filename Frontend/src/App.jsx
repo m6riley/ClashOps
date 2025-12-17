@@ -132,7 +132,11 @@ function App() {
       const checkStatus = async () => {
         try {
           const { getGetSubscriptionStatusUrl } = await import('./config')
-          const response = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${currentUserId}`)
+          // Construct URL properly - check if it already has query params
+          const baseUrl = getGetSubscriptionStatusUrl()
+          const separator = baseUrl.includes('?') ? '&' : '?'
+          const response = await fetch(`${baseUrl}${separator}userId=${currentUserId}`)
+          
           if (response.ok) {
             const data = await response.json()
             const isActive = data.hasSubscription && (data.status === 'active' || data.status === 'trialing' || data.status === 'incomplete')
@@ -2159,10 +2163,12 @@ function App() {
             onNotification={showNotification}
             onLogin={(userId) => {
               setCurrentUserId(userId)
+              setIsSubscribed(false) // Reset subscription status on login, will be updated by AccountView's useEffect
               fetchPlayerDecks(userId)
             }}
             onLogout={() => {
               setCurrentUserId(null)
+              setIsSubscribed(false) // Reset subscription status on logout
               setFavouriteDecks([])
               setFavouriteDeckNames({})
             }}

@@ -218,18 +218,37 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     if (isLoggedIn && currentUserId) {
       const fetchSubscriptionStatus = async () => {
         try {
-          const response = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${currentUserId}`)
+          // Construct URL properly - check if it already has query params
+          const baseUrl = getGetSubscriptionStatusUrl()
+          const separator = baseUrl.includes('?') ? '&' : '?'
+          const response = await fetch(`${baseUrl}${separator}userId=${currentUserId}`)
+          
           if (response.ok) {
             const data = await response.json()
-            setIsSubscribed(data.hasSubscription && (data.status === 'active' || data.status === 'trialing'))
+            const isActive = data.hasSubscription && (data.status === 'active' || data.status === 'trialing' || data.status === 'incomplete')
+            setIsSubscribed(isActive)
+            console.log('Subscription status fetched:', {
+              hasSubscription: data.hasSubscription,
+              status: data.status,
+              isActive
+            })
+          } else {
+            console.warn('Failed to fetch subscription status:', response.status, response.statusText)
+            // On error, assume not subscribed to be safe
+            setIsSubscribed(false)
           }
         } catch (error) {
           console.error('Error fetching subscription status:', error)
+          // On error, assume not subscribed to be safe
+          setIsSubscribed(false)
         }
       }
       fetchSubscriptionStatus()
+    } else {
+      // Reset subscription status when logged out
+      setIsSubscribed(false)
     }
-  }, [isLoggedIn, currentUserId])
+  }, [isLoggedIn, currentUserId, setIsSubscribed])
 
   const handleCancelSubscription = async () => {
     if (!currentUserId) {
