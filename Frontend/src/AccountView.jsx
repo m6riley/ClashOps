@@ -3,10 +3,10 @@ import './AccountView.css'
 import crownIcon from './assets/ClashOps-PNG.png'
 import {
   getAddAccountUrl,
-  getAccountUrl,
+  getGetAccountUrl,
   getEditAccountUrl,
   getDeleteAccountUrl,
-  getSubscriptionStatusUrl,
+  getGetSubscriptionStatusUrl,
   getCancelSubscriptionUrl
 } from './config'
 
@@ -128,7 +128,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     setIsLoading(true)
     
     try {
-      const response = await fetch(getAccountUrl(), {
+      const response = await fetch(getGetAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     if (isLoggedIn && currentUserId) {
       const fetchSubscriptionStatus = async () => {
         try {
-          const response = await fetch(`${getSubscriptionStatusUrl()}&userId=${currentUserId}`)
+          const response = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${currentUserId}`)
           if (response.ok) {
             const data = await response.json()
             setIsSubscribed(data.hasSubscription && (data.status === 'active' || data.status === 'trialing'))
@@ -330,7 +330,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     
     try {
       // First, verify the current password
-      const verifyResponse = await fetch(getAccountUrl(), {
+      const verifyResponse = await fetch(getGetAccountUrl(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
