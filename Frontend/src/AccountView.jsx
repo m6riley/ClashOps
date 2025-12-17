@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './AccountView.css'
+import crownIcon from './assets/ClashOps-PNG.png'
 import {
   getAddAccountUrl,
   getGetAccountUrl,
@@ -602,34 +603,49 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
 
         <div className="account-section">
           <h2 className="account-section-title">Subscription</h2>
-          <div className="subscription-card">
-            <div className="subscription-header">
-              <div className="subscription-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <div className="subscription-info">
-                <h3 className="subscription-name">ClashOps Diamond</h3>
-                <p className="subscription-description">Premium deck analysis and insights</p>
+          <div className="subscription-card account-subscription-card">
+            <div className="subscription-prompt-header">
+              <div className="subscription-prompt-icon">
+                <img 
+                  src={crownIcon} 
+                  alt="ClashOps Crown" 
+                  className="subscription-prompt-crown-icon"
+                />
               </div>
             </div>
-            <div className="subscription-status">
+            <div className="subscription-prompt-content">
+              <h2 className="subscription-prompt-title">Unlock ClashOps Diamond</h2>
+              <p className="subscription-prompt-subtitle">Premium deck analysis and insights</p>
+              <div className="subscription-prompt-features">
+                <div className="subscription-feature-item">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                  </svg>
+                  <span>Advanced deck analysis</span>
+                </div>
+                <div className="subscription-feature-item">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                  </svg>
+                  <span>Detailed statistics and insights</span>
+                </div>
+                <div className="subscription-feature-item">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                  </svg>
+                  <span>Exclusive premium features</span>
+                </div>
+              </div>
               {isSubscribed ? (
-                <>
+                <div className="subscription-status">
                   <div className="subscription-active">
                     <span className="subscription-badge">Active</span>
                     <p className="subscription-status-text">Your subscription is active</p>
                   </div>
-                  <button className="account-button account-button-secondary" onClick={handleCancelSubscription}>
-                    Cancel Subscription
-                  </button>
-                </>
+                </div>
               ) : (
                 <>
-                  <div className="subscription-pricing">
+                  <div className="subscription-prompt-pricing">
                     <div className="pricing-amount">
                       <span className="pricing-currency">$</span>
                       <span className="pricing-value">4.99</span>
@@ -637,10 +653,18 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
                     </div>
                     <p className="pricing-note">Cancel anytime</p>
                   </div>
-                  <button className="account-button account-button-premium" onClick={handleSubscribe}>
-                    Subscribe to ClashOps Diamond
-                  </button>
                 </>
+              )}
+            </div>
+            <div className="subscription-prompt-actions">
+              {isSubscribed ? (
+                <button className="subscription-prompt-button subscription-prompt-button-secondary" onClick={handleCancelSubscription}>
+                  Cancel Subscription
+                </button>
+              ) : (
+                <button className="subscription-prompt-button subscription-prompt-button-primary" onClick={handleSubscribe}>
+                  Subscribe to ClashOps Diamond
+                </button>
               )}
             </div>
           </div>

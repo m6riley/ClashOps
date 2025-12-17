@@ -27,8 +27,20 @@
   max-width: 600px;
   width: 90%;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(255, 215, 0, 0.4);
   position: relative;
+}
+
+.subscription-prompt-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .subscription-prompt-dialog.fade-in {
@@ -56,6 +68,14 @@
   border-radius: 16px;
   color: white;
   flex-shrink: 0;
+}
+
+.subscription-prompt-crown-icon {
+  width: 64px;
+  height: auto;
+  border: none;
+  outline: none;
+  filter: brightness(0) invert(1);
 }
 
 .subscription-prompt-close {
