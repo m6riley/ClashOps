@@ -127,14 +127,22 @@ def handle_subscription_updated(subscription):
     
     if accounts_by_customer:
         accounts = accounts_by_customer
+        logging.info(f"Found account by customer ID: {customer_id}")
     else:
         # If not found by customer ID, try subscription ID
         query_subscription = build_table_query(PARTITION_KEY, {"StripeSubscriptionID": subscription_id})
         accounts_by_subscription = list(accounts_table.query_entities(query_subscription))
         accounts = accounts_by_subscription
+        if accounts_by_subscription:
+            logging.info(f"Found account by subscription ID: {subscription_id}")
     
     if accounts:
         account = accounts[0]
+        # Ensure StripeSubscriptionID is set
+        if not account.get('StripeSubscriptionID'):
+            account['StripeSubscriptionID'] = subscription_id
+            logging.info(f"Setting StripeSubscriptionID for account: {subscription_id}")
+        
         account['SubscriptionStatus'] = status
         
         # Update period end if available
@@ -151,8 +159,13 @@ def handle_subscription_updated(subscription):
         if status == 'active' and subscription.get('cancel_at_period_end'):
             account['SubscriptionStatus'] = 'cancel_at_period_end'
         
-        accounts_table.update_entity(account)
-        logging.info(f"Updated account for subscription {subscription_id}")
+        try:
+            accounts_table.update_entity(account)
+            logging.info(f"Successfully updated account for subscription {subscription_id} with status {status}")
+        except Exception as e:
+            logging.error(f"Failed to update account for subscription updated: {e}")
+    else:
+        logging.warning(f"No account found for customer ID: {customer_id} or subscription ID: {subscription_id}")
 
 
 def handle_subscription_deleted(subscription):
@@ -196,7 +209,7 @@ def handle_payment_succeeded(invoice):
     customer_id = invoice.get('customer')
     subscription_id = invoice.get('subscription')
     
-    logging.info(f"Payment succeeded for subscription: {subscription_id}")
+    logging.info(f"Payment succeeded for subscription: {subscription_id}, customer: {customer_id}")
     
     # Find account by Stripe customer ID
     query = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
@@ -206,13 +219,24 @@ def handle_payment_succeeded(invoice):
         account = accounts[0]
         # Update subscription status to active if payment succeeded
         if subscription_id:
+            # Ensure StripeSubscriptionID is set if not already set
+            if not account.get('StripeSubscriptionID'):
+                account['StripeSubscriptionID'] = subscription_id
+                logging.info(f"Setting StripeSubscriptionID for account: {subscription_id}")
+            
             account['SubscriptionStatus'] = 'active'
             # Azure Table Storage doesn't support None values
             period_end = invoice.get('period_end')
             if period_end is not None:
                 account['SubscriptionCurrentPeriodEnd'] = period_end
-            accounts_table.update_entity(account)
-            logging.info(f"Updated account after successful payment for subscription {subscription_id}")
+            
+            try:
+                accounts_table.update_entity(account)
+                logging.info(f"Successfully updated account after successful payment for subscription {subscription_id}")
+            except Exception as e:
+                logging.error(f"Failed to update account after payment succeeded: {e}")
+    else:
+        logging.warning(f"No account found for customer ID: {customer_id}")
 
 
 def handle_payment_failed(invoice):

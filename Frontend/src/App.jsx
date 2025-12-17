@@ -2163,33 +2163,60 @@ function App() {
             onNotification={showNotification}
             onLogin={async (userId) => {
               setCurrentUserId(userId)
-              setIsSubscribed(false) // Reset subscription status on login, will be updated by AccountView's useEffect
               fetchPlayerDecks(userId)
               
               // Immediately check subscription status after login
+              // This runs in parallel with AccountView's useEffect, but ensures we check it
               try {
                 const { getGetSubscriptionStatusUrl } = await import('./config')
                 const baseUrl = getGetSubscriptionStatusUrl()
                 const separator = baseUrl.includes('?') ? '&' : '?'
-                const response = await fetch(`${baseUrl}${separator}userId=${userId}`)
+                const url = `${baseUrl}${separator}userId=${userId}`
+                
+                console.log('App: Checking subscription status on login for userId:', userId)
+                const response = await fetch(url)
                 
                 if (response.ok) {
                   const data = await response.json()
-                  const isActive = data.hasSubscription && (
-                    data.status === 'active' || 
-                    data.status === 'trialing' || 
-                    data.status === 'incomplete'
-                  )
-                  setIsSubscribed(isActive)
-                  console.log('Subscription status checked on login:', {
-                    hasSubscription: data.hasSubscription,
-                    status: data.status,
-                    isActive
+                  console.log('App: Subscription status response on login:', JSON.stringify(data, null, 2))
+                  
+                  if (data.hasSubscription === true && data.status) {
+                    const isActive = (
+                      data.status === 'active' || 
+                      data.status === 'trialing' || 
+                      data.status === 'incomplete'
+                    )
+                    
+                    setIsSubscribed(isActive)
+                    console.log('App: Subscription status set on login:', {
+                      hasSubscription: data.hasSubscription,
+                      status: data.status,
+                      isActive,
+                      subscriptionId: data.subscriptionId
+                    })
+                  } else {
+                    // Explicitly no subscription or invalid status
+                    setIsSubscribed(false)
+                    console.log('App: No active subscription found for user:', {
+                      hasSubscription: data.hasSubscription,
+                      status: data.status
+                    })
+                  }
+                } else {
+                  const errorText = await response.text()
+                  console.error('App: Failed to check subscription status on login:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    error: errorText,
+                    url: url
                   })
+                  // Set to false on error - AccountView's useEffect will also try
+                  setIsSubscribed(false)
                 }
               } catch (error) {
-                console.error('Error checking subscription status on login:', error)
-                // Don't set to false on error - let AccountView's useEffect handle it
+                console.error('App: Error checking subscription status on login:', error)
+                // Set to false on error - AccountView's useEffect will also try
+                setIsSubscribed(false)
               }
             }}
             onLogout={() => {

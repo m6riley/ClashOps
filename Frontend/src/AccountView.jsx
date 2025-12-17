@@ -223,42 +223,53 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
           const separator = baseUrl.includes('?') ? '&' : '?'
           const url = `${baseUrl}${separator}userId=${currentUserId}`
           
-          console.log('Fetching subscription status for userId:', currentUserId)
+          console.log('AccountView: Fetching subscription status for userId:', currentUserId)
           const response = await fetch(url)
           
           if (response.ok) {
             const data = await response.json()
-            console.log('Subscription status response:', data)
+            console.log('AccountView: Subscription status response:', JSON.stringify(data, null, 2))
             
             // Check if user has an active subscription
             // Status can be: 'active', 'trialing', 'incomplete', 'incomplete_expired', 'past_due', 'canceled', 'unpaid'
-            const isActive = data.hasSubscription && (
-              data.status === 'active' || 
-              data.status === 'trialing' || 
-              data.status === 'incomplete' // incomplete means payment is being processed
-            )
-            
-            setIsSubscribed(isActive)
-            console.log('Subscription status updated:', {
-              hasSubscription: data.hasSubscription,
-              status: data.status,
-              isActive,
-              subscriptionId: data.subscriptionId
-            })
+            if (data.hasSubscription === true && data.status) {
+              const isActive = (
+                data.status === 'active' || 
+                data.status === 'trialing' || 
+                data.status === 'incomplete' // incomplete means payment is being processed
+              )
+              
+              setIsSubscribed(isActive)
+              console.log('AccountView: Subscription status updated:', {
+                hasSubscription: data.hasSubscription,
+                status: data.status,
+                isActive,
+                subscriptionId: data.subscriptionId
+              })
+            } else {
+              // No subscription or invalid status
+              setIsSubscribed(false)
+              console.log('AccountView: No active subscription found:', {
+                hasSubscription: data.hasSubscription,
+                status: data.status
+              })
+            }
           } else {
             const errorText = await response.text()
-            console.error('Failed to fetch subscription status:', {
+            console.error('AccountView: Failed to fetch subscription status:', {
               status: response.status,
               statusText: response.statusText,
-              error: errorText
+              error: errorText,
+              url: url
             })
-            // On error, don't change subscription status - keep current state
-            // This prevents clearing a valid subscription due to temporary API issues
+            // On error, set to false to ensure we don't show incorrect subscription status
+            // The user can try again or the status will be checked again on next mount
+            setIsSubscribed(false)
           }
         } catch (error) {
-          console.error('Error fetching subscription status:', error)
-          // On network error, don't change subscription status - keep current state
-          // This prevents clearing a valid subscription due to network issues
+          console.error('AccountView: Error fetching subscription status:', error)
+          // On network error, set to false - user can try again
+          setIsSubscribed(false)
         }
       }
       fetchSubscriptionStatus()

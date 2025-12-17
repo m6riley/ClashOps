@@ -113,7 +113,12 @@ def create_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
         if current_period_end:
             account["SubscriptionCurrentPeriodEnd"] = current_period_end
 
-        accounts_table.update_entity(account)
+        try:
+            accounts_table.update_entity(account)
+            logging.info(f"Successfully saved subscription {subscription.id} for user {user_id} with status {subscription.status}")
+        except Exception as update_error:
+            logging.error(f"Failed to update account with subscription: {update_error}")
+            # Continue anyway - webhook will update it
 
         # ─────────────────────────────────────────────
         # 5️⃣ Return data required by frontend only
