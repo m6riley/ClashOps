@@ -31,7 +31,21 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
         # Trim whitespace from keys and values
         features_list = []
         for row in reader:
-            trimmed_row = {k.strip(): v.strip() if isinstance(v, str) else v for k, v in row.items()}
+            trimmed_row = {}
+            for k, v in row.items():
+                # Handle None keys (shouldn't happen, but be safe)
+                if k is None:
+                    continue
+                # Strip key (handle empty strings)
+                trimmed_key = k.strip() if k else k
+                # Handle None values and strip string values
+                if v is None:
+                    trimmed_value = None
+                elif isinstance(v, str):
+                    trimmed_value = v.strip()
+                else:
+                    trimmed_value = v
+                trimmed_row[trimmed_key] = trimmed_value
             features_list.append(trimmed_row)
 
     except Exception as e:

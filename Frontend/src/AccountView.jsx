@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './AccountView.css'
 import crownIcon from './assets/ClashOps-PNG.png'
 import {
   getAddAccountUrl,
   getGetAccountUrl,
   getEditAccountUrl,
-  getDeleteAccountUrl
+  getDeleteAccountUrl,
+  getGetSubscriptionStatusUrl,
+  getCancelSubscriptionUrl
 } from './config'
 
-function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout }) {
+function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout, currentUserId }) {
   const [isSignUp, setIsSignUp] = useState(true) // Toggle between sign up and login
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -211,10 +213,72 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     }
   }
 
-  const handleCancelSubscription = () => {
-    // TODO: Implement cancel subscription functionality
-    setIsSubscribed(false)
-    console.log('Cancelling ClashOps Diamond subscription')
+  // Fetch subscription status when user is logged in
+  useEffect(() => {
+    if (isLoggedIn && currentUserId) {
+      const fetchSubscriptionStatus = async () => {
+        try {
+          const response = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${currentUserId}`)
+          if (response.ok) {
+            const data = await response.json()
+            setIsSubscribed(data.hasSubscription && (data.status === 'active' || data.status === 'trialing'))
+          }
+        } catch (error) {
+          console.error('Error fetching subscription status:', error)
+        }
+      }
+      fetchSubscriptionStatus()
+    }
+  }, [isLoggedIn, currentUserId])
+
+  const handleCancelSubscription = async () => {
+    if (!currentUserId) {
+      if (onNotification) {
+        onNotification({
+          message: 'Please log in to cancel your subscription',
+          type: 'error'
+        })
+      }
+      return
+    }
+
+    try {
+      const response = await fetch(getCancelSubscriptionUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: currentUserId,
+          cancelImmediately: false // Cancel at period end
+        })
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(errorText || 'Failed to cancel subscription')
+      }
+
+      const data = await response.json()
+      setIsSubscribed(false)
+      
+      if (onNotification) {
+        onNotification({
+          message: data.cancelAtPeriodEnd 
+            ? 'Your subscription will be cancelled at the end of the billing period.'
+            : 'Your subscription has been cancelled.',
+          type: 'success'
+        })
+      }
+    } catch (error) {
+      console.error('Error cancelling subscription:', error)
+      if (onNotification) {
+        onNotification({
+          message: error.message || 'Failed to cancel subscription. Please try again.',
+          type: 'error'
+        })
+      }
+    }
   }
 
   const handleEditAccount = () => {

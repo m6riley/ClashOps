@@ -6,10 +6,10 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1001;
-  backdrop-filter: blur(6px);
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .payment-form-dialog {
@@ -18,149 +18,139 @@
   padding: 40px;
   max-width: 600px;
   width: 90%;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  position: relative;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(168, 85, 247, 0.4);
-  position: relative;
+}
+
+.payment-form-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .payment-form-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+  text-align: center;
 }
 
-.payment-form-title {
-  background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.payment-form-header h2 {
+  color: #ffd700;
   font-size: 28px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.payment-form-close {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 36px;
-  cursor: pointer;
-  padding: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: color 0.2s;
-  border-radius: 50%;
-}
-
-.payment-form-close:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.payment-form-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.payment-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.payment-form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.payment-form-group-half {
-  flex: 1;
-}
-
-.payment-form-label {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
+  margin: 0 0 8px 0;
   font-weight: 600;
 }
 
-.payment-form-input,
-.payment-form-textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: white;
+.payment-form-header p {
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
-  font-family: inherit;
-  transition: border-color 0.2s, background 0.2s;
+  margin: 0;
 }
 
-.payment-form-input:focus,
-.payment-form-textarea:focus {
-  outline: none;
-  border-color: rgba(168, 85, 247, 0.6);
-  background: rgba(255, 255, 255, 0.08);
+.payment-element-container {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.payment-form-input::placeholder,
-.payment-form-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+.payment-security-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin-top: -8px;
 }
 
-.payment-form-textarea {
-  resize: vertical;
-  min-height: 80px;
+.payment-security-message svg {
+  flex-shrink: 0;
+  color: rgba(168, 85, 247, 0.8);
+}
+
+.payment-error-message {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 14px;
 }
 
 .payment-form-actions {
   display: flex;
   gap: 12px;
-  margin-top: 8px;
+  justify-content: flex-end;
 }
 
 .payment-form-button {
-  flex: 1;
-  padding: 16px 32px;
-  border: none;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  border: none;
 }
 
-.payment-form-button:hover {
-  transform: translateY(-2px);
+.payment-form-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .payment-form-button-primary {
   background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #14b8a6 100%);
   color: white;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
 }
 
-.payment-form-button-primary:hover {
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+.payment-form-button-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
 }
 
 .payment-form-button-secondary {
-  background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.payment-form-button-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Stripe Elements styling */
+.payment-element-container .Input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  border: 1px solid #666;
 }
 
-.payment-form-button-secondary:hover {
-  background: linear-gradient(135deg, #5a5a5a 0%, #4a4a4a 100%);
-  box-shadow: 0 4px 12px rgba(102, 102, 102, 0.4);
-  border-color: #777;
+.payment-element-container .Input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

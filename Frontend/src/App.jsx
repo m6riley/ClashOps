@@ -71,6 +71,7 @@ function App() {
   const [expandedCategory, setExpandedCategory] = useState(null) // Track which category is expanded (similar to expandedFeature)
   const [isLoggedIn, setIsLoggedIn] = useState(false) // Track if user is logged in
   const [currentUserId, setCurrentUserId] = useState(null) // Track current user ID
+  const [currentUserEmail, setCurrentUserEmail] = useState(null) // Track current user email
   const [showLoginPrompt, setShowLoginPrompt] = useState(false) // Show login prompt dialog
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false) // Show subscription prompt dialog
   const [showPaymentForm, setShowPaymentForm] = useState(false) // Show payment form dialog
@@ -113,13 +114,59 @@ function App() {
   }
 
   // Handle payment form completion
-  const handlePaymentComplete = () => {
+  const handlePaymentComplete = async (subscriptionData) => {
+    // Optimistically set subscription status to true immediately
+    // This prevents the brief moment where it looks like user isn't subscribed
     setIsSubscribed(true)
     setShowPaymentForm(false)
     showNotification({
       message: 'Welcome to ClashOps Diamond!',
       type: 'success'
     })
+    
+    // Then verify with backend in the background
+    if (currentUserId) {
+      // Try multiple times with delays to account for webhook processing
+      let attempts = 0
+      const maxAttempts = 5
+      const checkStatus = async () => {
+        try {
+          const { getGetSubscriptionStatusUrl } = await import('./config')
+          const response = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${currentUserId}`)
+          if (response.ok) {
+            const data = await response.json()
+            const isActive = data.hasSubscription && (data.status === 'active' || data.status === 'trialing' || data.status === 'incomplete')
+            // Only update if status check succeeded and subscription is confirmed
+            if (isActive) {
+              setIsSubscribed(true)
+              return true // Success
+            } else if (attempts < maxAttempts) {
+              // Still waiting for status to update
+              attempts++
+              setTimeout(checkStatus, 1000) // Check again in 1 second
+              return false
+            } else {
+              // Max attempts reached, keep optimistic true
+              setIsSubscribed(true)
+              return true
+            }
+          }
+        } catch (error) {
+          console.error('Error refreshing subscription status:', error)
+          if (attempts < maxAttempts) {
+            attempts++
+            setTimeout(checkStatus, 1000)
+          } else {
+            // On error after max attempts, keep optimistic true
+            setIsSubscribed(true)
+          }
+          return false
+        }
+      }
+      
+      // Start checking after a short delay
+      setTimeout(checkStatus, 500)
+    }
   }
 
   // Cards, features, and decks are now loaded from Azure Functions during initial loading
@@ -1397,12 +1444,58 @@ function App() {
       )}
 
       {/* Payment Form Dialog */}
-      {showPaymentForm && (
-        <PaymentForm
-          onClose={() => setShowPaymentForm(false)}
-          onComplete={handlePaymentComplete}
-        />
-      )}
+      {showPaymentForm && (() => {
+        console.log('App: Rendering PaymentForm, showPaymentForm:', showPaymentForm)
+        console.log('App: currentUserId:', currentUserId)
+        console.log('App: isLoggedIn:', isLoggedIn)
+        
+        if (!currentUserId) {
+          console.log('App: No currentUserId, showing login prompt')
+          return (
+            <div className="payment-form-overlay" onClick={() => setShowPaymentForm(false)}>
+              <div className="payment-form-dialog" onClick={(e) => e.stopPropagation()}>
+                <div className="payment-form">
+                  <div className="payment-form-header">
+                    <h2>Please Log In</h2>
+                    <p>You must be logged in to subscribe to ClashOps Diamond.</p>
+                  </div>
+                  <div className="payment-form-actions">
+                    <button
+                      type="button"
+                      className="payment-form-button payment-form-button-primary"
+                      onClick={() => {
+                        setShowPaymentForm(false)
+                        setShowLoginPrompt(true)
+                      }}
+                    >
+                      Go to Login
+                    </button>
+                    <button
+                      type="button"
+                      className="payment-form-button payment-form-button-secondary"
+                      onClick={() => setShowPaymentForm(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        }
+        
+        console.log('App: Rendering PaymentForm component')
+        return (
+          <PaymentForm
+            userId={currentUserId}
+            onClose={() => {
+              console.log('App: PaymentForm onClose called')
+              setShowPaymentForm(false)
+            }}
+            onComplete={handlePaymentComplete}
+          />
+        )
+      })()}
 
       {/* Analyze Loading Dialog */}
       {showAnalyzeLoading && analyzingDeck && (
@@ -2057,6 +2150,7 @@ function App() {
         )}
         {activeTab === 'account' && (
           <AccountView 
+            currentUserId={currentUserId}
             isLoggedIn={isLoggedIn}
             setIsLoggedIn={setIsLoggedIn}
             isSubscribed={isSubscribed}
