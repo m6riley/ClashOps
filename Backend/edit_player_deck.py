@@ -1,8 +1,20 @@
+"""
+Azure Function for editing player decks in the database.
+
+This function handles HTTP requests to update player deck entities in Azure
+Table Storage.
+"""
 import logging
-import json
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.table_utils import _playerDecks, PARTITION_KEY
+
+from shared.table_utils import player_decks_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 edit_player_deck_bp = Blueprint()
@@ -19,49 +31,41 @@ def edit_player_deck(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Edit deck request received")
 
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
     
-    deckID = body.get("deckID")
+    deck_id = body.get("deckID")
     cards = body.get("cards")
-    categoryID = body.get("categoryID")
-    deckName = body.get("deckName")
+    category_id = body.get("categoryID")
+    deck_name = body.get("deckName")
     
-    if not deckID:
-        logging.warning("Missing deckID field in request")
-        return func.HttpResponse(
+    if not deck_id:
+        return create_error_response(
             "Missing 'deckID' field in request body",
             status_code=400,
-            mimetype="text/plain"
+            log_error=False
         )
     
-    if cards is None or categoryID is None:
-        logging.warning("Missing cards or categoryID field in request")
-        return func.HttpResponse(
+    if cards is None or category_id is None:
+        return create_error_response(
             "Missing 'cards' and/or 'categoryID' field in request body",
             status_code=400,
-            mimetype="text/plain"
+            log_error=False
         )
     
     # Find and update deck in database
     try:
         # Query for the deck using DeckID field
-        query = f"PartitionKey eq '{PARTITION_KEY}' and DeckID eq '{deckID}'"
-        decks = list(_playerDecks.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"DeckID": deck_id})
+        decks = list(player_decks_table.query_entities(query))
         
         if not decks:
-            logging.warning(f"Deck with DeckID {deckID} not found")
-            return func.HttpResponse(
+            logging.warning(f"Deck with DeckID {deck_id} not found")
+            return create_error_response(
                 "Deck not found",
                 status_code=404,
-                mimetype="text/plain"
+                log_error=False
             )
         
         # Get the deck entity
@@ -69,33 +73,25 @@ def edit_player_deck(req: func.HttpRequest) -> func.HttpResponse:
         row_key = deck.get("RowKey")
         
         if not row_key:
-            logging.error(f"Deck found but RowKey is missing for DeckID {deckID}")
-            return func.HttpResponse(
-                "Deck found but RowKey is missing",
-                status_code=500,
-                mimetype="text/plain"
+            return create_error_response(
+                f"Deck found but RowKey is missing for DeckID {deck_id}",
+                status_code=500
             )
         
         # Update the deck entity with new values
         deck["Cards"] = cards
-        deck["CategoryID"] = categoryID
-        if deckName is not None:
-            deck["DeckName"] = deckName
+        deck["CategoryID"] = category_id
+        if deck_name is not None:
+            deck["DeckName"] = deck_name
         
         # Update the entity in the table (using upsert to ensure all fields are preserved)
-        _playerDecks.upsert_entity(entity=deck)
+        player_decks_table.upsert_entity(entity=deck)
         
-        logging.info(f"Deck {deckID} updated successfully with new cards and category")
-        return func.HttpResponse(
-            json.dumps({"deckID": deckID, "message": "Deck updated successfully"}),
-            status_code=200,
-            mimetype="application/json"
-        )
+        logging.info(f"Deck {deck_id} updated successfully with new cards and category")
+        return create_success_response({
+            "deckID": deck_id,
+            "message": "Deck updated successfully"
+        })
     except Exception as e:
-        logging.error(f"Error updating deck: {e}")
-        return func.HttpResponse(
-            f"Error updating deck: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error updating deck: {e}")
 

@@ -7,11 +7,18 @@ a new account if one doesn't already exist.
 """
 import logging
 import uuid
-import json
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_email,
+    validate_required_fields,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 add_account_bp = Blueprint()
@@ -40,58 +47,37 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Add account request received")
 
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
 
-    email = body.get("email")
-    password = body.get("password")
-
-    if not email or not password:
-        logging.warning("Missing email and/or password fields in request body")
-        return func.HttpResponse(
-            "Missing 'email' and/or 'password' fields in request body",
-            status_code=400,
-            mimetype="text/plain"
-        )
-
-    # Normalize and validate email address
-    email = email.strip().lower()
+    # Validate required fields
+    error_response, fields = validate_required_fields(body, ["email", "password"])
+    if error_response:
+        return error_response
     
-    if not email or "@" not in email:
-        logging.warning(f"Invalid email address provided: {email}")
-        return func.HttpResponse(
-            "Invalid email address format",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    email = fields["email"]
+    password = fields["password"]
+
+    # Validate and normalize email address
+    email, error_response = validate_email(email)
+    if error_response:
+        return error_response
 
     # Check if account already exists by querying for email
     try:
-        query = f"PartitionKey eq '{PARTITION_KEY}' and Email eq '{email}'"
-        accounts = list(_accounts.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"Email": email})
+        accounts = list(accounts_table.query_entities(query))
         
         if accounts:
             # Account exists
             logging.info(f"Account already exists for email: {email}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Account already exists",
-                status_code=409,  # Conflict status code
-                mimetype="text/plain"
+                status_code=409
             )
     except Exception as e:
-        logging.error(f"Error checking account existence: {e}")
-        return func.HttpResponse(
-            f"Error checking account existence: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error checking account existence: {e}")
 
     # Generate unique ID for the account
     user_id = str(uuid.uuid4())
@@ -107,29 +93,20 @@ def add_account(req: func.HttpRequest) -> func.HttpResponse:
     }
 
     try:
-        _accounts.create_entity(entity=account_entity)
+        accounts_table.create_entity(entity=account_entity)
         logging.info(f"Account added successfully for email: {email} with UserID: {user_id}")
-        return func.HttpResponse(
-            json.dumps({
-                "message": "Account added successfully",
-                "id": user_id,
-                "account_id": user_id
-            }),
-            status_code=200,
-            mimetype="application/json"
-        )
+        return create_success_response({
+            "message": "Account added successfully",
+            "id": user_id,
+            "account_id": user_id
+        })
     except Exception as e:
         # Check if it's a conflict error (account already exists)
         if "EntityAlreadyExists" in str(e) or "409" in str(e):
             logging.warning(f"Account already exists (race condition): {email}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Account already exists",
                 status_code=409,
-                mimetype="text/plain"
+                log_error=False
             )
-        logging.error(f"Error adding account: {e}")
-        return func.HttpResponse(
-            f"Error adding account: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error adding account: {e}")

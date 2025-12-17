@@ -1,9 +1,21 @@
+"""
+Azure Function for saving categories to the database.
+
+This function handles HTTP requests to create new category entities in Azure
+Table Storage for organizing user decks.
+"""
 import logging
-import json
+import uuid
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.table_utils import _categories, PARTITION_KEY
-import uuid
+
+from shared.table_utils import categories_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_required_fields,
+    create_error_response,
+    create_success_response
+)
 
 # Azure Functions Blueprint
 save_category_bp = Blueprint()
@@ -18,48 +30,40 @@ def save_category(req: func.HttpRequest) -> func.HttpResponse:
     HTTP-triggered Azure Function for saving a category to the database.
     """
     logging.info("Save category request received")
+    
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
-    categoryID = str(uuid.uuid4())
-    userID = body.get("userID")
-    categoryName = body.get("categoryName")
-    categoryIcon = body.get("categoryIcon")
-    categoryColor = body.get("categoryColor")
-    if not userID or not categoryName or not categoryIcon or not categoryColor:
-        logging.warning("Missing field in request")
-        return func.HttpResponse(
-            "Missing field in request",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
+    
+    # Validate required fields
+    error_response, fields = validate_required_fields(
+        body,
+        ["userID", "categoryName", "categoryIcon", "categoryColor"]
+    )
+    if error_response:
+        return error_response
+    
+    category_id = str(uuid.uuid4())
+    user_id = fields["userID"]
+    category_name = fields["categoryName"]
+    category_icon = fields["categoryIcon"]
+    category_color = fields["categoryColor"]
+    
     # Save category to database
     try:
-        _categories.create_entity({
+        categories_table.create_entity({
             "PartitionKey": PARTITION_KEY,
-            "RowKey": categoryID,
-            "UserID": userID,
-            "CategoryName": categoryName,
-            "CategoryIcon": categoryIcon,
-            "CategoryColor": categoryColor,
+            "RowKey": category_id,
+            "UserID": user_id,
+            "CategoryName": category_name,
+            "CategoryIcon": category_icon,
+            "CategoryColor": category_color,
+        })
+        logging.info(f"Category saved successfully for user: {user_id} with categoryID: {category_id}")
+        return create_success_response({
+            "categoryID": category_id,
+            "message": "Category saved successfully"
         })
     except Exception as e:
-        logging.error(f"Error saving category: {e}")
-        return func.HttpResponse(
-            f"Error saving category: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
-    logging.info(f"Category saved successfully for user: {userID} with categoryID: {categoryID}")
-    return func.HttpResponse(
-        json.dumps({"categoryID": categoryID, "message": "Category saved successfully"}),
-        status_code=200,
-        mimetype="application/json"
-    )
+        return create_error_response(f"Error saving category: {e}")

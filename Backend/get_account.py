@@ -5,11 +5,18 @@ This function handles HTTP requests to verify account credentials and return
 the account ID if the email and password match.
 """
 import logging
-import json
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_email,
+    validate_required_fields,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 get_account_bp = Blueprint()
@@ -41,50 +48,35 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Get account request received")
 
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
 
-    email = body.get("email")
-    password = body.get("password")
-
-    if not email or not password:
-        logging.warning("Missing email and/or password fields in request body")
-        return func.HttpResponse(
-            "Missing 'email' and/or 'password' fields in request body",
-            status_code=400,
-            mimetype="text/plain"
-        )
-
-    # Normalize and validate email address
-    email = email.strip().lower()
+    # Validate required fields
+    error_response, fields = validate_required_fields(body, ["email", "password"])
+    if error_response:
+        return error_response
     
-    if not email or "@" not in email:
-        logging.warning(f"Invalid email address provided: {email}")
-        return func.HttpResponse(
-            "Invalid email address format",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    email = fields["email"]
+    password = fields["password"]
+
+    # Validate and normalize email address
+    email, error_response = validate_email(email)
+    if error_response:
+        return error_response
 
     # Query for account by email
     try:
-        query = f"PartitionKey eq '{PARTITION_KEY}' and Email eq '{email}'"
-        accounts = list(_accounts.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"Email": email})
+        accounts = list(accounts_table.query_entities(query))
         
         if not accounts:
             # Account does not exist
             logging.info(f"Account not found for email: {email}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Account does not exist",
-                status_code=409,  # Conflict status code
-                mimetype="text/plain"
+                status_code=409,
+                log_error=False
             )
         
         # Account exists, verify password
@@ -94,25 +86,16 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
         if stored_password != password:
             # Password is incorrect
             logging.warning(f"Incorrect password for email: {email}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Password is incorrect",
-                status_code=408,  # Request Timeout (used for incorrect password)
-                mimetype="text/plain"
+                status_code=408,
+                log_error=False
             )
         
         # Password is correct, return account ID (RowKey) and email
         user_id = account.get("RowKey")  # UserID is stored as RowKey
         logging.info(f"Account verified successfully for email: {email}")
-        return func.HttpResponse(
-            json.dumps({"id": user_id, "email": email}),
-            status_code=200,
-            mimetype="application/json"
-        )
+        return create_success_response({"id": user_id, "email": email})
         
     except Exception as e:
-        logging.error(f"Error getting account: {e}")
-        return func.HttpResponse(
-            f"Error getting account: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error getting account: {e}")

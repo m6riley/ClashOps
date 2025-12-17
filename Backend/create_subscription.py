@@ -12,7 +12,14 @@ import stripe
 import azure.functions as func
 from azure.functions import Blueprint
 
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_required_fields,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Stripe configuration
 stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
@@ -29,26 +36,32 @@ def create_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Create subscription request received")
 
     try:
-        body = req.get_json()
-        user_id = body.get("userId")
-
-        if not user_id:
-            return func.HttpResponse("Missing userId", status_code=400)
+        # Parse and validate request body
+        body, error_response = parse_json_body(req)
+        if error_response:
+            return error_response
+        
+        # Validate required fields
+        error_response, fields = validate_required_fields(body, ["userId"])
+        if error_response:
+            return error_response
+        
+        user_id = fields["userId"]
 
         # ─────────────────────────────────────────────
         # 1️⃣ Fetch user account from Azure Table Storage
         # ─────────────────────────────────────────────
-        query = f"PartitionKey eq '{PARTITION_KEY}' and RowKey eq '{user_id}'"
-        accounts = list(_accounts.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"RowKey": user_id})
+        accounts = list(accounts_table.query_entities(query))
 
         if not accounts:
-            return func.HttpResponse("Account not found", status_code=404)
+            return create_error_response("Account not found", status_code=404, log_error=False)
 
         account = accounts[0]
         email = account.get("Email")
 
         if not email:
-            return func.HttpResponse("Account email missing", status_code=400)
+            return create_error_response("Account email missing", status_code=400, log_error=False)
 
         # ─────────────────────────────────────────────
         # 2️⃣ Create or reuse Stripe Customer
@@ -87,10 +100,7 @@ def create_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
 
         if not confirmation_secret:
             logging.error("Confirmation secret missing for subscription %s", subscription.id)
-            return func.HttpResponse(
-                "Confirmation secret not created",
-                status_code=500
-            )
+            return create_error_response("Confirmation secret not created", status_code=500)
 
         # ─────────────────────────────────────────────
         # 4️⃣ Persist subscription state to Azure Table
@@ -103,24 +113,17 @@ def create_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
         if current_period_end:
             account["SubscriptionCurrentPeriodEnd"] = current_period_end
 
-        _accounts.update_entity(account)
+        accounts_table.update_entity(account)
 
         # ─────────────────────────────────────────────
         # 5️⃣ Return data required by frontend only
         # ─────────────────────────────────────────────
-        return func.HttpResponse(
-            json.dumps({
-                "customerId": customer.id,
-                "subscriptionId": subscription.id,
-                "clientSecret": confirmation_secret
-            }),
-            mimetype="application/json",
-            status_code=200
-        )
+        return create_success_response({
+            "customerId": customer.id,
+            "subscriptionId": subscription.id,
+            "clientSecret": confirmation_secret
+        })
 
     except Exception as e:
         logging.exception("Error creating subscription")
-        return func.HttpResponse(
-            str(e),
-            status_code=500
-        )
+        return create_error_response(str(e))

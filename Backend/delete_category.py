@@ -1,7 +1,20 @@
+"""
+Azure Function for deleting categories from the database.
+
+This function handles HTTP requests to delete category entities from Azure
+Table Storage.
+"""
 import logging
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.table_utils import _categories, PARTITION_KEY
+
+from shared.table_utils import categories_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_required_fields,
+    create_error_response,
+    create_success_response
+)
 
 # Azure Functions Blueprint
 delete_category_bp = Blueprint()
@@ -16,36 +29,22 @@ def delete_category(req: func.HttpRequest) -> func.HttpResponse:
     HTTP-triggered Azure Function for deleting a category from the database.
     """
     logging.info("Delete category request received")
+    
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
-    categoryID = body.get("categoryID")
-    if not categoryID:
-        logging.warning("Missing field in request")
-        return func.HttpResponse(
-            "Missing field in request",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
+    
+    # Validate required fields
+    error_response, fields = validate_required_fields(body, ["categoryID"])
+    if error_response:
+        return error_response
+    
+    category_id = fields["categoryID"]
+    
     # Delete category from database
     try:
-        _categories.delete_entity(PARTITION_KEY, categoryID)
+        categories_table.delete_entity(PARTITION_KEY, category_id)
+        return create_success_response(message="Category deleted successfully")
     except Exception as e:
-        logging.error(f"Error deleting category: {e}")
-        return func.HttpResponse(
-            f"Error deleting category: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
-    return func.HttpResponse(
-        "Category deleted successfully",
-        status_code=200,
-        mimetype="text/plain"
-    )
+        return create_error_response(f"Error deleting category: {e}")

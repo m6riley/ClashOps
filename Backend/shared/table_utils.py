@@ -17,23 +17,21 @@ PARTITION_KEY = "Default"
 # Internal table service client (not exported)
 _service = TableServiceClient.from_connection_string(_CONNECTION_STRING)
 
-# Reports table client (exported for direct access in some modules)
-_reports = _service.get_table_client("reports")
+# Table clients (exported for use in Azure Function blueprints)
+reports_table = _service.get_table_client("reports")
+accounts_table = _service.get_table_client("accounts")
+player_decks_table = _service.get_table_client("playerdecks")
+categories_table = _service.get_table_client("categories")
+decks_table = _service.get_table_client("decks")
+features_table = _service.get_table_client("features")
 
-# Accounts table client (exported for account management)
-_accounts = _service.get_table_client("accounts")
-
-# Player Decks table client
-_playerDecks = _service.get_table_client("playerdecks")
-
-# Categories table client
-_categories = _service.get_table_client("categories")
-
-# Decks table client
-_decks = _service.get_table_client("decks")
-
-# Features table client
-_features = _service.get_table_client("features")
+# Legacy exports for backward compatibility (deprecated - use new names above)
+_accounts = accounts_table
+_categories = categories_table
+_playerDecks = player_decks_table
+_decks = decks_table
+_features = features_table
+_reports = reports_table
 
 def update_report_field(deck: str, field: str, value: str) -> None:
     """
@@ -44,7 +42,7 @@ def update_report_field(deck: str, field: str, value: str) -> None:
         field: Field name to update
         value: New value for the field
     """
-    _reports.update_entity(
+    reports_table.update_entity(
         mode="merge",
         entity={
             "PartitionKey": PARTITION_KEY,
@@ -93,7 +91,7 @@ def get_report_by_deck(deck: str) -> tuple[dict | None, str | None]:
     # Query all reports in partition
     filter_query = f"PartitionKey eq '{PARTITION_KEY}'"
 
-    for entity in _reports.query_entities(filter_query):
+    for entity in reports_table.query_entities(filter_query):
         existing_deck = entity.get("RowKey", "")
         if canonicalize(existing_deck) == canonical:
             return entity, existing_deck

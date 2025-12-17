@@ -1,8 +1,20 @@
+"""
+Azure Function for editing categories in the database.
+
+This function handles HTTP requests to update category entities in Azure
+Table Storage.
+"""
 import logging
-import json
 import azure.functions as func
 from azure.functions import Blueprint
-from shared.table_utils import _categories, PARTITION_KEY
+
+from shared.table_utils import categories_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 edit_category_bp = Blueprint()
@@ -19,78 +31,63 @@ def edit_category(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Edit category request received")
 
     # Parse and validate request body
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
     
-    categoryID = body.get("categoryID")
-    categoryName = body.get("categoryName")
-    categoryIcon = body.get("categoryIcon")
-    categoryColor = body.get("categoryColor")
+    category_id = body.get("categoryID")
+    category_name = body.get("categoryName")
+    category_icon = body.get("categoryIcon")
+    category_color = body.get("categoryColor")
 
-    if not categoryID:
-        logging.warning("Missing categoryID field in request")
-        return func.HttpResponse(
+    if not category_id:
+        return create_error_response(
             "Missing 'categoryID' field in request body",
             status_code=400,
-            mimetype="text/plain"
+            log_error=False
         )
     
     # At least one field must be provided for update
-    if categoryName is None and categoryIcon is None and categoryColor is None:
-        logging.warning("No fields provided for update in request")
-        return func.HttpResponse(
+    if category_name is None and category_icon is None and category_color is None:
+        return create_error_response(
             "No fields provided for update",
             status_code=400,
-            mimetype="text/plain"
+            log_error=False
         )
     
     # Find and update category in database
     try:
-        # Query for the category using CategoryID field (or RowKey)
-        # First try to find by CategoryID (if it's stored as a field)
-        query = f"PartitionKey eq '{PARTITION_KEY}' and RowKey eq '{categoryID}'"
-        categories = list(_categories.query_entities(query))
+        # Query for the category using RowKey
+        query = build_table_query(PARTITION_KEY, {"RowKey": category_id})
+        categories = list(categories_table.query_entities(query))
         
         if not categories:
-            logging.warning(f"Category with ID {categoryID} not found")
-            return func.HttpResponse(
+            logging.warning(f"Category with ID {category_id} not found")
+            return create_error_response(
                 "Category not found",
                 status_code=404,
-                mimetype="text/plain"
+                log_error=False
             )
         
         # Get the category entity
         category = categories[0]
         
         # Update the category entity with new values if provided
-        if categoryName is not None:
-            category["CategoryName"] = categoryName
-        if categoryIcon is not None:
-            category["CategoryIcon"] = categoryIcon
-        if categoryColor is not None:
-            category["CategoryColor"] = categoryColor
+        if category_name is not None:
+            category["CategoryName"] = category_name
+        if category_icon is not None:
+            category["CategoryIcon"] = category_icon
+        if category_color is not None:
+            category["CategoryColor"] = category_color
         
         # Update the entity in the table (using upsert to ensure all fields are preserved)
-        _categories.upsert_entity(entity=category)
+        categories_table.upsert_entity(entity=category)
         
-        logging.info(f"Category {categoryID} updated successfully")
-        return func.HttpResponse(
-            json.dumps({"categoryID": categoryID, "message": "Category updated successfully"}),
-            status_code=200,
-            mimetype="application/json"
-        )
+        logging.info(f"Category {category_id} updated successfully")
+        return create_success_response({
+            "categoryID": category_id,
+            "message": "Category updated successfully"
+        })
     except Exception as e:
-        logging.error(f"Error updating category: {e}")
-        return func.HttpResponse(
-            f"Error updating category: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error updating category: {e}")
 

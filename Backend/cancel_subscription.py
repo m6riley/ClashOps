@@ -7,7 +7,14 @@ import azure.functions as func
 from azure.functions import Blueprint
 
 from shared.stripe_utils import cancel_subscription
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    parse_json_body,
+    validate_required_fields,
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 cancel_subscription_bp = Blueprint()
@@ -28,38 +35,32 @@ def cancel_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
     """
     logging.info("Cancel subscription request received")
 
-    try:
-        body = req.get_json()
-    except ValueError as e:
-        logging.error(f"Invalid JSON in request: {e}")
-        return func.HttpResponse(
-            "Invalid JSON",
-            status_code=400,
-            mimetype="text/plain"
-        )
+    # Parse and validate request body
+    body, error_response = parse_json_body(req)
+    if error_response:
+        return error_response
 
     user_id = body.get("userId")
     cancel_immediately = body.get("cancelImmediately", False)
 
     if not user_id:
-        logging.warning("Missing userId in request")
-        return func.HttpResponse(
+        return create_error_response(
             "Missing 'userId' field",
             status_code=400,
-            mimetype="text/plain"
+            log_error=False
         )
 
     try:
         # Get user account
-        query = f"PartitionKey eq '{PARTITION_KEY}' and RowKey eq '{user_id}'"
-        accounts = list(_accounts.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"RowKey": user_id})
+        accounts = list(accounts_table.query_entities(query))
         
         if not accounts:
             logging.warning(f"Account not found for user ID: {user_id}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Account not found",
                 status_code=404,
-                mimetype="text/plain"
+                log_error=False
             )
         
         account = accounts[0]
@@ -67,10 +68,10 @@ def cancel_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
         
         if not subscription_id:
             logging.warning(f"No subscription found for user ID: {user_id}")
-            return func.HttpResponse(
+            return create_error_response(
                 "No active subscription found",
                 status_code=404,
-                mimetype="text/plain"
+                log_error=False
             )
         
         # Cancel subscription in Stripe
@@ -81,7 +82,7 @@ def cancel_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
         if cancel_immediately:
             account['SubscriptionCancelledAt'] = subscription.canceled_at
         
-        _accounts.update_entity(account)
+        accounts_table.update_entity(account)
         
         response_data = {
             "success": True,
@@ -90,17 +91,8 @@ def cancel_subscription_handler(req: func.HttpRequest) -> func.HttpResponse:
         }
         
         logging.info(f"Subscription cancelled: {subscription_id} for user {user_id}")
-        return func.HttpResponse(
-            json.dumps(response_data),
-            status_code=200,
-            mimetype="application/json"
-        )
+        return create_success_response(response_data)
         
     except Exception as e:
-        logging.error(f"Error cancelling subscription: {e}")
-        return func.HttpResponse(
-            f"Error cancelling subscription: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error cancelling subscription: {e}")
 

@@ -7,7 +7,12 @@ import azure.functions as func
 from azure.functions import Blueprint
 
 from shared.stripe_utils import get_subscription
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 get_subscription_status_bp = Blueprint()
@@ -47,15 +52,15 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         # Get user account
-        query = f"PartitionKey eq '{PARTITION_KEY}' and RowKey eq '{user_id}'"
-        accounts = list(_accounts.query_entities(query))
+        query = build_table_query(PARTITION_KEY, {"RowKey": user_id})
+        accounts = list(accounts_table.query_entities(query))
         
         if not accounts:
             logging.warning(f"Account not found for user ID: {user_id}")
-            return func.HttpResponse(
+            return create_error_response(
                 "Account not found",
                 status_code=404,
-                mimetype="text/plain"
+                log_error=False
             )
         
         account = accounts[0]
@@ -67,11 +72,7 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
                 "hasSubscription": False,
                 "status": None
             }
-            return func.HttpResponse(
-                json.dumps(response_data),
-                status_code=200,
-                mimetype="application/json"
-            )
+            return create_success_response(response_data)
         
         # Get latest subscription status from Stripe
         subscription = get_subscription(subscription_id)
@@ -84,7 +85,7 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
         
         # Update account in database
         try:
-            _accounts.update_entity(account)
+            accounts_table.update_entity(account)
         except Exception as e:
             logging.warning(f"Could not update account with latest subscription status: {e}")
             # Continue anyway - not critical for this request
@@ -102,17 +103,8 @@ def get_subscription_status_handler(req: func.HttpRequest) -> func.HttpResponse:
         }
         
         logging.info(f"Retrieved subscription status for user {user_id}")
-        return func.HttpResponse(
-            json.dumps(response_data),
-            status_code=200,
-            mimetype="application/json"
-        )
+        return create_success_response(response_data)
         
     except Exception as e:
-        logging.error(f"Error getting subscription status: {e}")
-        return func.HttpResponse(
-            f"Error getting subscription status: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error getting subscription status: {e}")
 

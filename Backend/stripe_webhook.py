@@ -8,7 +8,12 @@ import azure.functions as func
 from azure.functions import Blueprint
 import stripe
 
-from shared.table_utils import _accounts, PARTITION_KEY
+from shared.table_utils import accounts_table, PARTITION_KEY
+from shared.http_utils import (
+    create_error_response,
+    create_success_response,
+    build_table_query
+)
 
 # Azure Functions Blueprint
 stripe_webhook_bp = Blueprint()
@@ -30,18 +35,16 @@ def stripe_webhook_handler(req: func.HttpRequest) -> func.HttpResponse:
 
     if not sig_header:
         logging.error("Missing stripe-signature header")
-        return func.HttpResponse(
+        return create_error_response(
             "Missing stripe-signature header",
-            status_code=400,
-            mimetype="text/plain"
+            status_code=400
         )
 
     if not WEBHOOK_SECRET:
         logging.error("STRIPE_WEBHOOK_SECRET not configured")
-        return func.HttpResponse(
+        return create_error_response(
             "Webhook secret not configured",
-            status_code=500,
-            mimetype="text/plain"
+            status_code=500
         )
 
     try:
@@ -51,18 +54,10 @@ def stripe_webhook_handler(req: func.HttpRequest) -> func.HttpResponse:
         )
     except ValueError as e:
         logging.error(f"Invalid payload: {e}")
-        return func.HttpResponse(
-            "Invalid payload",
-            status_code=400,
-            mimetype="text/plain"
-        )
+        return create_error_response("Invalid payload", status_code=400)
     except stripe.error.SignatureVerificationError as e:
         logging.error(f"Invalid signature: {e}")
-        return func.HttpResponse(
-            "Invalid signature",
-            status_code=400,
-            mimetype="text/plain"
-        )
+        return create_error_response("Invalid signature", status_code=400)
 
     # Handle the event
     event_type = event['type']
@@ -84,19 +79,10 @@ def stripe_webhook_handler(req: func.HttpRequest) -> func.HttpResponse:
         else:
             logging.info(f"Unhandled event type: {event_type}")
 
-        return func.HttpResponse(
-            json.dumps({"received": True}),
-            status_code=200,
-            mimetype="application/json"
-        )
+        return create_success_response({"received": True})
 
     except Exception as e:
-        logging.error(f"Error processing webhook: {e}")
-        return func.HttpResponse(
-            f"Error processing webhook: {e}",
-            status_code=500,
-            mimetype="text/plain"
-        )
+        return create_error_response(f"Error processing webhook: {e}")
 
 
 def handle_subscription_created(subscription):
@@ -108,8 +94,8 @@ def handle_subscription_created(subscription):
     logging.info(f"Subscription created: {subscription_id} for customer {customer_id}")
     
     # Find account by Stripe customer ID
-    query = f"PartitionKey eq '{PARTITION_KEY}' and StripeCustomerID eq '{customer_id}'"
-    accounts = list(_accounts.query_entities(query))
+    query = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
+    accounts = list(accounts_table.query_entities(query))
     
     if accounts:
         account = accounts[0]
@@ -119,7 +105,7 @@ def handle_subscription_created(subscription):
         current_period_end = subscription.get('current_period_end')
         if current_period_end is not None:
             account['SubscriptionCurrentPeriodEnd'] = current_period_end
-        _accounts.update_entity(account)
+        accounts_table.update_entity(account)
         logging.info(f"Updated account for subscription {subscription_id}")
 
 
@@ -132,8 +118,20 @@ def handle_subscription_updated(subscription):
     logging.info(f"Subscription updated: {subscription_id} - Status: {status}")
     
     # Find account by Stripe customer ID or subscription ID
-    query = f"PartitionKey eq '{PARTITION_KEY}' and (StripeCustomerID eq '{customer_id}' or StripeSubscriptionID eq '{subscription_id}')"
-    accounts = list(_accounts.query_entities(query))
+    # Note: Azure Table Storage doesn't support OR queries, so we need to query separately
+    accounts = []
+    
+    # Try to find by customer ID first
+    query_customer = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
+    accounts_by_customer = list(accounts_table.query_entities(query_customer))
+    
+    if accounts_by_customer:
+        accounts = accounts_by_customer
+    else:
+        # If not found by customer ID, try subscription ID
+        query_subscription = build_table_query(PARTITION_KEY, {"StripeSubscriptionID": subscription_id})
+        accounts_by_subscription = list(accounts_table.query_entities(query_subscription))
+        accounts = accounts_by_subscription
     
     if accounts:
         account = accounts[0]
@@ -153,7 +151,7 @@ def handle_subscription_updated(subscription):
         if status == 'active' and subscription.get('cancel_at_period_end'):
             account['SubscriptionStatus'] = 'cancel_at_period_end'
         
-        _accounts.update_entity(account)
+        accounts_table.update_entity(account)
         logging.info(f"Updated account for subscription {subscription_id}")
 
 
@@ -165,8 +163,20 @@ def handle_subscription_deleted(subscription):
     logging.info(f"Subscription deleted: {subscription_id}")
     
     # Find account by Stripe customer ID or subscription ID
-    query = f"PartitionKey eq '{PARTITION_KEY}' and (StripeCustomerID eq '{customer_id}' or StripeSubscriptionID eq '{subscription_id}')"
-    accounts = list(_accounts.query_entities(query))
+    # Note: Azure Table Storage doesn't support OR queries, so we need to query separately
+    accounts = []
+    
+    # Try to find by customer ID first
+    query_customer = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
+    accounts_by_customer = list(accounts_table.query_entities(query_customer))
+    
+    if accounts_by_customer:
+        accounts = accounts_by_customer
+    else:
+        # If not found by customer ID, try subscription ID
+        query_subscription = build_table_query(PARTITION_KEY, {"StripeSubscriptionID": subscription_id})
+        accounts_by_subscription = list(accounts_table.query_entities(query_subscription))
+        accounts = accounts_by_subscription
     
     if accounts:
         account = accounts[0]
@@ -177,7 +187,7 @@ def handle_subscription_deleted(subscription):
         if canceled_at:
             account['SubscriptionCancelledAt'] = canceled_at
         
-        _accounts.update_entity(account)
+        accounts_table.update_entity(account)
         logging.info(f"Updated account for deleted subscription {subscription_id}")
 
 
@@ -189,8 +199,8 @@ def handle_payment_succeeded(invoice):
     logging.info(f"Payment succeeded for subscription: {subscription_id}")
     
     # Find account by Stripe customer ID
-    query = f"PartitionKey eq '{PARTITION_KEY}' and StripeCustomerID eq '{customer_id}'"
-    accounts = list(_accounts.query_entities(query))
+    query = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
+    accounts = list(accounts_table.query_entities(query))
     
     if accounts:
         account = accounts[0]
@@ -201,7 +211,7 @@ def handle_payment_succeeded(invoice):
             period_end = invoice.get('period_end')
             if period_end is not None:
                 account['SubscriptionCurrentPeriodEnd'] = period_end
-            _accounts.update_entity(account)
+            accounts_table.update_entity(account)
             logging.info(f"Updated account after successful payment for subscription {subscription_id}")
 
 
@@ -213,14 +223,14 @@ def handle_payment_failed(invoice):
     logging.info(f"Payment failed for subscription: {subscription_id}")
     
     # Find account by Stripe customer ID
-    query = f"PartitionKey eq '{PARTITION_KEY}' and StripeCustomerID eq '{customer_id}'"
-    accounts = list(_accounts.query_entities(query))
+    query = build_table_query(PARTITION_KEY, {"StripeCustomerID": customer_id})
+    accounts = list(accounts_table.query_entities(query))
     
     if accounts:
         account = accounts[0]
         # Update subscription status
         if subscription_id:
             account['SubscriptionStatus'] = 'past_due'
-            _accounts.update_entity(account)
+            accounts_table.update_entity(account)
             logging.info(f"Updated account after failed payment for subscription {subscription_id}")
 
