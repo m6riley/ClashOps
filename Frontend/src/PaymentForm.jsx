@@ -125,12 +125,17 @@ function PaymentFormContent({ userId, clientSecret, subscriptionId, onSuccess, o
       
       try {
         const { getGetSubscriptionStatusUrl } = await import('./config')
-        const statusResponse = await fetch(`${getGetSubscriptionStatusUrl()}&userId=${userId}`)
+        // Construct URL properly - check if it already has query params
+        const baseUrl = getGetSubscriptionStatusUrl()
+        const separator = baseUrl.includes('?') ? '&' : '?'
+        const statusResponse = await fetch(`${baseUrl}${separator}userId=${userId}`)
+        
         if (statusResponse.ok) {
           const statusData = await statusResponse.json()
           console.log('PaymentFormContent: Subscription status refreshed', {
             subscriptionId,
-            status: statusData.status
+            status: statusData.status,
+            hasSubscription: statusData.hasSubscription
           })
           
           // Call success callbacks with subscription data
@@ -140,6 +145,22 @@ function PaymentFormContent({ userId, clientSecret, subscriptionId, onSuccess, o
             hasSubscription: statusData.hasSubscription
           }
           
+          if (onSuccess) {
+            onSuccess(subscriptionData)
+          }
+          if (onComplete) {
+            onComplete(subscriptionData)
+          }
+        } else {
+          // If status check fails, still call callbacks optimistically
+          console.warn('PaymentFormContent: Status check failed, but payment was confirmed', {
+            status: statusResponse.status,
+            statusText: statusResponse.statusText
+          })
+          const subscriptionData = {
+            subscriptionId,
+            status: 'active' // Optimistic - webhook will confirm
+          }
           if (onSuccess) {
             onSuccess(subscriptionData)
           }
@@ -162,6 +183,9 @@ function PaymentFormContent({ userId, clientSecret, subscriptionId, onSuccess, o
           onComplete(subscriptionData)
         }
       }
+      
+      // Reset processing state after callbacks are called
+      setIsProcessing(false)
 
     } catch (error) {
       console.error('PaymentFormContent: Unexpected error during payment confirmation', error)

@@ -45,7 +45,14 @@ export async function onRequest(context) {
     const method = request.method;
     const body = method !== 'GET' && method !== 'HEAD' ? await request.text() : null;
     
-    const response = await fetch(azureUrl, {
+    // Extract query parameters from the original request URL
+    const url = new URL(request.url);
+    const queryString = url.search;
+    
+    // Append query parameters to Azure Function URL
+    const proxiedUrl = queryString ? `${azureUrl}${queryString}` : azureUrl;
+    
+    const response = await fetch(proxiedUrl, {
       method,
       headers: request.headers,
       body,
