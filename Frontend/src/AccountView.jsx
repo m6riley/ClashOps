@@ -210,6 +210,11 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       // Success - account created
       const data = await response.json()
       const accountId = data.id || data.account_id
+      const accountEmail = email.trim().toLowerCase()
+      
+      // Store email in state and localStorage
+      setEmail(accountEmail)
+      localStorage.setItem('clashops_user_email', accountEmail)
       
       if (onNotification) {
         onNotification({
@@ -287,6 +292,11 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       // Success - account verified
       const data = await response.json()
       const accountId = data.id || data.account_id
+      const accountEmail = data.email || email.trim().toLowerCase()
+      
+      // Store email in state and localStorage
+      setEmail(accountEmail)
+      localStorage.setItem('clashops_user_email', accountEmail)
       
       if (onNotification) {
         onNotification({
@@ -328,6 +338,8 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     setCurrentPassword('')
     setEditPassword('')
     setEditConfirmPassword('')
+    // Clear email from localStorage on logout
+    localStorage.removeItem('clashops_user_email')
   }
 
   const handleSubscribe = () => {
@@ -418,6 +430,17 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
           setIsSubscribed(false)
         }
       }
+
+  // Load email from localStorage when component mounts and user is logged in
+  useEffect(() => {
+    if (isLoggedIn && !email) {
+      const storedEmail = localStorage.getItem('clashops_user_email')
+      if (storedEmail) {
+        setEmail(storedEmail)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]) // Only run when isLoggedIn changes, not when email changes
 
   // Fetch subscription status when user is logged in
   useEffect(() => {
