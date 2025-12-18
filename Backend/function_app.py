@@ -29,6 +29,7 @@ from cancel_subscription import cancel_subscription_bp
 from renew_subscription import renew_subscription_bp
 from get_subscription_status import get_subscription_status_bp
 from stripe_webhook import stripe_webhook_bp
+from send_verification_code import send_verification_code_bp
 
 # Create the main FunctionApp instance
 app = func.FunctionApp()
@@ -62,3 +63,4 @@ app.register_functions(cancel_subscription_bp)
 app.register_functions(renew_subscription_bp)
 app.register_functions(get_subscription_status_bp)
 app.register_functions(stripe_webhook_bp)
+app.register_functions(send_verification_code_bp)

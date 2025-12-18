@@ -9,7 +9,8 @@ import {
   getDeleteAccountUrl,
   getGetSubscriptionStatusUrl,
   getCancelSubscriptionUrl,
-  getRenewSubscriptionUrl
+  getRenewSubscriptionUrl,
+  getSendVerificationCodeUrl
 } from './config'
 
 function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout, currentUserId }) {
@@ -30,6 +31,10 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
   const [billingCycleEnd, setBillingCycleEnd] = useState(null) // Store billing cycle end date
   const [showCancelConfirm, setShowCancelConfirm] = useState(false) // Show cancel subscription confirmation
   const [showRenewConfirm, setShowRenewConfirm] = useState(false) // Show renew subscription confirmation
+  const [showVerificationStep, setShowVerificationStep] = useState(false) // Show verification code input step
+  const [verificationCode, setVerificationCode] = useState('') // User-entered verification code
+  const [storedVerificationCode, setStoredVerificationCode] = useState('') // Verification code from API
+  const [isSendingCode, setIsSendingCode] = useState(false) // Loading state for sending code
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
@@ -41,6 +46,59 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value)
+  }
+
+  const handleResendVerificationCode = async () => {
+    // Clear previous errors
+    setError('')
+    
+    // Validate email is present
+    if (!email) {
+      setError('Email is required to resend verification code')
+      return
+    }
+    
+    setIsSendingCode(true)
+    
+    try {
+      const response = await fetch(getSendVerificationCodeUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase()
+        })
+      })
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        setError(errorText || `Failed to resend verification code. Status: ${response.status}`)
+        setIsSendingCode(false)
+        return
+      }
+      
+      // Store new verification code
+      const data = await response.json()
+      setStoredVerificationCode(data.verification_code)
+      setVerificationCode('')
+      
+      if (onNotification) {
+        onNotification({
+          message: 'New verification code sent to your email. Please check your inbox.',
+          type: 'success'
+        })
+      }
+    } catch (err) {
+      console.error('Error resending verification code:', err)
+      if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
+        setError('Network error: Unable to connect to server. Please try again.')
+      } else {
+        setError(err.message || 'An error occurred while resending verification code. Please try again.')
+      }
+    } finally {
+      setIsSendingCode(false)
+    }
   }
 
   const handleSignUp = async () => {
@@ -60,6 +118,60 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     
     if (password.length < 6) {
       setError('Password must be at least 6 characters long')
+      return
+    }
+    
+    // If not in verification step, send verification code first
+    if (!showVerificationStep) {
+      setIsSendingCode(true)
+      
+      try {
+        const response = await fetch(getSendVerificationCodeUrl(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase()
+          })
+        })
+        
+        if (!response.ok) {
+          const errorText = await response.text()
+          setError(errorText || `Failed to send verification code. Status: ${response.status}`)
+          setIsSendingCode(false)
+          return
+        }
+        
+        // Store verification code and show verification step
+        const data = await response.json()
+        setStoredVerificationCode(data.verification_code)
+        setShowVerificationStep(true)
+        setVerificationCode('')
+        
+        if (onNotification) {
+          onNotification({
+            message: 'Verification code sent to your email. Please check your inbox.',
+            type: 'success'
+          })
+        }
+      } catch (err) {
+        console.error('Error sending verification code:', err)
+        if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
+          setError('Network error: Unable to connect to server. Please try again.')
+        } else {
+          setError(err.message || 'An error occurred while sending verification code. Please try again.')
+        }
+      } finally {
+        setIsSendingCode(false)
+      }
+      return
+    }
+    
+    // Verification step: compare codes and create account
+    if (verificationCode !== storedVerificationCode) {
+      setError('Verification code does not match. Please try again.')
+      setVerificationCode('')
       return
     }
     
@@ -83,6 +195,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
         setIsSignUp(false) // Switch to login view
         setPassword('')
         setConfirmPassword('')
+        setShowVerificationStep(false)
+        setVerificationCode('')
+        setStoredVerificationCode('')
         return
       }
       
@@ -109,6 +224,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       setPassword('')
       setConfirmPassword('')
       setError('')
+      setShowVerificationStep(false)
+      setVerificationCode('')
+      setStoredVerificationCode('')
     } catch (err) {
       console.error('Error signing up:', err)
       if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
@@ -202,6 +320,9 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     setEmail('')
     setPassword('')
     setConfirmPassword('')
+    setShowVerificationStep(false)
+    setVerificationCode('')
+    setStoredVerificationCode('')
     setIsEditing(false)
     setEditEmail('')
     setCurrentPassword('')
@@ -641,13 +762,25 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
             <div className="auth-toggle">
               <button
                 className={`auth-toggle-button ${isSignUp ? 'active' : ''}`}
-                onClick={() => setIsSignUp(true)}
+                onClick={() => {
+                  setIsSignUp(true)
+                  setShowVerificationStep(false)
+                  setVerificationCode('')
+                  setStoredVerificationCode('')
+                  setError('')
+                }}
               >
                 Sign Up
               </button>
               <button
                 className={`auth-toggle-button ${!isSignUp ? 'active' : ''}`}
-                onClick={() => setIsSignUp(false)}
+                onClick={() => {
+                  setIsSignUp(false)
+                  setShowVerificationStep(false)
+                  setVerificationCode('')
+                  setStoredVerificationCode('')
+                  setError('')
+                }}
               >
                 Login
               </button>
@@ -662,6 +795,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
                   value={email}
                   onChange={handleEmailChange}
                   placeholder="Enter your email"
+                  disabled={showVerificationStep && isSignUp}
                 />
               </div>
               <div className="form-group">
@@ -673,6 +807,7 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
                   value={password}
                   onChange={handlePasswordChange}
                   placeholder="Enter your password"
+                  disabled={showVerificationStep && isSignUp}
                 />
               </div>
               {isSignUp && (
@@ -685,7 +820,45 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
                     placeholder="Confirm your password"
+                    disabled={showVerificationStep}
                   />
+                </div>
+              )}
+              {isSignUp && showVerificationStep && (
+                <div className="form-group">
+                  <label htmlFor="verificationCode" className="form-label">Verification Code</label>
+                  <input
+                    type="text"
+                    id="verificationCode"
+                    className="form-input"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="Enter 6-digit code"
+                    maxLength={6}
+                    style={{ letterSpacing: '8px', textAlign: 'center', fontSize: '1.2rem' }}
+                  />
+                  <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.5rem', textAlign: 'center' }}>
+                    Check your email for the verification code
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleResendVerificationCode}
+                    disabled={isSendingCode}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#007bff',
+                      cursor: isSendingCode ? 'not-allowed' : 'pointer',
+                      fontSize: '0.85rem',
+                      textDecoration: 'underline',
+                      padding: '0.5rem 0',
+                      marginTop: '0.25rem',
+                      width: '100%',
+                      opacity: isSendingCode ? 0.6 : 1
+                    }}
+                  >
+                    {isSendingCode ? 'Sending...' : "Didn't receive it? Resend code"}
+                  </button>
                 </div>
               )}
               {error && (
@@ -693,12 +866,26 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
                   {error}
                 </div>
               )}
+              {isSignUp && showVerificationStep && (
+                <button 
+                  className="account-button account-button-secondary" 
+                  onClick={() => {
+                    setShowVerificationStep(false)
+                    setVerificationCode('')
+                    setStoredVerificationCode('')
+                    setError('')
+                  }}
+                  disabled={isLoading}
+                >
+                  Back
+                </button>
+              )}
               <button 
                 className="account-button account-button-primary" 
                 onClick={isSignUp ? handleSignUp : handleLogin}
-                disabled={isLoading}
+                disabled={isLoading || isSendingCode}
               >
-                {isLoading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Login')}
+                {isSendingCode ? 'Sending Code...' : isLoading ? 'Loading...' : (isSignUp ? (showVerificationStep ? 'Verify & Sign Up' : 'Send Verification Code') : 'Login')}
               </button>
             </div>
           </div>
