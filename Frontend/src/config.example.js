@@ -28,7 +28,8 @@ const FUNCTION_KEYS = {
   cancel_subscription: 'YOUR_CANCEL_SUBSCRIPTION_FUNCTION_KEY',
   renew_subscription: 'YOUR_RENEW_SUBSCRIPTION_FUNCTION_KEY',
   get_subscription_status: 'YOUR_GET_SUBSCRIPTION_STATUS_FUNCTION_KEY',
-  stripe_webhook: 'YOUR_STRIPE_WEBHOOK_FUNCTION_KEY'
+  stripe_webhook: 'YOUR_STRIPE_WEBHOOK_FUNCTION_KEY',
+  send_verification_code: 'YOUR_SEND_VERIFICATION_CODE_FUNCTION_KEY'
 };
 
 // Helper function to get function URL
@@ -76,3 +77,4 @@ export const getRenewSubscriptionUrl = () => getFunctionUrl('renew_subscription'
 export const getGetSubscriptionStatusUrl = () => getFunctionUrl('get_subscription_status');
 export const getStripeWebhookUrl = () => getFunctionUrl('stripe_webhook');
 
+export const getSendVerificationCodeUrl = () => getFunctionUrl('send_verification_code');
