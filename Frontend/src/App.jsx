@@ -139,7 +139,14 @@ function App() {
           
           if (response.ok) {
             const data = await response.json()
-            const isActive = data.hasSubscription && (data.status === 'active' || data.status === 'trialing' || data.status === 'incomplete')
+            // Check if subscription is active, including cancelled subscriptions that haven't reached billing cycle end
+            const isActive = data.hasSubscription && (
+              data.status === 'active' || 
+              data.status === 'trialing' || 
+              data.status === 'incomplete' ||
+              (data.status === 'cancel_at_period_end' && data.billingCycleEnd && 
+               Math.floor(Date.now() / 1000) < data.billingCycleEnd)
+            )
             // Only update if status check succeeded and subscription is confirmed
             if (isActive) {
               setIsSubscribed(true)
@@ -2181,10 +2188,13 @@ function App() {
                   console.log('App: Subscription status response on login:', JSON.stringify(data, null, 2))
                   
                   if (data.hasSubscription === true && data.status) {
+                    // Check if subscription is active, including cancelled subscriptions that haven't reached billing cycle end
                     const isActive = (
                       data.status === 'active' || 
                       data.status === 'trialing' || 
-                      data.status === 'incomplete'
+                      data.status === 'incomplete' ||
+                      (data.status === 'cancel_at_period_end' && data.billingCycleEnd && 
+                       Math.floor(Date.now() / 1000) < data.billingCycleEnd)
                     )
                     
                     setIsSubscribed(isActive)

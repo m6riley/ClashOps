@@ -296,7 +296,8 @@
 }
 
 .subscription-active,
-.subscription-inactive {
+.subscription-inactive,
+.subscription-cancelled {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -313,10 +314,21 @@
   width: fit-content;
 }
 
+.subscription-badge-cancelled {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
 .subscription-status-text {
   color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
   margin: 0;
+}
+
+.subscription-status-note {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  margin: 0;
+  margin-top: 4px;
 }
 
 .subscription-pricing {
@@ -458,7 +470,8 @@
   align-items: center;
 }
 
-.account-subscription-card .subscription-active {
+.account-subscription-card .subscription-active,
+.account-subscription-card .subscription-cancelled {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -474,6 +487,10 @@
   font-size: 14px;
   font-weight: 600;
   width: fit-content;
+}
+
+.account-subscription-card .subscription-badge-cancelled {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
 }
 
 .account-subscription-card .subscription-status-text {

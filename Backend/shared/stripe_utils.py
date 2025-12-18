@@ -179,3 +179,28 @@ def get_customer_subscriptions(customer_id):
         logging.error(f"Stripe error getting customer subscriptions: {e}")
         raise
 
+def renew_subscription(subscription_id):
+    """
+    Renew/reactivate a Stripe subscription that is set to cancel at period end.
+    
+    This sets cancel_at_period_end to False, reactivating the subscription.
+    
+    Args:
+        subscription_id: Stripe Subscription ID
+    
+    Returns:
+        Updated Stripe Subscription object
+    """
+    try:
+        subscription = stripe.Subscription.modify(
+            subscription_id,
+            cancel_at_period_end=False
+        )
+        
+        logging.info(f"Renewed/reactivated subscription {subscription_id}")
+        return subscription
+        
+    except stripe.error.StripeError as e:
+        logging.error(f"Stripe error renewing subscription: {e}")
+        raise
+

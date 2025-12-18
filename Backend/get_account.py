@@ -5,6 +5,7 @@ This function handles HTTP requests to verify account credentials and return
 the account ID if the email and password match.
 """
 import logging
+import time
 import azure.functions as func
 from azure.functions import Blueprint
 
@@ -92,7 +93,41 @@ def get_account(req: func.HttpRequest) -> func.HttpResponse:
                 log_error=False
             )
         
-        # Password is correct, return account ID (RowKey) and email
+        # Password is correct - check if subscription billing cycle has ended
+        # If user cancelled subscription, check if billing cycle end date has passed
+        subscription_status = account.get("SubscriptionStatus")
+        billing_cycle_end = account.get("SubscriptionBillingCycleEnd")
+        
+        # Treat empty strings as None
+        if subscription_status == '':
+            subscription_status = None
+        if billing_cycle_end == '':
+            billing_cycle_end = None
+        
+        if subscription_status == 'cancel_at_period_end' and billing_cycle_end:
+            # Check if billing cycle has ended (billing_cycle_end is a Unix timestamp)
+            # Handle both string and integer timestamps
+            try:
+                billing_cycle_end_int = int(billing_cycle_end) if billing_cycle_end else None
+            except (ValueError, TypeError):
+                billing_cycle_end_int = None
+            
+            if billing_cycle_end_int:
+                current_time = int(time.time())
+                if current_time >= billing_cycle_end_int:
+                    # Billing cycle has ended, remove subscription from account
+                    logging.info(f"Billing cycle ended for user {account.get('RowKey')}. Removing subscription.")
+                    # Set subscription fields to empty strings (Azure Table Storage doesn't support None)
+                    account['SubscriptionStatus'] = ''
+                    account['StripeSubscriptionID'] = ''
+                    account['SubscriptionBillingCycleEnd'] = ''
+                    if 'SubscriptionCurrentPeriodEnd' in account:
+                        account['SubscriptionCurrentPeriodEnd'] = ''
+                    if 'SubscriptionCancelledAt' in account:
+                        account['SubscriptionCancelledAt'] = ''
+                    accounts_table.update_entity(account)
+        
+        # Return account ID (RowKey) and email
         user_id = account.get("RowKey")  # UserID is stored as RowKey
         logging.info(f"Account verified successfully for email: {email}")
         return create_success_response({"id": user_id, "email": email})

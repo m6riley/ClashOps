@@ -26,6 +26,7 @@ const FUNCTION_KEYS = {
   optimize_deck: 'YOUR_OPTIMIZE_DECK_FUNCTION_KEY',
   create_subscription: 'YOUR_CREATE_SUBSCRIPTION_FUNCTION_KEY',
   cancel_subscription: 'YOUR_CANCEL_SUBSCRIPTION_FUNCTION_KEY',
+  renew_subscription: 'YOUR_RENEW_SUBSCRIPTION_FUNCTION_KEY',
   get_subscription_status: 'YOUR_GET_SUBSCRIPTION_STATUS_FUNCTION_KEY',
   stripe_webhook: 'YOUR_STRIPE_WEBHOOK_FUNCTION_KEY'
 };
@@ -71,6 +72,7 @@ export const getOptimizeDeckUrl = () => getFunctionUrl('optimize_deck');
 
 export const getCreateSubscriptionUrl = () => getFunctionUrl('create_subscription');
 export const getCancelSubscriptionUrl = () => getFunctionUrl('cancel_subscription');
+export const getRenewSubscriptionUrl = () => getFunctionUrl('renew_subscription');
 export const getGetSubscriptionStatusUrl = () => getFunctionUrl('get_subscription_status');
 export const getStripeWebhookUrl = () => getFunctionUrl('stripe_webhook');
 

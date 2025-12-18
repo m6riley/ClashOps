@@ -158,6 +158,10 @@ def handle_subscription_updated(subscription):
         # Handle cancel_at_period_end status
         if status == 'active' and subscription.get('cancel_at_period_end'):
             account['SubscriptionStatus'] = 'cancel_at_period_end'
+            # Store billing cycle end date when subscription is set to cancel at period end
+            if current_period_end:
+                account['SubscriptionBillingCycleEnd'] = current_period_end
+                logging.info(f"Stored billing cycle end date: {current_period_end} for subscription {subscription_id}")
         
         try:
             accounts_table.update_entity(account)

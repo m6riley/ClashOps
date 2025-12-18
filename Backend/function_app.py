@@ -26,6 +26,7 @@ from ingest_blob import ingest_blob_bp
 from remove_blob import remove_blob_bp
 from create_subscription import create_subscription_bp
 from cancel_subscription import cancel_subscription_bp
+from renew_subscription import renew_subscription_bp
 from get_subscription_status import get_subscription_status_bp
 from stripe_webhook import stripe_webhook_bp
 
@@ -58,5 +59,6 @@ app.register_functions(ingest_blob_bp)
 app.register_functions(remove_blob_bp)
 app.register_functions(create_subscription_bp)
 app.register_functions(cancel_subscription_bp)
+app.register_functions(renew_subscription_bp)
 app.register_functions(get_subscription_status_bp)
 app.register_functions(stripe_webhook_bp)

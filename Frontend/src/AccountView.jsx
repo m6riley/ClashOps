@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import './AccountView.css'
 import crownIcon from './assets/ClashOps-PNG.png'
+import ConfirmDialog from './ConfirmDialog'
 import {
   getAddAccountUrl,
   getGetAccountUrl,
   getEditAccountUrl,
   getDeleteAccountUrl,
   getGetSubscriptionStatusUrl,
-  getCancelSubscriptionUrl
+  getCancelSubscriptionUrl,
+  getRenewSubscriptionUrl
 } from './config'
 
 function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed, onSubscribe, onNotification, onLogin, onLogout, currentUserId }) {
@@ -24,6 +26,10 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
   const [editConfirmPassword, setEditConfirmPassword] = useState('')
   const [editError, setEditError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null) // Store subscription status from API
+  const [billingCycleEnd, setBillingCycleEnd] = useState(null) // Store billing cycle end date
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false) // Show cancel subscription confirmation
+  const [showRenewConfirm, setShowRenewConfirm] = useState(false) // Show renew subscription confirmation
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
@@ -213,74 +219,162 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
     }
   }
 
-  // Fetch subscription status when user is logged in
-  useEffect(() => {
-    if (isLoggedIn && currentUserId) {
-      const fetchSubscriptionStatus = async () => {
-        try {
-          // Construct URL properly - check if it already has query params
-          const baseUrl = getGetSubscriptionStatusUrl()
-          const separator = baseUrl.includes('?') ? '&' : '?'
-          const url = `${baseUrl}${separator}userId=${currentUserId}`
+  // Function to fetch and update subscription status
+  // When status is 'cancel_at_period_end', compares current date with billingCycleEnd from the status response
+  const fetchSubscriptionStatus = async () => {
+    if (!currentUserId) {
+      setIsSubscribed(false)
+      return
+    }
+
+    try {
+      // Construct URL properly - check if it already has query params
+      const baseUrl = getGetSubscriptionStatusUrl()
+      const separator = baseUrl.includes('?') ? '&' : '?'
+      const url = `${baseUrl}${separator}userId=${currentUserId}`
+      
+      console.log('AccountView: Fetching subscription status for userId:', currentUserId)
+      const response = await fetch(url)
+      
+      if (response.ok) {
+        const data = await response.json()
+        console.log('AccountView: Subscription status response:', JSON.stringify(data, null, 2))
+        
+        // Check if user has an active subscription
+        // Status can be: 'active', 'trialing', 'incomplete', 'incomplete_expired', 'past_due', 'canceled', 'unpaid', 'cancel_at_period_end'
+        if (data.hasSubscription === true && data.status) {
+          // Store subscription status and billing cycle end for display
+          setSubscriptionStatus(data.status)
+          setBillingCycleEnd(data.billingCycleEnd || null)
           
-          console.log('AccountView: Fetching subscription status for userId:', currentUserId)
-          const response = await fetch(url)
+          // Check if subscription is active, including cancelled subscriptions that haven't reached billing cycle end
+          // When status is 'cancel_at_period_end', compare current date with billingCycleEnd from the status response
+          const isActive = (
+            data.status === 'active' || 
+            data.status === 'trialing' || 
+            data.status === 'incomplete' || // incomplete means payment is being processed
+            (data.status === 'cancel_at_period_end' && data.billingCycleEnd && 
+             Math.floor(Date.now() / 1000) < data.billingCycleEnd)
+          )
           
-          if (response.ok) {
-            const data = await response.json()
-            console.log('AccountView: Subscription status response:', JSON.stringify(data, null, 2))
-            
-            // Check if user has an active subscription
-            // Status can be: 'active', 'trialing', 'incomplete', 'incomplete_expired', 'past_due', 'canceled', 'unpaid'
-            if (data.hasSubscription === true && data.status) {
-              const isActive = (
-                data.status === 'active' || 
-                data.status === 'trialing' || 
-                data.status === 'incomplete' // incomplete means payment is being processed
-              )
-              
-              setIsSubscribed(isActive)
-              console.log('AccountView: Subscription status updated:', {
-                hasSubscription: data.hasSubscription,
-                status: data.status,
-                isActive,
-                subscriptionId: data.subscriptionId
-              })
-            } else {
-              // No subscription or invalid status
-              setIsSubscribed(false)
-              console.log('AccountView: No active subscription found:', {
-                hasSubscription: data.hasSubscription,
-                status: data.status
-              })
-            }
-          } else {
-            const errorText = await response.text()
-            console.error('AccountView: Failed to fetch subscription status:', {
-              status: response.status,
-              statusText: response.statusText,
-              error: errorText,
-              url: url
-            })
+          setIsSubscribed(isActive)
+          console.log('AccountView: Subscription status updated:', {
+            hasSubscription: data.hasSubscription,
+            status: data.status,
+            isActive,
+            billingCycleEnd: data.billingCycleEnd,
+            subscriptionId: data.subscriptionId
+          })
+        } else {
+          // No subscription or invalid status
+          setSubscriptionStatus(null)
+          setBillingCycleEnd(null)
+          setIsSubscribed(false)
+          console.log('AccountView: No active subscription found:', {
+            hasSubscription: data.hasSubscription,
+            status: data.status
+          })
+        }
+      } else {
+        const errorText = await response.text()
+        console.error('AccountView: Failed to fetch subscription status:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+          url: url
+        })
             // On error, set to false to ensure we don't show incorrect subscription status
             // The user can try again or the status will be checked again on next mount
+            setSubscriptionStatus(null)
+            setBillingCycleEnd(null)
             setIsSubscribed(false)
           }
         } catch (error) {
           console.error('AccountView: Error fetching subscription status:', error)
           // On network error, set to false - user can try again
+          setSubscriptionStatus(null)
+          setBillingCycleEnd(null)
           setIsSubscribed(false)
         }
       }
+
+  // Fetch subscription status when user is logged in
+  useEffect(() => {
+    if (isLoggedIn && currentUserId) {
       fetchSubscriptionStatus()
     } else {
       // Reset subscription status when logged out
+      setSubscriptionStatus(null)
+      setBillingCycleEnd(null)
       setIsSubscribed(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, currentUserId]) // Removed setIsSubscribed from deps to avoid infinite loops
 
-  const handleCancelSubscription = async () => {
+  const handleRenewSubscriptionClick = () => {
+    // Show confirmation dialog
+    setShowRenewConfirm(true)
+  }
+
+  const confirmRenewSubscription = async () => {
+    setShowRenewConfirm(false)
+    
+    if (!currentUserId) {
+      if (onNotification) {
+        onNotification({
+          message: 'Please log in to renew your subscription',
+          type: 'error'
+        })
+      }
+      return
+    }
+
+    try {
+      const response = await fetch(getRenewSubscriptionUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: currentUserId
+        })
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(errorText || 'Failed to renew subscription')
+      }
+
+      const data = await response.json()
+      
+      // Refresh subscription status after renewal
+      await fetchSubscriptionStatus()
+      
+      if (onNotification) {
+        onNotification({
+          message: data.message || 'Your subscription has been renewed successfully!',
+          type: 'success'
+        })
+      }
+    } catch (error) {
+      console.error('Error renewing subscription:', error)
+      if (onNotification) {
+        onNotification({
+          message: error.message || 'Failed to renew subscription. Please try again.',
+          type: 'error'
+        })
+      }
+    }
+  }
+
+  const handleCancelSubscriptionClick = () => {
+    // Show confirmation dialog
+    setShowCancelConfirm(true)
+  }
+
+  const confirmCancelSubscription = async () => {
+    setShowCancelConfirm(false)
+    
     if (!currentUserId) {
       if (onNotification) {
         onNotification({
@@ -309,12 +403,16 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
       }
 
       const data = await response.json()
-      setIsSubscribed(false)
+      
+      // Refresh subscription status after cancellation
+      // The backend has stored billingCycleEnd in the accounts table
+      // fetchSubscriptionStatus will check the status and compare current date with billingCycleEnd
+      await fetchSubscriptionStatus()
       
       if (onNotification) {
         onNotification({
           message: data.cancelAtPeriodEnd 
-            ? 'Your subscription will be cancelled at the end of the billing period.'
+            ? 'Your subscription will be cancelled at the end of the billing period. You will continue to have access until then.'
             : 'Your subscription has been cancelled.',
           type: 'success'
         })
@@ -751,10 +849,29 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
               </div>
               {isSubscribed ? (
                 <div className="subscription-status">
-                  <div className="subscription-active">
-                    <span className="subscription-badge">Active</span>
-                    <p className="subscription-status-text">Your subscription is active</p>
-                  </div>
+                  {subscriptionStatus === 'cancel_at_period_end' ? (
+                    <div className="subscription-cancelled">
+                      <span className="subscription-badge subscription-badge-cancelled">Cancelled</span>
+                      <p className="subscription-status-text">
+                        Your subscription will deactivate on{' '}
+                        {billingCycleEnd ? (
+                          <strong>{new Date(billingCycleEnd * 1000).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          })}</strong>
+                        ) : (
+                          'the end of your billing period'
+                        )}
+                      </p>
+                      <p className="subscription-status-note">You will continue to have access until then.</p>
+                    </div>
+                  ) : (
+                    <div className="subscription-active">
+                      <span className="subscription-badge">Active</span>
+                      <p className="subscription-status-text">Your subscription is active</p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
@@ -771,9 +888,15 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
             </div>
             <div className="subscription-prompt-actions">
               {isSubscribed ? (
-                <button className="subscription-prompt-button subscription-prompt-button-secondary" onClick={handleCancelSubscription}>
-                  Cancel Subscription
-                </button>
+                subscriptionStatus === 'cancel_at_period_end' ? (
+                  <button className="subscription-prompt-button subscription-prompt-button-primary" onClick={handleRenewSubscriptionClick}>
+                    Renew Subscription
+                  </button>
+                ) : (
+                  <button className="subscription-prompt-button subscription-prompt-button-secondary" onClick={handleCancelSubscriptionClick}>
+                    Cancel Subscription
+                  </button>
+                )
               ) : (
                 <button className="subscription-prompt-button subscription-prompt-button-primary" onClick={handleSubscribe}>
                   Subscribe to ClashOps Diamond
@@ -783,6 +906,24 @@ function AccountView({ isLoggedIn, setIsLoggedIn, isSubscribed, setIsSubscribed,
           </div>
         </div>
       </div>
+
+      {/* Cancel Subscription Confirmation Dialog */}
+      {showCancelConfirm && (
+        <ConfirmDialog
+          message="Are you sure you want to cancel your subscription? You will continue to have access until the end of your current billing period."
+          onConfirm={confirmCancelSubscription}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
+
+      {/* Renew Subscription Confirmation Dialog */}
+      {showRenewConfirm && (
+        <ConfirmDialog
+          message="Are you sure you want to renew your subscription? Your subscription will continue automatically."
+          onConfirm={confirmRenewSubscription}
+          onCancel={() => setShowRenewConfirm(false)}
+        />
+      )}
     </div>
   )
 }
