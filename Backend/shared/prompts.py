@@ -188,7 +188,26 @@ INVESTMENTS (0–5)
 (Elixir Pump, Tombstone, Furnace, Queen Ability, Goblin Hut — anything that “generates long-term value.”)
 - +2.0 for each troop that can be played in the back for passive defense
 - +2.0 for each building (+3.0 for Elixer Collector)
+FINAL "Defense.Score" CALCULATION (REQUIRED)
+------------------------------------------------------------
+Compute the overall Defense score as:
 
+  Defense.Score =
+      (AirDefense.Score * 0.20)
+    + (CrowdControl.Score * 0.20)
+    + (MiniTank.Score * 0.20)
+    + (Buildings.Score * 0.20)
+    + (ResetMechanics.Score * 0.10)
+    + (TankKiller.Score * 0.05)
+    + (ControlStall.Score * 0.05)
+    + (CycleCards.Score * 0.05)
+    + (Investments.Score * 0.05)
+    + (SwarmUnits.Score * 0.05)
+    + (SpellBait.Score * 0.05)
+ 
+Round to one decimal place.
+
+The output MUST follow the JSON structure exactly and contain NO additional commentary outside the JSON.
 '''
 
 synergy_prompt = '''
@@ -459,29 +478,252 @@ You MUST follow the JSON template EXACTLY:
 
 STRICT OPTIMIZATION RULES
 ------------------------------------------------------------
-1. Only propose swaps that improve AT LEAST ONE of the lowest-scoring categories.
+1. Only propose swaps (or swap combinations) that improve AT LEAST ONE of the lowest-scoring categories.
 2. Identify the deck’s weakest category (score < 3.5).  
    Only consider swaps that directly target that weakness.
-3. NEVER remove:
-   - the primary win condition
-   - the only small spell
-   - the only building (if Defense is weak)
-   - the only air-targeting troop (if Air Defense is weak)
-4. NEVER recommend more than TWO swaps unless ALL categories score below 3.0.
-5. Swaps must improve ROLE COVERAGE:
-   - increase splash if Crowd Control < 3.0
-   - increase tank killer if Tank Killer < 3.0
-   - add cycle units if Cycle Cards < 3.0
-   - add air defense if Air Defense < 3.0
-   - add synergy combos if Synergy < 3.0
-6. VALIDATE IMPROVEMENT (MANDATORY):
-   Before selecting a swap, evaluate expected improvement:
-   - +0.5 if swap adds missing role coverage
-   - +0.5 if swap strengthens synergy with win condition
-   - +0.5 if swap improves cycle consistency
-   - –1.0 if swap weakens a strong category (>4.0)
-   Choose ONLY the swap(s) with the highest expected improvement total.
-7. All summaries MUST use bullet points with:
+3. NEVER change the primary win condition or the overall deck archetype.
+4. The new deck that includes the swapped cards MUST score higher than the original deck. Use the scoring criteria below to validate this (DO NOT output the new scores, only use them for internal validation).
+   Offense Scoring Criteria:
+   ------------------------------------------------------------
+   SCORING RULES FOR "Win Conditions" (0–5):
+- +4.0 if deck contains a primary win condition (e.g., Hog, RG, Miner, Graveyard, X-Bow, Giant, etc.)
+- +1.0 for an additional secondary win condition (e.g., Skeleton Barrel, Wall Breakers, Battle Ram, etc.).
+- Cap at 5.0.
+
+SCORING RULES FOR "Offensive Support" (0–5):
+- +1.0 for each card that directly enables/supports pushes (e.g., Ice Spirit, Fire Spirit, Knight, Valkyrie, Flying Machine, etc.)
+- +1.0 if the card synergizes with the win condition (e.g. Night Witch for Golem, Fisherman for Royal Giant, Princess for Goblin Barrel, ect.)
+- Cap at 5.0.
+
+SCORING RULES FOR "Big Damage Spells" (0–5):
+- +4.0 if the deck includes ANY ≥4 elixir tower-damaging spell (Fireball, Rocket, Lightning).
+- +1.0 if the spell synergizes with the win condition (e.g. EQ for Hog, Rocket/Fireball for X-Bow, etc.).
+- Cap at 5.0.
+
+SCORING RULES FOR "Small Damage Spells" (0–5):
+- +4.0 if the deck has a reliable ≤3 elixir tower-damaging spell (Log, Zap, Snowball).
+- +1.0 if the spell provides both utility + damage (e.g. Log for knockback, zap for reset, etc.).
+- Cap at 5.0.
+
+SCORING RULES FOR "Bridge Pressure" (0–5):
+- +1.0 for each unit that applies instant pressure (Bandit, Ghost, Hog, Goblin Barrel, Wall Breakers, Archer Queen at bridge, etc.)
+- +1.0 if deck supports dual-lane pressure (Wall Breakers, Royal Recruits, etc.).
+- Cap at 5.0.
+
+SCORING RULES FOR "Pump Responses" (0–5):
+- +3.0 if deck includes a spell or unit that efficiently punishes Elixir Pump (Fireball, Lightning, Miner).
+- +2.0 if deck can apply fast lane pressure after Pump is placed (e.g. Wall Breakers, Hog Rider, etc.).
+- Cap at 5.0.
+
+SCORING RULES FOR "Chip Damage" (0–5):
+- +2.0 if the deck has a guaranteed chip source (Miner, Goblin Barrel, Spear Goblins, Spirits).
+- +1.0 for each additional guaranteed chip tool.
+- Cap at 5.0.
+
+FINAL "Offense.Score" CALCULATION (REQUIRED)
+------------------------------------------------------------
+Compute the overall Offense score as:
+
+  Offense.Score = 
+      (WinConditions.Score * 0.30)
+    + (OffensiveSupport.Score * 0.20)
+    + (BigDamageSpells.Score * 0.15)
+    + (SmallDamageSpells.Score * 0.15)
+    + (BridgePressure.Score * 0.10)
+    + (PumpResponses.Score * 0.05)
+    + (ChipDamage.Score * 0.05)
+
+   Defense Scoring Criteria:
+   ------------------------------------------------------------
+   SCORING RULES FOR "Air Defense" (0–5):
+   - +2.0 for each troop or building that can target air troops (e.g., Musketeer, Archers, Flying Machine, Minions, AQ, etc.)
+   - +1.0 if the deck contains a troop or building unit that can target air swarms (e.g. Baby Dragon, Wizard, etc.)
+   - –1.0 if all air defense troops are vulnerable to spells (i.e. glass cannons and/or swarms)
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Crowd Control" (0–5):
+   - +2.0 for each splash/AoE unit (Valkyrie, Bowler, Baby Dragon, Wizard, Bomb Tower, etc.)
+   - +1.0 if the deck contains Tornado
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Mini Tank" (0–5):
+   - +4.0 if deck has at least one mini tank (Knight, Valkyrie, Ice Golem, etc.)
+   - +1.0 if the mini tanks synergize with the win condition (e.g. Ice Golem for Hog, Knight for Graveyard, etc.)
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Buildings" (0–5):
+   - +4.0 if deck contains a defensive building (Cannon, Bomb Tower, Tesla, Inferno Tower)
+   - +3.0 if the deck contains a seige building (X-Bow, Mortar)
+   - +1.0 if building synergizes with win condition (e.g. Cannon/Tesla for Hog, Tombstone for Lava Hound, etc.)
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Reset Mechanics" (0–5):
+   - +2.0 if deck includes any reset tool
+   - +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky (e.g. Zap, Lightning, etc.)
+   - +1.0 if deck include more than one reset tool
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Tank Killer" (0–5):
+   - +5.0 for a tank killer (Mini Pekka, DPS buildings, Inferno Dragon, etc.)
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Control Stall" (0–5):
+   - +1.0 for each kiting tool (e.g. Spirits, Skeletons, Buildings, etc.)
+   - +1.0 for each tool that has a slow/stun/knockback effect (e.g. Ice Spirit, E-Spirit, Bowler, Ice Wizard, etc.)
+   - +2.0 for Tornado
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Cycle Cards" (0–5):
+   - +2.0 per cheap cycle card (≤2 elixir)
+   - Cap at 5.0.
+
+   SCORING RULES FOR "Investments" (0–5):
+   - +2.0 for each troop that can be played in the back for passive defense
+   - +2.0 for each building (+3.0 for Elixer Collector)
+   - Cap at 5.0.
+
+FINAL "Defense.Score" CALCULATION (REQUIRED)
+------------------------------------------------------------
+Compute the overall Defense score as:
+
+  Defense.Score =
+      (AirDefense.Score * 0.20)
+    + (CrowdControl.Score * 0.20)
+    + (MiniTank.Score * 0.20)
+    + (Buildings.Score * 0.20)
+    + (ResetMechanics.Score * 0.10)
+    + (TankKiller.Score * 0.05)
+    + (ControlStall.Score * 0.05)
+    + (CycleCards.Score * 0.05)
+    + (Investments.Score * 0.05)
+    + (SwarmUnits.Score * 0.05)
+    + (SpellBait.Score * 0.05)
+
+   Synergy Scoring Criteria:
+   ------------------------------------------------------------
+ OFFENSIVE COMBOS (0–5)
+A valid offensive combo is two or more cards that work together to create reliable tower pressure  
+(e.g., Hog + Ice Spirit, Giant + Mini Pekka, RG + Fisherman, Miner + Poison, GY + Freeze, Wall Breakers + Bomber).
+
+Scoring:
+- +1.5 for each strong, proven offensive combo (up to 2 combos)
+- +0.5 for each secondary supporting interaction (e.g., support troop enabling a push)
+- –1.0 if offensive combos require difficult timing or have low reliability
+- Cap at 5.0
+
+DEFENSIVE COMBOS (0–5)
+A valid defensive combo is two or more cards that reliably stop pushes together  
+(e.g., Tornado + Valkyrie, Cannon + Ice Spirit, Inferno Tower + Ice Golem, Bowler + Tornado).
+
+Scoring:
+- +1.5 for each strong, reliable defensive combo (up to 2 combos)
+- +0.5 for each supportive interaction (cycle card or control card that enhances a defensive unit)
+- –1.0 if defensive combos depend on high elixir or risky timing
+- Cap at 5.0
+
+------------------------------------------------------------
+REQUIRED FINAL SYNERGY SCORE CALCULATION
+------------------------------------------------------------
+Compute the final Synergy.Score as:
+
+  Synergy.Score =
+      (OffensiveCombos.Score * 0.50)
+    + (DefensiveCombos.Score * 0.50)
+
+   Versatility Scoring Criteria:
+   ------------------------------------------------------------
+   SCORING RULES FOR "Versatility" (0–5):
+   - +2.0 for each matchup category that is improved
+   - +1.0 for each matchup category that is strengthened
+   - –1.0 if the matchup category is weakened
+   - Cap at 5.0.
+   Use the following rubric for all matchup categories:
+
+5.0 — **Dominant**:  
+- Deck has hard counters or perfect answers to the archetype  
+- Little elixir pressure  
+- Multiple reliable responses  
+
+4.0 — **Strong**:  
+- Deck has consistent, safe counters  
+- One weak point allowed as long as others compensate  
+
+3.0 — **Even / Skill-based**:  
+- Matchup is winnable with correct play  
+- Some weaknesses, but no fatal flaws  
+- One strong answer + one partial answer  
+
+2.0 — **Unfavorable**:  
+- Major defensive gaps  
+- Only one unreliable counter or requires perfect timing  
+- High elixir strain  
+
+1.0 — **Very Poor / Hard Counter Against You**:  
+- Deck lacks key tools needed for this matchup  
+- Requires opponent mistakes to win  
+
+0.0 — **Unplayable**:  
+- Deck has no practical way to defend or pressure the archetype  
+
+MATCHUP-SPECIFIC ADJUSTMENTS  
+------------------------------------------------------------
+
+Versus **Beatdown 🪖**  
+(Golem, Giant, Lava Hound, Electro Giant)  
+- +2.0 for strong tank killers  
+- +1.0 for cycle + stall capability  
+- –2.0 if deck struggles vs air or big push stacking  
+
+Versus **Bridge Spam 🚨**  
+(Bandit, Battle Ram, Ghost, Prince, Ram Rider)  
+- +2.0 for quick, reliable defensive resets  
+- +1.0 for cheap cycle  
+- –2.0 if deck cannot stop opposite lane pressure  
+
+Versus **Siege 🏰**  
+(X-Bow, Mortar)  
+- +2.0 for buildings  
+- +1.0 for big spells that remove X-Bow/Mortar support  
+- –2.0 if deck cannot cross the river or punish setups  
+
+Versus **Bait 🪝**  
+(Goblin Barrel, Skarmy, Spear Goblins, Princess)  
+- +2.0 for a small spell at ≤3 elixir  
+- +1.0 if swarms or cheap units help  
+- –2.0 if no small spell exists  
+
+Versus **Cycle ♻️**  
+(Hog, Miner, Wall Breakers, Drill)  
+- +1.5 for buildings or consistent responses  
+- +1.0 for cycle parity (≤3.5 average elixir)  
+- –2.0 if deck is heavy and cannot keep up  
+
+Versus **Royal Giant 💣**  
+- +2.0 for tank killers  
+- +1.0 for defensive buildings  
+- –2.0 if deck relies solely on fragile troops  
+
+Versus **Graveyard ☠️**  
+- +2.0 for splash control  
+- +1.0 for cheap spells  
+- –2.0 if deck lacks both splash AND cheap spells  
+
+------------------------------------------------------------
+REQUIREDFINAL VERSATILITY SCORE CALCULATION
+------------------------------------------------------------
+
+Compute the final score as the average:
+
+  Versatility.Score =
+      (Beatdown.Score
+     + BridgeSpam.Score
+     + Siege.Score
+     + Bait.Score
+     + Cycle.Score
+     + RoyalGiant.Score
+     + Graveyard.Score) / 7
+
+5. All summaries MUST use bullet points with:
    - Pros "✅"
    - Cons "❗"
    - Suggestions "💡"
