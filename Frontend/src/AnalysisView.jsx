@@ -5,6 +5,7 @@ import ElixirIcon from './assets/Elixir.svg'
 import CycleIcon from './assets/Cycle.svg'
 import OptimizeLoading from './OptimizeLoading'
 import { getOptimizeDeckUrl } from './config'
+import { fetchWithRetry } from './apiUtils'
 import Trophy from './Trophy'
 import OffenseIcon from './OffenseIcon'
 import DefenseIcon from './DefenseIcon'
@@ -315,7 +316,7 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
 
       const functionUrl = getOptimizeDeckUrl()
 
-      const response = await fetch(functionUrl, {
+      const response = await fetchWithRetry(functionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -331,6 +332,10 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
           versatilityScore: versatilityData.score,
           versatilitySummary: versatilityData.summary
         })
+      }, {
+        maxRetries: 3,
+        retryDelay: 1000,
+        timeout: 60000 // Longer timeout for optimization calls
       })
 
       if (!response.ok) {

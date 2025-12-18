@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './AnalyzeLoading.css'
 import { getAnalyzeDeckUrl, getCreateReportUrl } from './config'
+import { fetchWithRetry } from './apiUtils'
 
 function AnalyzeLoading({ deck, onClose, onComplete }) {
   const [progress, setProgress] = useState(0)
@@ -50,7 +51,7 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
     // This is idempotent - if report already exists, it just returns success
     const createReport = async () => {
       try {
-        const createResponse = await fetch(createReportUrl, {
+        const createResponse = await fetchWithRetry(createReportUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,6 +59,10 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
           body: JSON.stringify({
             deck: deckString
           })
+        }, {
+          maxRetries: 3,
+          retryDelay: 1000,
+          timeout: 30000
         })
 
         if (!createResponse.ok) {
@@ -79,7 +84,7 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
       // Make all 4 API calls asynchronously
       const promises = categories.map(async (category) => {
       try {
-        const response = await fetch(analyzeFunctionUrl, {
+        const response = await fetchWithRetry(analyzeFunctionUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -88,6 +93,10 @@ function AnalyzeLoading({ deck, onClose, onComplete }) {
             deckToAnalyze: deckString,
             category: category
           })
+        }, {
+          maxRetries: 3,
+          retryDelay: 1000,
+          timeout: 60000 // Longer timeout for analysis calls
         })
 
         if (!response.ok) {
