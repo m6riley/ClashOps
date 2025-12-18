@@ -539,13 +539,15 @@
 
 .deck-editor-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
   gap: 12px;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
   padding: 10px;
   animation: fadeIn 0.4s ease-out 0.5s both;
+  justify-content: start;
+  align-items: start;
 }
 
 .editor-card-item {
@@ -559,6 +561,9 @@
   border: 2px solid transparent;
   cursor: grab;
   transition: all 0.2s;
+  align-self: start;
+  width: 100%;
+  max-width: 100px;
 }
 
 /* Only animate on initial load */

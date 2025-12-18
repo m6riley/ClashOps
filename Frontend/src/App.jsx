@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import './App.css'
 import Swords from './Swords'
 import crownIcon from './assets/ClashOps-PNG.png'
@@ -268,8 +268,8 @@ function App() {
       // For other feature types, card can be anywhere
       return true
     })
-    // Apply card filter if any cards are selected
-    if (selectedFilterCards.length > 0) {
+    // Apply card filter if any cards are selected or excluded
+    if (selectedFilterCards.length > 0 || excludedFilterCards.length > 0) {
       filtered = filtered.filter(deckMatchesFilter)
     }
     return limit ? filtered.slice(0, limit) : filtered
@@ -1195,11 +1195,27 @@ function App() {
     })
   }
   
+  // Filter features to only include those with decks after applying current filters
+  // Use useMemo to ensure this recalculates when filters or decks change
+  const filteredFeatures = useMemo(() => {
+    return features.filter(feature => {
+      // Skip features without filter_options or with empty string (like "Top Decks" which is handled separately)
+      if (!feature.filter_options || feature.filter_options === '') return false
+      
+      // Check if this feature has any decks after applying filters
+      const featureDecks = getDecksForFeature(feature.filter_options, null, feature.featured_type)
+      return featureDecks.length > 0
+    })
+  }, [features, decks, selectedFilterCards, excludedFilterCards])
+  
   // Group features into pairs for two-per-row display
-  const groupedFeatures = []
-  for (let i = 0; i < features.length; i += 2) {
-    groupedFeatures.push(features.slice(i, i + 2))
-  }
+  const groupedFeatures = useMemo(() => {
+    const grouped = []
+    for (let i = 0; i < filteredFeatures.length; i += 2) {
+      grouped.push(filteredFeatures.slice(i, i + 2))
+    }
+    return grouped
+  }, [filteredFeatures])
   const handleInitialLoadingComplete = async () => {
     // Load features, decks, and cards from Azure Functions
     try {
@@ -1769,37 +1785,35 @@ function App() {
                       )
                     })}
                 
-                {/* Top Decks section */}
-                <div className="category-section">
-                  <FeatureBanner 
-                    feature={{
-                      featured_title: 'Top Decks',
-                      featured_type: 'All',
-                      featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
-                      filter_options: ''
-                    }}
-                    decks={[]}
-                    isExpanded={false}
-                    onSeeAll={() => {}}
-                    onBack={() => {}}
-                        hideSeeAll={true}
-                  />
-                  <div className="decks-grid">
-                        {getFilteredDecks().length > 0 ? (
-                          getFilteredDecks().map(deck => (
-                            <DeckCard 
-                              key={deck.id} 
-                              deck={deck} 
-                              isFavourite={isDeckInFavourites(deck.id)}
-                              onToggleFavourite={addToFavourites}
-                              onAnalyze={handleAnalyzeDeck}
-                            />
-                      ))
-                    ) : (
-                      <div className="no-decks-message">No decks available</div>
-                    )}
+                {/* Top Decks section - only show if there are filtered decks */}
+                {getFilteredDecks().length > 0 && (
+                  <div className="category-section">
+                    <FeatureBanner 
+                      feature={{
+                        featured_title: 'Top Decks',
+                        featured_type: 'All',
+                        featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
+                        filter_options: ''
+                      }}
+                      decks={[]}
+                      isExpanded={false}
+                      onSeeAll={() => {}}
+                      onBack={() => {}}
+                          hideSeeAll={true}
+                    />
+                    <div className="decks-grid">
+                      {getFilteredDecks().map(deck => (
+                        <DeckCard 
+                          key={deck.id} 
+                          deck={deck} 
+                          isFavourite={isDeckInFavourites(deck.id)}
+                          onToggleFavourite={addToFavourites}
+                          onAnalyze={handleAnalyzeDeck}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </>
             )}
           </>
