@@ -51,7 +51,7 @@ SCORING RULES FOR "Offensive Support" (0–5):
 - Cap at 5.0.
 
 SCORING RULES FOR "Big Damage Spells" (0–5):
-- +4.0 if the deck includes ANY ≥4 elixir tower-damaging spell (Fireball, Rocket, Lightning).
+- +4.0 if the deck includes ANY ≥3 elixir tower-damaging spell (Fireball, Rocket, Lightning, Earthquake, Void, Poison, etc.
 - +1.0 if the spell synergizes with the win condition (e.g. EQ for Hog, Rocket/Fireball for X-Bow, etc.).
 - Cap at 5.0.
 
@@ -163,9 +163,9 @@ BUILDINGS (0–5)
 - Cap at 5.0
 
 RESET MECHANICS (0–5)
-(Units or spells that stop charges or inferno beams: Zap, Snowball, Electro Spirit, Ewiz, Electro Giant, Lightning.)
+(Units or spells that stop charges or inferno beams: Zap, Electro Spirit, Ewiz, Electro Giant, Ice Spirit, Ice Golem, Lightning, Vines, Freeze)
 - +2.0 if deck includes any reset tool
-- +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky (e.g. Zap, Lightning, etc.)
+- +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky.
 - +1.0 if deck include more than one reset tool
 - Cap at 5.0
 
@@ -496,7 +496,7 @@ SCORING RULES FOR "Offensive Support" (0–5):
 - Cap at 5.0.
 
 SCORING RULES FOR "Big Damage Spells" (0–5):
-- +4.0 if the deck includes ANY ≥4 elixir tower-damaging spell (Fireball, Rocket, Lightning).
+- +4.0 if the deck includes ANY ≥3 elixir tower-damaging spell (Fireball, Rocket, Lightning, Earthquake, Void, Poison, etc.
 - +1.0 if the spell synergizes with the win condition (e.g. EQ for Hog, Rocket/Fireball for X-Bow, etc.).
 - Cap at 5.0.
 
@@ -557,11 +557,12 @@ Compute the overall Offense score as:
    - +1.0 if building synergizes with win condition (e.g. Cannon/Tesla for Hog, Tombstone for Lava Hound, etc.)
    - Cap at 5.0.
 
-   SCORING RULES FOR "Reset Mechanics" (0–5):
-   - +2.0 if deck includes any reset tool
-   - +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky (e.g. Zap, Lightning, etc.)
-   - +1.0 if deck include more than one reset tool
-   - Cap at 5.0.
+ RESET MECHANICS (0–5)
+(Units or spells that stop charges or inferno beams: Zap, Electro Spirit, Ewiz, Electro Giant, Ice Spirit, Ice Golem, Lightning, Vines, Freeze)
+- +2.0 if deck includes any reset tool
+- +2.0 if deck one of the reset tools can reset Inferno Tower/Dragon or Sparky.
+- +1.0 if deck include more than one reset tool
+- Cap at 5.0
 
    SCORING RULES FOR "Tank Killer" (0–5):
    - +5.0 for a tank killer (Mini Pekka, DPS buildings, Inferno Dragon, etc.)
