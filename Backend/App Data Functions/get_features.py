@@ -9,8 +9,20 @@ import azure.functions as func
 from azure.functions import Blueprint
 from shared.blobs_utils import features
 
+# In features.csv, use | in featured_text (and featured_title) where a comma is needed.
+# Commas would split CSV columns; | is replaced with "," after parsing.
+FEATURED_TEXT_COMMA = "|"
+
 # Azure Functions Blueprint
 get_features_bp = Blueprint()
+
+def _restore_featured_commas(row: dict) -> dict:
+    """Replace | with , in featured text fields so CSV can omit literal commas."""
+    for key in ("featured_text", "featured_title"):
+        value = row.get(key)
+        if isinstance(value, str) and FEATURED_TEXT_COMMA in value:
+            row[key] = value.replace(FEATURED_TEXT_COMMA, ",")
+    return row
 
 @get_features_bp.route(route="get_features", auth_level=func.AuthLevel.FUNCTION)
 def get_features(req: func.HttpRequest) -> func.HttpResponse:
@@ -46,7 +58,7 @@ def get_features(req: func.HttpRequest) -> func.HttpResponse:
                 else:
                     trimmed_value = v
                 trimmed_row[trimmed_key] = trimmed_value
-            features_list.append(trimmed_row)
+            features_list.append(_restore_featured_commas(trimmed_row))
 
     except Exception as e:
         logging.error(f"Error getting features from blob: {e}")
