@@ -1271,7 +1271,18 @@ function App() {
       
       const featuresData = await featuresResponse.json()
       if (Array.isArray(featuresData)) {
-        setFeatures(featuresData)
+        // features.csv uses | as a comma stand-in so CSV columns don't split;
+        // restore commas for display (also handled in get_features after deploy).
+        const restoreFeatureCommas = (value) =>
+          typeof value === 'string' ? value.replaceAll('|', ',') : value
+        setFeatures(featuresData.map(feature => ({
+          ...feature,
+          featured_text: restoreFeatureCommas(feature.featured_text),
+          featured_title: restoreFeatureCommas(feature.featured_title),
+          ...(feature[' featured_text'] !== undefined
+            ? { ' featured_text': restoreFeatureCommas(feature[' featured_text']) }
+            : {})
+        })))
       } else {
         console.warn('Features data is not an array:', featuresData)
         setFeatures([])

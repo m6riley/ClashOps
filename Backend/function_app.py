@@ -1,4 +1,21 @@
+import sys
+from pathlib import Path
+
 import azure.functions as func
+
+# Blueprint modules live in category folders with spaces (not importable packages).
+# Add those folders to sys.path so Azure worker indexing can load them.
+_ROOT = Path(__file__).resolve().parent
+for _subdir in (
+    "App Data Functions",
+    "Accounts Functions",
+    "User Data Functions",
+    "Subscriptions Functions",
+    "RAG Functions",
+):
+    _path = str(_ROOT / _subdir)
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
 
 # Blueprints
 from analyze_deck import analyze_deck_bp
