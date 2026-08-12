@@ -13,7 +13,6 @@
 }
 
 .feature-banner-content {
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #8b6914 100%);
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   display: flex;
@@ -23,6 +22,21 @@
   position: relative;
   min-height: 80px;
   overflow: hidden;
+}
+
+.feature-banner-content--gold {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #8b6914 100%);
+  background-size: 200% 200%;
+}
+
+.feature-banner-content--purple {
+  background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 50%, #5b2c6f 100%);
+  background-size: 200% 200%;
+}
+
+.feature-banner-content--pink {
+  background: linear-gradient(135deg, #e91e8c 0%, #c2185b 50%, #9c1250 100%);
+  background-size: 200% 200%;
 }
 
 .feature-banner-content::before {

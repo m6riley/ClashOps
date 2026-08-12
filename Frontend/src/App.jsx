@@ -1793,7 +1793,8 @@ function App() {
                         featured_title: 'Top Decks',
                         featured_type: 'All',
                         featured_image: 'https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoic3VwZXJjZWxsXC9maWxlXC9qTGJKMjY1b2dGRWRYQ0w0WTRCUi5wbmcifQ:supercell:6cXygIXb6fZTZPpSR2s15sX5vWYI9ytE1LMHyWHsr-Y?width=2400',
-                        filter_options: ''
+                        filter_options: '',
+                        color: 'Gold'
                       }}
                       decks={[]}
                       isExpanded={false}
