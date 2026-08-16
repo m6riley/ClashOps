@@ -10,7 +10,6 @@ import csv
 import requests
 import time
 from urllib.parse import quote
-from datetime import datetime
 from io import StringIO
 from .blobs_utils import decks
 
@@ -114,7 +113,7 @@ def process_player_deck(player_data: dict, deck_dict: dict, deck_id_counter: int
     """
     Process a player's current deck and update the deck dictionary.
     
-    Increments the score for existing decks or creates a new entry.
+    Increments num_battles for existing decks or creates a new entry.
     Returns the updated deck_id_counter.
     
     Args:
@@ -133,14 +132,13 @@ def process_player_deck(player_data: dict, deck_dict: dict, deck_id_counter: int
     deck_key = frozenset(deck_cards)
 
     if deck_key in deck_dict:
-        deck_dict[deck_key]["score"] += 1
-        deck_dict[deck_key]["last_entry"] = datetime.now()
+        deck_dict[deck_key]["num_battles"] += 1
     else:
         deck_dict[deck_key] = {
             "deck_id": deck_id_counter,
             "cards": "; ".join(deck_cards),
-            "score": 1,
-            "last_entry": datetime.now(),
+            "win_rate": 0.0,
+            "num_battles": 1,
         }
         deck_id_counter += 1
 
@@ -152,21 +150,21 @@ def upload_decks(sorted_decks: list[dict]) -> None:
     Upload sorted deck data to Azure Blob Storage as a CSV file.
     
     Args:
-        sorted_decks: List of deck dictionaries sorted by score
+        sorted_decks: List of deck dictionaries sorted by win_rate / num_battles
     """
     csv_buffer = StringIO()
     writer = csv.writer(csv_buffer)
 
     # Write header
-    writer.writerow(["deck_id", "cards", "score", "last_entry"])
+    writer.writerow(["deck_id", "cards", "win_rate", "num_battles"])
 
     # Write rows
     for deck in sorted_decks:
         writer.writerow([
             deck["deck_id"],
             deck["cards"],
-            deck["score"],
-            deck["last_entry"].isoformat()  # convert datetime to string
+            deck["win_rate"],
+            deck["num_battles"],
         ])
 
     decks.upload_blob(csv_buffer.getvalue(), overwrite=True)

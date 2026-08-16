@@ -17,6 +17,40 @@ export function cardNameToApiName(cardName) {
 }
 
 /**
+ * Parse catalog card labels that may include evolved-/hero- prefixes.
+ * Examples:
+ *   "evolved-Mega Knight" -> { baseName: "Mega Knight", isEvolution: true, isHero: false }
+ *   "hero-Berserker" -> { baseName: "Berserker", isEvolution: false, isHero: true }
+ *   "Fireball" -> { baseName: "Fireball", isEvolution: false, isHero: false }
+ */
+export function parseDeckCardLabel(rawName) {
+  if (!rawName) {
+    return { baseName: '', isEvolution: false, isHero: false }
+  }
+
+  const trimmed = String(rawName).trim()
+  const lower = trimmed.toLowerCase()
+
+  if (lower.startsWith('evolved-')) {
+    return {
+      baseName: trimmed.slice('evolved-'.length).trim(),
+      isEvolution: true,
+      isHero: false,
+    }
+  }
+
+  if (lower.startsWith('hero-')) {
+    return {
+      baseName: trimmed.slice('hero-'.length).trim(),
+      isEvolution: false,
+      isHero: true,
+    }
+  }
+
+  return { baseName: trimmed, isEvolution: false, isHero: false }
+}
+
+/**
  * Gets the card image URL from RoyaleAPI CDN
  */
 export function getCardImageUrl(cardName) {
@@ -48,4 +82,3 @@ export function getCardHeroImageUrl(cardName) {
 export function getCardType(card) {
   return card?.type
 }
-

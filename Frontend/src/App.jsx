@@ -20,6 +20,7 @@ import AnalyzeLoading from './AnalyzeLoading'
 import AnalysisView from './AnalysisView'
 import InitialLoading from './InitialLoading'
 import CountUpAnimation from './CountUpAnimation'
+import { parseDeckCardLabel } from './cardUtils'
 import {
   getGetPlayerDecksUrl,
   getGetCategoriesUrl,
@@ -199,24 +200,13 @@ function App() {
     if (selectedFilterCards.length > 0) {
       const hasAllSelected = selectedFilterCards.every(filterItem => {
         const { cardName, mode } = filterItem
-        // Determine which slots to check based on the card's mode
-        let slotsToCheck = []
-        if (mode === 'evolution') {
-          slotsToCheck = [0, 1] // Evolution mode: check slots 0-1
-        } else if (mode === 'hero') {
-          slotsToCheck = [2, 3] // Hero mode: check slots 2-3
-        } else {
-          slotsToCheck = [0, 1, 2, 3, 4, 5, 6, 7] // Basic mode: check all slots
-        }
-        
-        // Get card names from the specified slots
-        const slotCardNames = slotsToCheck
-          .map(slotIndex => deck.cards[slotIndex]?.name)
-          .filter(name => name !== null && name !== undefined)
-        
-        return slotCardNames.some(cn => 
-          cn.toLowerCase() === cardName.toLowerCase()
-        )
+        return deck.cards.some(card => {
+          if (!card?.name) return false
+          if (card.name.toLowerCase() !== cardName.toLowerCase()) return false
+          if (mode === 'evolution') return Boolean(card.isEvolution)
+          if (mode === 'hero') return Boolean(card.isHero)
+          return true
+        })
       })
       if (!hasAllSelected) return false
     }
@@ -225,24 +215,13 @@ function App() {
     if (excludedFilterCards.length > 0) {
       const hasExcluded = excludedFilterCards.some(filterItem => {
         const { cardName, mode } = filterItem
-        // Determine which slots to check based on the card's mode
-        let slotsToCheck = []
-        if (mode === 'evolution') {
-          slotsToCheck = [0, 1] // Evolution mode: check slots 0-1
-        } else if (mode === 'hero') {
-          slotsToCheck = [2, 3] // Hero mode: check slots 2-3
-        } else {
-          slotsToCheck = [0, 1, 2, 3, 4, 5, 6, 7] // Basic mode: check all slots
-        }
-        
-        // Get card names from the specified slots
-        const slotCardNames = slotsToCheck
-          .map(slotIndex => deck.cards[slotIndex]?.name)
-          .filter(name => name !== null && name !== undefined)
-        
-        return slotCardNames.some(cn => 
-          cn.toLowerCase() === cardName.toLowerCase()
-        )
+        return deck.cards.some(card => {
+          if (!card?.name) return false
+          if (card.name.toLowerCase() !== cardName.toLowerCase()) return false
+          if (mode === 'evolution') return Boolean(card.isEvolution)
+          if (mode === 'hero') return Boolean(card.isHero)
+          return true
+        })
       })
       if (hasExcluded) return false
     }
@@ -253,19 +232,17 @@ function App() {
   // Helper function to filter decks by featured card
   const getDecksForFeature = (featureCardName, limit = null, featureType = null) => {
     let filtered = decks.filter(deck => {
-      const cardIndex = deck.cardNames.findIndex(cardName => 
-        cardName.toLowerCase() === featureCardName.toLowerCase()
+      const matchingCards = (deck.cards || []).filter(card =>
+        card?.name && card.name.toLowerCase() === featureCardName.toLowerCase()
       )
-      
-      // If card not found in deck, exclude it
-      if (cardIndex === -1) return false
-      
-      // If feature type is "Hero", card must be in slots 3 or 4 (indices 2 or 3)
+      if (matchingCards.length === 0) return false
+
       if (featureType && featureType.toLowerCase() === 'hero') {
-        return cardIndex === 2 || cardIndex === 3
+        return matchingCards.some(card => Boolean(card.isHero))
       }
-      
-      // For other feature types, card can be anywhere
+      if (featureType && featureType.toLowerCase() === 'evolution') {
+        return matchingCards.some(card => Boolean(card.isEvolution))
+      }
       return true
     })
     // Apply card filter if any cards are selected or excluded
@@ -395,16 +372,19 @@ function App() {
         
         // Create deck cards array
         const deckCards = cardNames.map(cardName => {
-          const card = cards.find(c => c.card_name === cardName)
+          const parsed = parseDeckCardLabel(cardName)
+          const card = cards.find(c => c.card_name === parsed.baseName)
           return {
-            name: cardName,
-            rarity: card ? card.rarity : 'common'
+            name: parsed.baseName,
+            rarity: card ? card.rarity : 'common',
+            isEvolution: parsed.isEvolution,
+            isHero: parsed.isHero,
           }
         })
         
         // Fill to 8 cards
         while (deckCards.length < 8) {
-          deckCards.push({ name: null, rarity: 'common' })
+          deckCards.push({ name: null, rarity: 'common', isEvolution: false, isHero: false })
         }
         
         // Use DeckID as the deck ID (prefixed with fav- to match our format)
@@ -415,10 +395,11 @@ function App() {
         const transformedDeck = {
           id: deckId,
           cards: deckCards.slice(0, 8),
-          cardNames: cardNames,
+          cardNames: deckCards.map(card => card.name).filter(Boolean),
           elixirCost: elixirCost,
           cycle: cycle,
-          score: 0 // Decks from backend don't have scores
+          winRate: 0,
+          numBattles: 0
         }
         
         transformedDecks.push(transformedDeck)
@@ -863,7 +844,8 @@ function App() {
           cardNames: cardNames,
           elixirCost: elixirCost,
           cycle: cycle,
-          score: 0 // New decks start with 0 score
+          winRate: 0,
+          numBattles: 0
         }
         
         // Add to decks array
@@ -1184,7 +1166,8 @@ function App() {
       cardNames: [],
       elixirCost: 0,
       cycle: 0,
-      score: 0
+      winRate: 0,
+      numBattles: 0
     }
     setEditingDeck({ 
       deck: emptyDeck, 
@@ -1368,29 +1351,37 @@ function App() {
         // Transform the decks data
         const transformedDecks = decksData.map((deck) => {
           const cardsString = deck.cards || ''
-          const cardNames = cardsString.split(';').map(name => name.trim()).filter(name => name)
+          const rawCardNames = cardsString.split(';').map(name => name.trim()).filter(name => name)
+          const parsedCards = rawCardNames.map(parseDeckCardLabel)
+          const cardNames = parsedCards.map(card => card.baseName).filter(Boolean)
           
-          const deckCards = cardNames.map(cardName => ({
-            name: cardName,
-            rarity: 'common'
+          const deckCards = parsedCards.map(({ baseName, isEvolution, isHero }) => ({
+            name: baseName || null,
+            rarity: 'common',
+            isEvolution,
+            isHero,
           }))
           
           while (deckCards.length < 8) {
-            deckCards.push({ name: null, rarity: 'common' })
+            deckCards.push({ name: null, rarity: 'common', isEvolution: false, isHero: false })
           }
           
           return {
             id: parseInt(deck.deck_id || deck.id || 0),
             elixirCost: calculateAverageElixirCost(cardNames),
             cycle: calculateFourCardCycle(cardNames),
-            score: parseFloat(deck.score || 0),
+            winRate: parseFloat(deck.win_rate || 0),
+            numBattles: parseInt(deck.num_battles || 0, 10),
             cards: deckCards.slice(0, 8),
             cardNames: cardNames // Keep for filtering
           }
         })
         
-        // Sort decks by score (descending)
-        transformedDecks.sort((a, b) => b.score - a.score)
+        // Sort decks by win rate, then battle sample size (descending)
+        transformedDecks.sort((a, b) => {
+          if (b.winRate !== a.winRate) return b.winRate - a.winRate
+          return b.numBattles - a.numBattles
+        })
         
         setDecks(transformedDecks)
       } else {

@@ -4,65 +4,46 @@ import ElixirIcon from './assets/Elixir.svg'
 import CycleIcon from './assets/Cycle.svg'
 import { getCardImageUrl, getCardEvolutionImageUrl, getCardHeroImageUrl } from './cardUtils'
 
-function CardImage({ card, index, onVariantLoaded }) {
-  // Determine which variant to try based on card position
-  const isEvolution = index < 2 // First two cards (slots 1-2)
-  const isHero = index >= 2 && index < 4 // Third and fourth cards (slots 3-4)
-  
+function CardImage({ card, onVariantLoaded }) {
+  const isEvolution = Boolean(card?.isEvolution)
+  const isHero = Boolean(card?.isHero)
   const [variantFailed, setVariantFailed] = useState(false)
-  
+
   const evolutionUrl = getCardEvolutionImageUrl(card.name)
   const heroUrl = getCardHeroImageUrl(card.name)
   const normalUrl = getCardImageUrl(card.name)
-  
-  // Determine initial image URL
+
   let imageUrl = normalUrl
   if (isEvolution && !variantFailed) {
     imageUrl = evolutionUrl
   } else if (isHero && !variantFailed) {
     imageUrl = heroUrl
   }
-  
-  const handleLoad = (e) => {
-    // Check if the loaded image is the hero variant
-    if (isHero && !variantFailed) {
-      // If we're trying to load hero and haven't failed, it's the hero variant
-      if (onVariantLoaded) {
-        onVariantLoaded(true)
-      }
-    } else if (isEvolution && !variantFailed) {
-      // Evolution variant loaded
-      if (onVariantLoaded) {
-        onVariantLoaded(true)
-      }
+
+  const handleLoad = () => {
+    if ((isEvolution || isHero) && !variantFailed) {
+      onVariantLoaded?.(true)
     } else {
-      // Normal image loaded
-      if (onVariantLoaded) {
-        onVariantLoaded(false)
-      }
+      onVariantLoaded?.(false)
     }
   }
-  
+
   const handleError = (e) => {
-    if (!variantFailed) {
-      // Variant image failed, try normal image
+    if (!variantFailed && (isEvolution || isHero)) {
       setVariantFailed(true)
-      if (onVariantLoaded) {
-        onVariantLoaded(false)
-      }
+      onVariantLoaded?.(false)
       e.target.src = normalUrl
     } else {
-      // Normal image also failed, show placeholder
       e.target.style.display = 'none'
       if (e.target.nextSibling) {
         e.target.nextSibling.style.display = 'flex'
       }
     }
   }
-  
+
   return (
     <div className="card-image-container">
-      <img 
+      <img
         src={imageUrl}
         alt={card.name}
         className="card-image"
@@ -78,7 +59,7 @@ function CardImage({ card, index, onVariantLoaded }) {
 
 function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck, onAnalyze, hideButtons = false }) {
   const [heroVariantLoaded, setHeroVariantLoaded] = useState({})
-  
+
   const handleFavouriteClick = () => {
     if (isInFavouritesView && onRemoveFavourite) {
       onRemoveFavourite(deck.id, favouriteIndex)
@@ -86,7 +67,7 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
       onToggleFavourite(deck.id)
     }
   }
-  
+
   const handleVariantLoaded = (index, loaded) => {
     setHeroVariantLoaded(prev => ({
       ...prev,
@@ -120,14 +101,13 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
       {/* Cards grid */}
       <div className="cards-grid">
         {deck.cards.map((card, index) => {
-          const isEvolution = index < 2 && card.name !== null
-          const isHero = index >= 2 && index < 4 && card.name !== null
+          const isEvolution = Boolean(card?.isEvolution) && card.name !== null
+          const isHero = Boolean(card?.isHero) && card.name !== null
           const heroLoaded = heroVariantLoaded[index] === true
           return (
             <div key={index} className={`card-item ${card.rarity} ${isEvolution ? 'evolution-card' : ''} ${isHero && heroLoaded ? 'hero-card' : ''}`}>
-              <CardImage 
-                card={card} 
-                index={index} 
+              <CardImage
+                card={card}
                 onVariantLoaded={(loaded) => handleVariantLoaded(index, loaded)}
               />
           </div>
@@ -138,7 +118,7 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
       {/* Action buttons */}
       {!hideButtons && (
         <div className="deck-actions">
-          <button 
+          <button
             className="action-btn favorite-btn"
             onClick={handleFavouriteClick}
           >
@@ -148,7 +128,7 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
             {isInFavouritesView ? 'Remove from Favourites' : 'Add to Favourites'}
           </button>
           {isInFavouritesView && onEditDeck && (
-            <button 
+            <button
               className="action-btn edit-btn"
               onClick={() => onEditDeck(deck, favouriteIndex)}
             >
@@ -159,8 +139,8 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
               Edit Deck
             </button>
           )}
-          <button 
-            className="action-btn analyze-btn" 
+          <button
+            className="action-btn analyze-btn"
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
@@ -182,4 +162,3 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
 }
 
 export default DeckCard
-

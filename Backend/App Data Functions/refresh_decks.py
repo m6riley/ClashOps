@@ -36,7 +36,7 @@ def refresh_decks(myTimer: func.TimerRequest) -> None:
     """
     Timer-triggered Azure Function for refreshing deck data.
     Fetches deck data from top global clans, aggregates by canonical form,
-    assigns UUID deck IDs, increments scores, and uploads to blob storage.
+    assigns deck IDs, aggregates win_rate / num_battles, and uploads to blob storage.
     """
 
     if myTimer.past_due:
@@ -95,7 +95,7 @@ def refresh_decks(myTimer: func.TimerRequest) -> None:
 
     sorted_decks = sorted(
         decks_list,
-        key=lambda d: d["score"],
+        key=lambda d: (d.get("win_rate") or 0, d.get("num_battles") or 0),
         reverse=True
     )
 
