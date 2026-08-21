@@ -139,6 +139,7 @@ def process_player_deck(player_data: dict, deck_dict: dict, deck_id_counter: int
             "cards": "; ".join(deck_cards),
             "win_rate": 0.0,
             "num_battles": 1,
+            "usage": 0.0,
         }
         deck_id_counter += 1
 
@@ -156,7 +157,7 @@ def upload_decks(sorted_decks: list[dict]) -> None:
     writer = csv.writer(csv_buffer)
 
     # Write header
-    writer.writerow(["deck_id", "cards", "win_rate", "num_battles"])
+    writer.writerow(["deck_id", "cards", "win_rate", "num_battles", "usage"])
 
     # Write rows
     for deck in sorted_decks:
@@ -165,6 +166,7 @@ def upload_decks(sorted_decks: list[dict]) -> None:
             deck["cards"],
             deck["win_rate"],
             deck["num_battles"],
+            deck.get("usage", 0.0),
         ])
 
     decks.upload_blob(csv_buffer.getvalue(), overwrite=True)

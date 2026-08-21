@@ -57,8 +57,24 @@ function CardImage({ card, onVariantLoaded }) {
   )
 }
 
+function formatPercent(value) {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return '—'
+  return `${n.toFixed(1)}%`
+}
+
+function formatBattles(value) {
+  const n = Number(value)
+  if (!Number.isFinite(n) || n < 0) return '—'
+  if (n >= 10000) {
+    return `${Math.round(n / 100) / 10}k`
+  }
+  return Math.round(n).toLocaleString()
+}
+
 function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavouritesView = false, onRemoveFavourite, favouriteIndex, deckName, onEditDeck, onAnalyze, hideButtons = false }) {
   const [heroVariantLoaded, setHeroVariantLoaded] = useState({})
+  const hasPerformanceStats = Number(deck?.numBattles) > 0 || Number(deck?.usage) > 0 || Number(deck?.winRate) > 0
 
   const handleFavouriteClick = () => {
     if (isInFavouritesView && onRemoveFavourite) {
@@ -97,6 +113,23 @@ function DeckCard({ deck, isFavourite = false, onToggleFavourite, isInFavourites
           <span>{deck.cycle}</span>
         </div>
       </div>
+
+      {hasPerformanceStats && (
+        <div className="deck-meta-stats">
+          <div className="meta-stat" title={`Win rate: ${formatPercent(deck.winRate)}`}>
+            <span className="meta-stat-value">{formatPercent(deck.winRate)}</span>
+            <span className="meta-stat-label">Win Rate</span>
+          </div>
+          <div className="meta-stat" title={`Total battles: ${Number(deck.numBattles || 0).toLocaleString()}`}>
+            <span className="meta-stat-value">{formatBattles(deck.numBattles)}</span>
+            <span className="meta-stat-label">Battles</span>
+          </div>
+          <div className="meta-stat" title={`Usage: ${formatPercent(deck.usage)}`}>
+            <span className="meta-stat-value">{formatPercent(deck.usage)}</span>
+            <span className="meta-stat-label">Usage</span>
+          </div>
+        </div>
+      )}
 
       {/* Cards grid */}
       <div className="cards-grid">

@@ -30,7 +30,6 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-bottom: 8px;
 }
 
 .stat-item {
@@ -46,6 +45,41 @@
   width: 18px;
   height: 18px;
   object-fit: contain;
+}
+
+.deck-meta-stats {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+  gap: 4px;
+  padding: 2px 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.meta-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.meta-stat-value {
+  color: #ffd700;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.meta-stat-label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
 }
 
 .cycle-icon {

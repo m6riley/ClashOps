@@ -1,0 +1,1145 @@
+deck_id,cards,win_rate,num_battles,usage,tag
+1,evolved-Giant Snowball; hero-Mega Minion; Graveyard; Mortar; Cannon Cart; Poison; Dart Goblin; Rascals,98.3,60,0.3,Card
+2,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Minions; Arrows; Spear Goblins,96,1060,0.5,Card
+3,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Goblins; Arrows,95.2,887,0.4,Card
+4,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Minions; Goblin Hut,94.9,570,0.3,Card
+5,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Minions; Goblin Cage,94.8,501,0.6,Card
+6,Giant; Mini P.E.K.K.A; Musketeer; Knight; Archers; Minions; Arrows; Spear Goblins,94.4,554,0.3,Card
+7,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Minions; Spear Goblins,94.1,1393,0.7,Card
+8,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Goblins; Minions,93.1,652,0.3,Card
+9,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Goblin Hut; Arrows,93.1,579,0.3,Card
+10,Giant; Mini P.E.K.K.A; Knight; Fireball; Archers; Minions; Arrows; Spear Goblins,92.8,542,0.3,Card
+11,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Arrows; Spear Goblins,92.6,1589,0.8,Card
+12,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Goblin Cage; Arrows,90.5,545,0.3,Card
+13,Mortar; Goblin Barrel; Baby Dragon; Ronin; Fireball; Goblins; Minions; Giant Snowball,88.6,35,0.1,Card
+14,evolved-Dart Goblin; hero-Tombstone; evolved-Inferno Dragon; Rune Giant; Miner; Cannon Cart; Poison; Barbarian Barrel,86,50,0.5,Card
+15,evolved-Minion Horde; Mortar; evolved-Barbarians; Cannon Cart; Mother Witch; Minions; Rascals; Furnace,84.3,70,0.3,Card
+16,evolved-Minion Horde; Mortar; evolved-Barbarians; Cannon Cart; Mother Witch; Goblin Gang; Rascals; Furnace,82.1,313,1.3,Card
+17,evolved-Wizard; hero-Dark Prince; evolved-Inferno Dragon; Rune Giant; Miner; Archers; Goblin Curse; Zap,76.9,39,0.4,Card
+18,evolved-Elite Barbarians; hero-Giant; hero-Mega Minion; Dark Prince; Fireball; Bomber; Zap; Rage,71.1,1045,0.5,Card
+19,evolved-Firecracker; Mega Knight; evolved-P.E.K.K.A; Witch; Valkyrie; Ronin; Skeleton Army; Wizard,70.6,119,0.1,Card
+20,Suspicious Bush; Goblin Barrel; Ronin; Knight; Barbarian Hut; Poison; Electro Wizard; The Log,69.5,1958,0.1,Card
+21,evolved-Inferno Dragon; hero-Knight; hero-Balloon; Bowler; Electro Dragon; Tornado; Freeze; Barbarian Barrel,69.2,637,2.4,Card
+22,evolved-Firecracker; hero-Knight; evolved-Tesla; Mortar; Lightning; Ice Wizard; Skeletons; The Log,68.6,51,0.2,Card
+23,Mortar; Goblin Barrel; P.E.K.K.A; Witch; Ronin; Berserker; Mega Minion; Minions,66.7,36,0.2,Card
+24,evolved-Musketeer; Golden Knight; evolved-Bats; Rune Giant; Berserker; Arrows; Skeletons; Elixir Collector,66.7,30,0.3,Card
+25,Suspicious Bush; Goblin Barrel; Mega Knight; Knight; Barbarian Hut; Poison; Electro Wizard; The Log,66.3,1190,0,Card
+26,Goblin Giant; Sparky; Mini P.E.K.K.A; Dark Prince; Firecracker; Electro Wizard; Minions; Zap,65.9,472,2.1,Card
+27,Royal Hogs; Flying Machine; Mother Witch; Royal Recruits; Fireball; Goblin Cage; Zappies; Barbarian Barrel,65.7,568,0.7,Card
+28,evolved-Battle Ram; Golden Knight; evolved-Elite Barbarians; Cannon Cart; Mother Witch; Zappies; Arrows; Heal Spirit,65.6,1437,0.5,Card
+29,evolved-Inferno Dragon; Golden Knight; evolved-Giant Snowball; Rune Giant; Magic Archer; Fire Spirit; Skeletons; Freeze,65.6,32,0.3,Card
+30,evolved-Dart Goblin; Royal Giant; evolved-Princess; Goblin Barrel; Mega Knight; Prince; Skeleton Army; Bats,65.5,620,1.4,Card
+31,Suspicious Bush; Goblin Barrel; Ronin; Knight; Firecracker; Electro Wizard; Bandit; Arrows,64.9,1643,0.1,Card
+32,evolved-Skeleton Army; hero-Balloon; evolved-Minion Horde; Lava Hound; Miner; Goblin Gang; Minions; Arrows,64.4,1014,0.4,Card
+33,evolved-Inferno Dragon; hero-Goblins; evolved-Zap; Lava Hound; Rune Giant; Miner; Fireball; Skeleton Dragons,64.4,59,0.5,Card
+34,evolved-Wizard; hero-Giant; evolved-Minion Horde; Sparky; Mini P.E.K.K.A; Dark Prince; Rage; Elixir Collector,64.1,1301,0.7,Card
+35,evolved-Witch; hero-Giant; hero-Mega Minion; Dark Prince; Ronin; Fireball; Zap; Rage,64.1,1065,0.2,Card
+36,evolved-Goblin Drill; Golden Knight; evolved-Executioner; Giant Skeleton; Zappies; Tornado; Barbarian Barrel; Cannon,63.8,1470,1,Card
+37,evolved-Mortar; hero-Knight; evolved-Musketeer; Skeleton Barrel; Fireball; Goblin Gang; Spear Goblins; The Log,63.5,482,0.3,Card
+38,evolved-Skeleton Barrel; Miner; evolved-Bats; Mega Knight; Inferno Dragon; Goblin Gang; Spear Goblins; Zap,63.3,504,0.3,Card
+39,evolved-Goblin Barrel; Goblinstein; evolved-Royal Recruits; Cannon Cart; Goblin Gang; Dart Goblin; Arrows; Cannon,63.2,1833,0.2,Card
+40,evolved-Bomber; hero-Bowler; evolved-Goblin Cage; Electro Giant; Phoenix; Lightning; Tornado; Barbarian Barrel,63.2,1822,1,Card
+41,evolved-Elite Barbarians; hero-Ice Golem; evolved-Royal Ghost; Three Musketeers; Bandit; Barbarian Barrel; Heal Spirit; Elixir Collector,63.2,1040,0.5,Card
+42,Battle Ram; P.E.K.K.A; Dark Prince; Poison; Electro Wizard; Bandit; Minions; Zap,63,560,0.7,Card
+43,evolved-Battle Ram; Little Prince; evolved-Firecracker; Mortar; Dark Prince; Royal Recruits; Arrows; Barbarian Barrel,62.8,43,0.2,Card
+44,evolved-Electro Dragon; hero-Barbarian Barrel; evolved-Baby Dragon; Elixir Golem; Battle Healer; Barbarian Hut; Tornado; Heal Spirit,62.1,182,1.3,Card
+45,evolved-Minion Horde; hero-Balloon; evolved-Zap; Lava Hound; Miner; Barbarians; Minions; Arrows,61.9,586,0.7,Card
+46,evolved-Witch; hero-Mini P.E.K.K.A; evolved-Giant Snowball; Graveyard; Giant; Bowler; Minions; Arrows,61.8,1775,0.1,Card
+47,evolved-Battle Ram; Archer Queen; evolved-Elite Barbarians; Magic Archer; Royal Ghost; Bandit; Arrows; Heal Spirit,61.8,1091,0.3,Card
+48,evolved-Inferno Dragon; hero-Tombstone; evolved-Zap; Rune Giant; Miner; Berserker; Goblin Curse; Bomber,61.8,34,0.3,Card
+49,evolved-Goblin Cage; hero-Balloon; evolved-Zap; Miner; Giant Skeleton; Mother Witch; Royal Ghost; Zappies,61.7,1028,0.1,Card
+50,evolved-Lumberjack; hero-Balloon; evolved-Inferno Dragon; Baby Dragon; Bowler; Tornado; Freeze; Barbarian Barrel,61.5,2187,0.2,Card
+51,evolved-Goblin Barrel; hero-Dark Prince; evolved-Princess; Cannon Cart; Rocket; Bandit; Rascals; Giant Snowball,61.5,1749,0.3,Card
+52,evolved-Mega Knight; Archer Queen; evolved-Bats; Wall Breakers; Prince; Bandit; Goblin Gang; Arrows,61.5,1681,0.4,Card
+53,evolved-P.E.K.K.A; hero-Giant; evolved-Wizard; Goblin Machine; Vines; Minions; Guards; Rage,61.5,104,0.7,Card
+54,evolved-Baby Dragon; hero-Bowler; evolved-Knight; Electro Giant; Lightning; Goblin Hut; Tornado; Barbarian Barrel,61.4,1358,1,Card
+55,evolved-Goblin Barrel; hero-Dark Prince; evolved-Giant Snowball; Cannon Cart; Rocket; Bandit; Princess; Rascals,61.2,3153,0.5,Card
+56,evolved-Baby Dragon; hero-Barbarian Barrel; evolved-Goblin Cage; Golem; Night Witch; Lightning; Skeleton Dragons; Tornado,61.1,1929,0.3,Card
+57,evolved-Goblin Giant; hero-Mini P.E.K.K.A; evolved-Zap; Sparky; Dark Prince; Electro Wizard; Heal Spirit; Rage,61,3534,0.7,Card
+58,evolved-Electro Dragon; Golden Knight; evolved-Goblin Cage; Golem; Cannon Cart; Skeleton Dragons; Tornado; Barbarian Barrel,61,3218,0.5,Card
+59,evolved-Royal Hogs; Golden Knight; evolved-Royal Recruits; Flying Machine; Goblin Cage; Zappies; Arrows; Barbarian Barrel,61,1845,0.2,Card
+60,evolved-Electro Dragon; hero-Bowler; evolved-Inferno Dragon; Balloon; Lumberjack; Tornado; Freeze; Barbarian Barrel,61,1691,0.2,Card
+61,evolved-Mortar; Goblinstein; evolved-Minion Horde; Cannon Cart; Fireball; Goblin Gang; Ice Wizard; Barbarian Barrel,60.7,1336,0.2,Card
+62,evolved-Knight; hero-Barbarian Barrel; evolved-Goblin Cage; Graveyard; Baby Dragon; Poison; Ice Wizard; Tornado,60.6,4038,0.6,Card
+63,evolved-Battle Ram; hero-Goblins; evolved-Mega Knight; Giant Skeleton; Mother Witch; Skeleton Dragons; Zappies; Arrows,60.6,1612,0.3,Card
+64,evolved-Battle Ram; hero-Berserker; evolved-Elite Barbarians; Mother Witch; Bandit; Zappies; Arrows; Heal Spirit,60.6,1106,0.3,Card
+65,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Goblin Cage; Flying Machine; Royal Recruits; Zappies; Arrows; Electro Spirit,60.5,1522,0.9,Card
+66,evolved-Inferno Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Mother Witch; Lightning; Tornado; Barbarian Barrel,60.5,1427,1,Card
+67,evolved-Hunter; hero-Balloon; evolved-Zap; Miner; Giant Skeleton; Minions; Ice Golem; Electro Spirit,60.5,1083,0.1,Card
+68,evolved-Executioner; Monk; evolved-Giant Snowball; Hog Rider; Ronin; Bomber; Zappies; Freeze,60.5,1062,0.4,Card
+69,evolved-Mortar; hero-Knight; evolved-Archers; Rocket; Tornado; Skeletons; Ice Spirit; The Log,60.4,1146,0.1,Card
+70,evolved-Battle Ram; Skeleton King; evolved-Furnace; Royal Recruits; Fisherman; Fireball; Zappies; Arrows,60.3,1286,0.2,Card
+71,evolved-Skeleton Army; Skeleton King; evolved-Inferno Dragon; Balloon; Giant Skeleton; Arrows; Bats; Freeze,60.3,985,0.2,Card
+72,evolved-Skeleton Barrel; hero-Barbarian Barrel; evolved-Mortar; Cannon Cart; Fireball; Goblins; Minions; Rascals,60.2,2478,0.4,Card
+73,evolved-Lumberjack; hero-Bowler; evolved-Electro Dragon; Balloon; Inferno Dragon; Tornado; Freeze; Barbarian Barrel,60.2,1914,0.2,Card
+74,evolved-Firecracker; Hog Rider; evolved-Tesla; Valkyrie; Earthquake; Skeletons; Ice Spirit; The Log,60.2,435,0.1,Card
+75,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Barbarian Barrel,60.1,99985,8.7,Card
+76,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Electro Spirit,60.1,16171,1.4,Card
+77,evolved-Baby Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Knight; Lightning; Tornado; Barbarian Barrel,60.1,4482,0.6,Card
+78,evolved-Goblin Cage; hero-Barbarian Barrel; evolved-Royal Recruits; Royal Hogs; Flying Machine; Fireball; Zappies; Electro Spirit,60.1,2719,0.4,Card
+79,evolved-Skeleton Barrel; hero-Barbarian Barrel; evolved-Royal Ghost; Wall Breakers; Dart Goblin; Vines; Rascals; Bomb Tower,60.1,1989,0.3,Card
+80,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Dart Goblin; Vines; Rascals; Cannon,60.1,1699,0.6,Card
+81,evolved-Skeleton Army; hero-Balloon; evolved-Inferno Dragon; Lava Hound; Fireball; Minions; Bomber; Giant Snowball,60.1,1190,0.2,Card
+82,evolved-Skeleton Barrel; Miner; evolved-Inferno Dragon; Mega Knight; Goblin Gang; Spear Goblins; Bats; Zap,60.1,808,0.4,Card
+83,evolved-Lumberjack; hero-Balloon; evolved-Inferno Dragon; Bowler; Electro Dragon; Tornado; Freeze; Barbarian Barrel,60.1,271,1,Card
+84,evolved-Zap; hero-Mini P.E.K.K.A; hero-Giant; Dark Prince; Witch; Heal Spirit; Rage; Elixir Collector,60.1,143,0.1,Card
+85,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Three Musketeers; Hunter; Ice Golem; Barbarian Barrel; Elixir Collector,60,2986,0.5,Card
+86,evolved-Battle Ram; hero-Barbarian Barrel; evolved-Royal Ghost; Three Musketeers; Hunter; Bandit; Ice Golem; Elixir Collector,60,1408,0.2,Card
+87,evolved-Royal Hogs; hero-Dark Prince; evolved-Bats; Giant Skeleton; Mother Witch; Fisherman; Zappies; Arrows,60,1252,0.7,Card
+88,evolved-Battle Ram; hero-Barbarian Barrel; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Wizard; Vines; Zappies,60,105,0.1,Card
+89,evolved-Inferno Dragon; Golden Knight; evolved-Giant Snowball; Rune Giant; Baby Dragon; Bowler; Lightning; Goblin Cage,60,55,0.5,Card
+90,evolved-Skeleton Army; hero-Tombstone; Golden Knight; Rune Giant; Ronin; Skeleton Dragons; Archers; Barbarian Barrel,60,30,0.3,Card
+91,evolved-Battle Ram; hero-Wizard; evolved-Lumberjack; Giant Skeleton; Mother Witch; Vines; Zappies; Barbarian Barrel,59.9,2266,0.1,Card
+92,evolved-Princess; Mighty Miner; evolved-Cannon; Goblin Barrel; Rocket; Goblins; Ice Spirit; The Log,59.9,1723,0.5,Card
+93,evolved-Royal Giant; Skeleton King; evolved-Witch; Fisherman; Fireball; Zappies; Barbarian Barrel; Tombstone,59.9,1381,0.7,Card
+94,evolved-Baby Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Lightning; Ice Wizard; Tornado; Barbarian Barrel,59.8,4637,0.6,Card
+95,evolved-Lumberjack; hero-Balloon; evolved-Electro Dragon; Inferno Dragon; Bowler; Tornado; Freeze; Barbarian Barrel,59.8,2880,0.3,Card
+96,evolved-Minion Horde; hero-Mini P.E.K.K.A; evolved-Zap; Giant; Sparky; Skeleton Army; Arrows; Bats,59.7,913,0.2,Card
+97,hero-Goblins; Mortar; Skeleton Barrel; Cannon Cart; Fireball; Minions; Rascals; Barbarian Barrel,59.7,72,0.3,Card
+98,evolved-Royal Hogs; hero-Bowler; evolved-Furnace; Berserker; Fireball; Goblin Hut; Electro Spirit; Barbarian Barrel,59.6,2072,0.4,Card
+99,evolved-Firecracker; hero-Knight; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Ice Spirit; The Log,59.6,1988,0.3,Card
+100,evolved-Firecracker; hero-Knight; evolved-Tesla; Hog Rider; Earthquake; Ice Spirit; Royal Delivery; The Log,59.6,1348,0.2,Card
+101,evolved-Mega Knight; hero-Goblins; evolved-Royal Ghost; Ram Rider; Spirit Empress; Fireball; Furnace; Zap,59.5,4321,2.6,Card
+102,evolved-Musketeer; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Night Witch; Guards; Arrows,59.5,3491,0.4,Card
+103,evolved-Wall Breakers; hero-Knight; evolved-Bats; Miner; Poison; Spear Goblins; The Log; Bomb Tower,59.5,1283,0.3,Card
+104,evolved-P.E.K.K.A; hero-Balloon; evolved-Baby Dragon; Dark Prince; Electro Wizard; Bomber; Tornado; Freeze,59.5,1273,0.7,Card
+105,evolved-Skeleton Barrel; hero-Goblins; evolved-Royal Ghost; Suspicious Bush; Fireball; Dart Goblin; Rascals; The Log,59.5,1039,1.9,Card
+106,evolved-Lumberjack; hero-Goblins; evolved-Executioner; Elixir Golem; Mortar; Rocket; Bats; The Log,59.5,79,0.3,Card
+107,evolved-Goblin Giant; hero-Dark Prince; evolved-Elite Barbarians; Sparky; Electro Wizard; Zap; Heal Spirit; Rage,59.4,2617,0.4,Card
+108,evolved-Royal Hogs; hero-Goblins; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Fisherman; Zappies; Arrows,59.4,1637,0.2,Card
+109,evolved-Goblin Giant; hero-Dark Prince; evolved-Zap; Sparky; Elite Barbarians; Electro Wizard; Heal Spirit; Rage,59.4,1502,0.2,Card
+110,evolved-Battle Ram; hero-Ice Golem; evolved-Zap; Three Musketeers; Dark Prince; Minion Horde; Bandit; Elixir Collector,59.4,281,0.3,Card
+111,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Mother Witch; Ronin; Bandit; Zappies; Arrows,59.3,1747,0.3,Card
+112,evolved-P.E.K.K.A; hero-Balloon; evolved-Baby Dragon; Lumberjack; Ice Wizard; Tornado; Freeze; Barbarian Barrel,59.3,1672,0.2,Card
+113,evolved-Zap; hero-Valkyrie; hero-Mega Minion; Lava Hound; Balloon; Fireball; Skeleton Dragons; Tombstone,59.3,1453,0.3,Card
+114,evolved-Royal Giant; Monk; evolved-Hunter; Lightning; Fisherman; Skeletons; Electro Spirit; The Log,59.3,1048,0.4,Card
+115,evolved-Elite Barbarians; Golden Knight; evolved-Furnace; Three Musketeers; Ice Golem; Zap; Heal Spirit; Elixir Collector,59.2,9020,1.3,Card
+116,evolved-Battle Ram; Archer Queen; evolved-Barbarians; Royal Ghost; Bandit; Arrows; Heal Spirit; Elixir Collector,59.2,4124,0.8,Card
+117,evolved-Skeleton Barrel; hero-Goblins; evolved-Royal Ghost; Wall Breakers; Dart Goblin; Vines; Rascals; Bomb Tower,59.2,2169,0.2,Card
+118,evolved-Elite Barbarians; Boss Bandit; evolved-Minion Horde; Hog Rider; Executioner; Bandit; Freeze; Zap,59.2,1923,0.6,Card
+119,evolved-Mega Knight; hero-Goblins; evolved-Executioner; Mortar; Musketeer; Barbarians; Fireball; The Log,59.2,49,0.2,Card
+120,evolved-Baby Dragon; hero-Knight; evolved-Inferno Dragon; Balloon; Bowler; Tornado; Freeze; Barbarian Barrel,59.1,14728,1.9,Card
+121,evolved-Baby Dragon; hero-Balloon; evolved-Inferno Dragon; Lumberjack; Bowler; Tornado; Freeze; Barbarian Barrel,59.1,12097,1.2,Card
+122,evolved-Battle Ram; hero-Goblins; evolved-Mega Knight; Mother Witch; Ronin; Skeleton Dragons; Zappies; Arrows,59.1,4976,0.8,Card
+123,evolved-Valkyrie; hero-Mega Minion; evolved-Zap; Lava Hound; Spirit Empress; Fireball; Skeletons; Tombstone,59.1,2479,0.6,Card
+124,evolved-Goblin Barrel; Rocket; evolved-Princess; Knight; Goblin Gang; Ice Spirit; The Log; Inferno Tower,59.1,1024,0.3,Card
+125,evolved-Goblin Barrel; Prince; evolved-Dart Goblin; Rocket; Princess; Goblin Gang; Rascals; The Log,59.1,1014,0.1,Card
+126,evolved-Royal Hogs; hero-Berserker; evolved-Royal Ghost; Lightning; Goblin Hut; Furnace; Electro Spirit; Barbarian Barrel,59.1,629,0.6,Card
+127,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Prince; Bandit; Goblin Gang; Arrows; Zap,59,7088,1.4,Card
+128,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Goblin Cage; Flying Machine; Royal Recruits; Fireball; Zappies; Arrows,59,6260,0.9,Card
+129,evolved-Elite Barbarians; hero-Mini P.E.K.K.A; evolved-Zap; Golem; Phoenix; Night Witch; Bomber; Arrows,59,2257,0.3,Card
+130,evolved-Skeleton Army; Skeleton King; evolved-Wizard; Elixir Golem; Void; Night Witch; Arrows; Rage,59,1462,0.8,Card
+131,evolved-Elite Barbarians; hero-Valkyrie; evolved-Zap; Golem; Phoenix; Night Witch; Bomber; Arrows,59,1360,1.3,Card
+132,evolved-Valkyrie; hero-Balloon; evolved-Zap; Lava Hound; Inferno Dragon; Fireball; Skeleton Dragons; Guards,59,1218,0.1,Card
+133,evolved-Skeleton Barrel; hero-Goblins; evolved-Bats; Miner; Mega Knight; Inferno Dragon; Spear Goblins; Zap,59,1088,0.5,Card
+134,evolved-P.E.K.K.A; hero-Mini P.E.K.K.A; evolved-Mega Knight; Lumberjack; Wizard; Electro Wizard; Tornado; Zap,59,188,0.2,Card
+135,evolved-Skeleton Barrel; hero-Bowler; evolved-Mortar; Fireball; Minions; Rascals; Skeletons; Barbarian Barrel,58.9,4907,0.6,Card
+136,evolved-Battle Ram; Golden Knight; evolved-P.E.K.K.A; Royal Ghost; Electro Wizard; Bandit; Minions; Arrows,58.9,2953,0.5,Card
+137,evolved-Mega Knight; hero-Berserker; evolved-Royal Ghost; Ram Rider; Spirit Empress; Fireball; Furnace; Zap,58.9,2786,1.8,Card
+138,evolved-Elite Barbarians; hero-Mini P.E.K.K.A; evolved-Executioner; Hog Rider; Minions; Ice Golem; Freeze; Zap,58.9,1678,0.6,Card
+139,evolved-Battle Ram; hero-Wizard; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Vines; Zappies; Barbarian Barrel,58.8,28578,3.2,Card
+140,evolved-Wall Breakers; hero-Berserker; evolved-Minion Horde; Miner; Princess; Goblins; The Log; Inferno Tower,58.8,563,0.5,Card
+141,evolved-Goblin Cage; hero-Barbarian Barrel; evolved-Royal Recruits; Royal Hogs; Flying Machine; Zappies; Arrows; Electro Spirit,58.7,34636,4.9,Card
+142,evolved-Battle Ram; hero-Wizard; evolved-Elite Barbarians; Giant Skeleton; Mother Witch; Vines; Zappies; Barbarian Barrel,58.7,22238,7.6,Card
+143,evolved-Baby Dragon; hero-Barbarian Barrel; evolved-Knight; Graveyard; Poison; Ice Wizard; Tornado; Tombstone,58.7,8699,1.2,Card
+144,evolved-Inferno Dragon; hero-Balloon; evolved-Valkyrie; Lava Hound; Fireball; Skeleton Dragons; Guards; Zap,58.7,7636,0.7,Card
+145,evolved-Battle Ram; hero-Ice Golem; evolved-Royal Ghost; Three Musketeers; Hunter; Bandit; Barbarian Barrel; Elixir Collector,58.7,3439,1,Card
+146,evolved-Skeleton Barrel; hero-Knight; evolved-Mortar; Fireball; Dart Goblin; Minions; Skeletons; Barbarian Barrel,58.7,2253,0.2,Card
+147,evolved-Battle Ram; hero-Mini P.E.K.K.A; evolved-Inferno Dragon; Mega Knight; Mother Witch; Bomber; Freeze; Zap,58.7,1598,0.3,Card
+148,evolved-Skeleton Barrel; hero-Bowler; evolved-Mortar; Fireball; Dart Goblin; Minions; Rascals; Barbarian Barrel,58.7,1160,0.4,Card
+149,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; The Log,58.6,5883,0.5,Card
+150,evolved-Battle Ram; hero-Wizard; evolved-Lumberjack; Giant Skeleton; Dark Prince; Fireball; Zappies; Barbarian Barrel,58.6,3015,0.5,Card
+151,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Mother Witch; Dart Goblin; Vines; Rascals,58.6,1685,0.3,Card
+152,evolved-Lumberjack; Golem; evolved-Elite Barbarians; Phoenix; Night Witch; Bomber; Arrows; Zap,58.6,1411,0.5,Card
+153,evolved-Battle Ram; Archer Queen; evolved-Elite Barbarians; Royal Ghost; Bandit; Arrows; Heal Spirit; Elixir Collector,58.6,1297,0.4,Card
+154,Goblin Barrel; Rocket; Valkyrie; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,58.6,1173,0,Card
+155,evolved-Valkyrie; hero-Balloon; evolved-Zap; Lava Hound; Fireball; Skeleton Dragons; Mega Minion; Tombstone,58.5,6658,0.6,Card
+156,hero-Ice Golem; Hog Rider; Musketeer; Fireball; Skeletons; Ice Spirit; The Log; Cannon,58.5,2946,0.5,Card
+157,evolved-Royal Hogs; hero-Magic Archer; evolved-Royal Ghost; Giant Skeleton; Dark Prince; Zappies; Arrows; Barbarian Barrel,58.5,2030,0.3,Card
+158,evolved-Skeleton Army; hero-Knight; evolved-Minion Horde; Wall Breakers; Miner; Princess; The Log; Inferno Tower,58.5,1151,0.4,Card
+159,evolved-Baby Dragon; hero-Tombstone; evolved-Inferno Dragon; Rune Giant; Goblin Demolisher; Berserker; Lightning; Arrows,58.5,272,2.5,Card
+160,evolved-Baby Dragon; Golden Knight; evolved-Goblin Cage; Electro Giant; Bowler; Lightning; Tornado; Barbarian Barrel,58.4,5897,0.8,Card
+161,evolved-Witch; hero-Giant; evolved-Giant Snowball; Graveyard; Bowler; Zappies; Arrows; Skeletons,58.4,3233,0.9,Card
+162,evolved-Goblin Cage; Golden Knight; evolved-Royal Recruits; Royal Hogs; Flying Machine; Fireball; Zappies; Arrows,58.4,1516,0.4,Card
+163,evolved-P.E.K.K.A; hero-Balloon; evolved-Baby Dragon; Lumberjack; Electro Wizard; Tornado; Freeze; Barbarian Barrel,58.4,1359,0.1,Card
+164,evolved-Knight; hero-Tombstone; hero-Barbarian Barrel; Graveyard; Baby Dragon; Poison; Ice Wizard; Tornado,58.4,1268,0.3,Card
+165,evolved-Goblin Drill; hero-Knight; evolved-Tesla; Goblin Demolisher; Poison; Skeletons; Ice Spirit; The Log,58.4,1204,0.8,Card
+166,evolved-Mortar; Goblinstein; evolved-Royal Ghost; Cannon Cart; Lightning; Minions; Skeletons; Barbarian Barrel,58.3,4989,0.5,Card
+167,evolved-Battle Ram; Golden Knight; evolved-Mega Knight; Mother Witch; Skeleton Dragons; Electro Wizard; Bandit; Arrows,58.3,3750,0.6,Card
+168,evolved-Battle Ram; hero-Berserker; evolved-Elite Barbarians; P.E.K.K.A; Mother Witch; Royal Ghost; Electro Wizard; Arrows,58.3,2891,0.3,Card
+169,evolved-Lumberjack; hero-Mega Minion; evolved-Baby Dragon; Golem; Night Witch; Lightning; Tornado; Barbarian Barrel,58.3,1539,0.3,Card
+170,evolved-Skeleton Barrel; hero-Bowler; evolved-Mortar; Fireball; Dart Goblin; Minions; Rascals; Skeletons,58.3,1403,0.2,Card
+171,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Electro Spirit,58.2,4678,0.3,Card
+172,evolved-Baby Dragon; hero-Mega Minion; evolved-Valkyrie; Lava Hound; Balloon; Fireball; Vines; Tombstone,58.2,1623,0.4,Card
+173,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Ram Rider; Ronin; Lightning; Royal Ghost; Barbarian Barrel,58.2,1570,0.6,Card
+174,evolved-Goblin Cage; hero-Barbarian Barrel; evolved-Royal Recruits; Royal Hogs; Flying Machine; Fireball; Zappies; Arrows,58.1,17055,2.4,Card
+175,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Ice Spirit; The Log,58.1,9340,1.1,Card
+176,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Princess; Goblin Gang; Ice Spirit; The Log; Cannon,58.1,5500,0.6,Card
+177,evolved-Lumberjack; hero-Barbarian Barrel; evolved-Electro Dragon; Golem; Ronin; Skeleton Dragons; Tornado; Elixir Collector,58.1,2063,0.3,Card
+178,evolved-Baby Dragon; hero-Bowler; evolved-Goblin Cage; Graveyard; Knight; Tornado; Freeze; Barbarian Barrel,58.1,1859,0.2,Card
+179,evolved-Archers; X-Bow; evolved-Tesla; Ronin; Fireball; Skeletons; Ice Spirit; The Log,58.1,1605,0.2,Card
+180,evolved-Electro Dragon; hero-Knight; evolved-Inferno Dragon; Balloon; Bowler; Tornado; Freeze; Barbarian Barrel,58.1,1505,0.7,Card
+181,evolved-Inferno Dragon; hero-Balloon; evolved-Zap; Lava Hound; Miner; Barbarians; Skeleton Dragons; Arrows,58.1,625,0.8,Card
+182,evolved-Musketeer; hero-Balloon; evolved-Skeletons; Miner; Ice Golem; Barbarian Barrel; Giant Snowball; Bomb Tower,58,21116,2,Card
+183,evolved-Baby Dragon; hero-Dark Prince; evolved-Goblin Cage; Electro Giant; Lightning; Ice Wizard; Tornado; Barbarian Barrel,58,8000,1.3,Card
+184,evolved-Valkyrie; hero-Mega Minion; evolved-Goblin Cage; Lava Hound; Lightning; Skeleton Dragons; Guards; Arrows,58,2760,0.4,Card
+185,evolved-Royal Hogs; hero-Ice Golem; evolved-Royal Ghost; Three Musketeers; Hunter; Fireball; Barbarian Barrel; Heal Spirit,58,2642,0.8,Card
+186,evolved-Firecracker; hero-Knight; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Ice Spirit; The Log,58,1930,0.4,Card
+187,evolved-Goblin Drill; hero-Knight; evolved-Tesla; Goblin Demolisher; Poison; Fire Spirit; Skeletons; The Log,58,1485,1,Card
+188,evolved-Wall Breakers; Skeleton King; evolved-Skeleton Army; Goblin Drill; Fireball; Dart Goblin; The Log; Inferno Tower,58,1055,0.7,Card
+189,evolved-Witch; hero-Giant; evolved-Giant Snowball; Graveyard; Mini P.E.K.K.A; Bowler; Minions; Arrows,57.9,11850,3.2,Card
+190,evolved-Skeleton Barrel; hero-Goblins; evolved-Royal Ghost; Suspicious Bush; Rocket; Dart Goblin; Rascals; The Log,57.9,3917,1.1,Card
+191,evolved-Valkyrie; hero-Mega Minion; evolved-Zap; Lava Hound; Balloon; Fireball; Skeleton Dragons; Tombstone,57.9,2716,0.6,Card
+192,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Royal Recruits; Flying Machine; Goblin Cage; Zappies; Arrows; Electro Spirit,57.9,1740,2,Card
+193,evolved-Royal Hogs; hero-Magic Archer; evolved-Goblin Cage; Berserker; Fireball; Skeleton Dragons; Electro Spirit; Barbarian Barrel,57.9,1485,0.2,Card
+194,evolved-Barbarians; hero-Balloon; evolved-Zap; Lava Hound; Fireball; Skeleton Dragons; Mega Minion; Tombstone,57.9,738,0.9,Card
+195,evolved-Zap; hero-Balloon; hero-Mega Minion; Lava Hound; Barbarians; Fireball; Skeleton Dragons; Tombstone,57.9,725,0.9,Card
+196,evolved-Musketeer; hero-Balloon; evolved-Bats; Miner; Ice Golem; Barbarian Barrel; Giant Snowball; Bomb Tower,57.8,2308,0.2,Card
+197,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Mother Witch; Ronin; Electro Wizard; Bandit; Arrows,57.8,2024,0.3,Card
+198,evolved-Skeleton Barrel; hero-Musketeer; evolved-Mortar; Knight; Fireball; Minions; Skeletons; Barbarian Barrel,57.8,1032,0.1,Card
+199,evolved-Royal Hogs; Flying Machine; evolved-Royal Recruits; Fireball; Goblin Cage; Zappies; Arrows; Barbarian Barrel,57.8,642,0.7,Card
+200,Mortar; Skeleton Barrel; Cannon Cart; Fireball; Goblins; Minions; Rascals; Barbarian Barrel,57.8,147,0.6,Card
+201,evolved-Firecracker; Hog Rider; evolved-Valkyrie; Earthquake; Skeletons; Ice Spirit; The Log; Tesla,57.7,6305,1.1,Card
+202,evolved-Electro Dragon; hero-Balloon; evolved-Inferno Dragon; Lumberjack; Bowler; Tornado; Freeze; Barbarian Barrel,57.7,5600,0.5,Card
+203,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Royal Recruits; Flying Machine; Fireball; Goblin Cage; Zappies; Arrows,57.7,3872,0.5,Card
+204,evolved-Witch; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Minions; Guards; Arrows,57.7,2871,0.6,Card
+205,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Fireball; Dart Goblin; Minions; Skeletons; Barbarian Barrel,57.7,2505,0.2,Card
+206,evolved-Lumberjack; hero-Dark Prince; evolved-Electro Dragon; Golem; Skeleton Dragons; Tornado; Barbarian Barrel; Elixir Collector,57.7,2298,0.4,Card
+207,evolved-Furnace; hero-Berserker; evolved-Bats; Graveyard; Giant Skeleton; Poison; Goblin Hut; Barbarian Barrel,57.7,1630,0.6,Card
+208,evolved-Skeleton Barrel; Cannon Cart; evolved-Mortar; Fireball; Goblins; Minions; Rascals; Barbarian Barrel,57.7,870,0.8,Card
+209,evolved-Minion Horde; hero-Giant; evolved-Bats; Battle Ram; Three Musketeers; Goblin Gang; Zap; Elixir Collector,57.7,712,0.9,Card
+210,evolved-Wall Breakers; Mighty Miner; evolved-Skeleton Barrel; Rocket; Royal Recruits; Goblin Gang; Minions; Arrows,57.7,570,0.8,Card
+211,evolved-Elite Barbarians; hero-Berserker; evolved-Baby Dragon; Golem; Vines; Minions; Furnace; Barbarian Barrel,57.7,515,0.5,Card
+212,evolved-Lumberjack; hero-Mega Minion; evolved-Elite Barbarians; Golem; Night Witch; Bomber; Arrows; Zap,57.6,4698,0.7,Card
+213,evolved-Royal Hogs; hero-Bowler; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Fisherman; Zappies; Arrows,57.6,4419,0.3,Card
+214,evolved-Baby Dragon; hero-Mega Minion; evolved-Goblin Cage; Golem; Night Witch; Lightning; Tornado; Barbarian Barrel,57.6,1367,0.3,Card
+215,evolved-Baby Dragon; hero-Tombstone; evolved-Valkyrie; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,57.6,344,0.1,Card
+216,evolved-Zap; hero-Mini P.E.K.K.A; hero-Mega Minion; Goblin Giant; Sparky; Dark Prince; Electro Wizard; Rage,57.6,304,1.4,Card
+217,evolved-Executioner; Golden Knight; evolved-Inferno Dragon; Graveyard; Bowler; Zappies; Tornado; Freeze,57.5,23472,3.2,Card
+218,evolved-Battle Ram; hero-Magic Archer; evolved-Royal Ghost; P.E.K.K.A; Poison; Electro Wizard; Bandit; Zap,57.5,4302,0.7,Card
+219,evolved-Royal Hogs; Mighty Miner; evolved-Baby Dragon; Lightning; Skeletons; Electro Spirit; The Log; Cannon,57.5,4215,0.5,Card
+220,evolved-Firecracker; Hog Rider; evolved-Tesla; Ronin; Earthquake; Skeletons; Ice Spirit; The Log,57.5,3049,0.5,Card
+221,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Ice Spirit; Barbarian Barrel,57.5,2845,0.3,Card
+222,evolved-Skeletons; hero-Ice Golem; Hog Rider; Musketeer; Fireball; Ice Spirit; The Log; Cannon,57.5,2323,0.4,Card
+223,evolved-Royal Giant; Skeleton King; evolved-Witch; Lightning; Fisherman; Zappies; Barbarian Barrel; Tombstone,57.5,1975,1.3,Card
+224,evolved-Goblin Barrel; hero-Knight; evolved-Cannon; Rocket; Princess; Goblin Gang; Ice Spirit; The Log,57.5,1911,0.2,Card
+225,evolved-Elite Barbarians; hero-Tombstone; evolved-Musketeer; Void; Royal Ghost; Skeleton Dragons; Arrows; Electro Spirit,57.5,1490,0.6,Card
+226,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Hunter; Guards; Freeze; Barbarian Barrel,57.5,1436,0.3,Card
+227,evolved-Lumberjack; hero-Goblins; evolved-Mega Knight; Ram Rider; Spirit Empress; Fireball; Furnace; Zap,57.5,856,0.5,Card
+228,evolved-Electro Dragon; hero-Berserker; evolved-Baby Dragon; Elixir Golem; Barbarian Hut; Tornado; Skeletons; Barbarian Barrel,57.5,146,1.1,Card
+229,evolved-Elite Barbarians; hero-Mega Minion; evolved-Zap; Golem; Lumberjack; Night Witch; Bomber; Arrows,57.4,10078,1.4,Card
+230,evolved-Valkyrie; hero-Mega Minion; evolved-Zap; Lava Hound; Spirit Empress; Berserker; Fireball; Tombstone,57.4,3805,2.3,Card
+231,evolved-Furnace; Mighty Miner; evolved-Cannon; Hog Rider; Lightning; Skeletons; Electro Spirit; The Log,57.4,3155,0.6,Card
+232,evolved-Royal Hogs; Golden Knight; evolved-Goblin Cage; Flying Machine; Royal Recruits; Zappies; Arrows; Barbarian Barrel,57.4,3035,0.4,Card
+233,evolved-Lumberjack; hero-Mini P.E.K.K.A; evolved-Zap; Golem; Phoenix; Night Witch; Bomber; Arrows,57.3,6487,1.2,Card
+234,evolved-Princess; Mighty Miner; evolved-Cannon; Goblin Barrel; Rocket; Skeletons; Ice Spirit; The Log,57.3,1224,0,Card
+235,evolved-Royal Hogs; hero-Goblins; Archer Queen; Earthquake; Ice Spirit; Royal Delivery; The Log; Cannon,57.3,1193,0.1,Card
+236,evolved-Musketeer; hero-Barbarian Barrel; evolved-Skeletons; Balloon; Miner; Ice Golem; Giant Snowball; Bomb Tower,57.3,1042,0.5,Card
+237,evolved-Inferno Dragon; hero-Balloon; evolved-Goblin Cage; Miner; Fireball; Mega Minion; Ice Golem; Zap,57.2,4956,0.5,Card
+238,evolved-Battle Ram; hero-Dark Prince; evolved-Zap; P.E.K.K.A; Fireball; Electro Wizard; Bandit; Minions,57.2,1441,0.7,Card
+239,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,57.1,27342,3.2,Card
+240,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Ice Spirit; The Log,57.1,8964,0.4,Card
+241,evolved-Goblin Drill; hero-Magic Archer; evolved-Skeletons; Goblin Demolisher; Knight; Tornado; The Log; Bomb Tower,57.1,4436,0.6,Card
+242,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Prince; Bandit; Minions; Arrows; Zap,57.1,3256,0.7,Card
+243,evolved-Princess; hero-Knight; Goblin Barrel; Rocket; Goblin Gang; Ice Spirit; The Log; Inferno Tower,57.1,2453,0.6,Card
+244,evolved-Baby Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Ronin; Lightning; Tornado; Barbarian Barrel,57.1,1625,0.2,Card
+245,evolved-Battle Ram; hero-Valkyrie; evolved-Elite Barbarians; Mother Witch; Bandit; Zappies; Arrows; Heal Spirit,57,13408,0.8,Card
+246,evolved-Lumberjack; hero-Mega Minion; evolved-Zap; Golem; Night Witch; Ronin; Bomber; Arrows,57,2385,0.5,Card
+247,evolved-Baby Dragon; hero-Bowler; evolved-Inferno Dragon; Balloon; Lumberjack; Tornado; Freeze; Barbarian Barrel,57,1891,0.2,Card
+248,evolved-Witch; hero-Giant; evolved-Zap; Mini P.E.K.K.A; Dark Prince; Heal Spirit; Rage; Elixir Collector,57,1822,0.5,Card
+249,evolved-Goblin Drill; hero-Goblins; evolved-Giant Snowball; Ronin; Poison; Bomber; Fire Spirit; Cannon,57,1431,1,Card
+250,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Ronin; Hunter; Freeze; Barbarian Barrel,57,1372,0.2,Card
+251,evolved-Minion Horde; hero-Giant; evolved-Zap; Sparky; Mini P.E.K.K.A; Skeleton Army; Arrows; Bats,57,1359,0.3,Card
+252,evolved-Bats; hero-Giant; evolved-Zap; Sparky; Dark Prince; Skeleton Army; Electro Wizard; Arrows,57,505,0.1,Card
+253,evolved-Musketeer; hero-Ice Golem; evolved-Skeletons; Balloon; Miner; Barbarian Barrel; Giant Snowball; Bomb Tower,56.9,10168,1.9,Card
+254,evolved-Wizard; hero-Giant; evolved-Zap; Sparky; Mini P.E.K.K.A; Tornado; Skeletons; Heal Spirit,56.9,7408,2,Card
+255,evolved-Zap; hero-Giant; hero-Mega Minion; Prince; Dark Prince; Fireball; Bomber; Rage,56.9,6860,0.4,Card
+256,evolved-Valkyrie; hero-Balloon; evolved-Zap; Lava Hound; Spirit Empress; Fireball; Skeleton Dragons; Tombstone,56.9,5973,0.6,Card
+257,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Wall Breakers; Mother Witch; Dart Goblin; Vines; Rascals,56.9,3548,0.4,Card
+258,evolved-Lumberjack; hero-Mega Minion; evolved-Zap; Golem; Elite Barbarians; Night Witch; Bomber; Arrows,56.9,3270,0.6,Card
+259,evolved-Inferno Dragon; hero-Berserker; Little Prince; Rune Giant; Miner; Goblin Demolisher; Goblin Curse; Zap,56.9,2830,4.3,Card
+260,evolved-Battle Ram; hero-Magic Archer; evolved-Royal Ghost; Ronin; Fireball; Electro Wizard; Bandit; Zap,56.9,2446,0.4,Card
+261,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,56.9,2283,0.4,Card
+262,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Goblin Demolisher; Cannon Cart; Fireball; Minions; Electro Spirit,56.9,2030,2.5,Card
+263,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Prince; Bandit; Goblin Gang; Arrows; Bats,56.9,1406,0.3,Card
+264,evolved-Skeleton Barrel; hero-Bowler; evolved-Mortar; Fireball; Dart Goblin; Rascals; Skeletons; Barbarian Barrel,56.9,1357,0.2,Card
+265,evolved-Elite Barbarians; hero-Tombstone; evolved-Baby Dragon; Bowler; Lightning; Skeleton Dragons; Goblins; Tornado,56.9,576,0.5,Card
+266,evolved-Valkyrie; hero-Balloon; hero-Mega Minion; Lava Hound; Fireball; Skeleton Dragons; Zap; Tombstone,56.8,3557,0.3,Card
+267,evolved-Cannon; hero-Ice Golem; evolved-Ice Spirit; Hog Rider; Musketeer; Fireball; Skeletons; The Log,56.8,3179,0.6,Card
+268,evolved-Royal Hogs; hero-Ice Golem; evolved-Firecracker; Mini P.E.K.K.A; Fireball; Goblin Gang; Bats; The Log,56.8,1626,0.3,Card
+269,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Electro Wizard; Bandit; Heal Spirit,56.8,1231,0.6,Card
+270,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; P.E.K.K.A; Fireball; Electro Wizard; Minions; Zap,56.8,1136,0.6,Card
+271,evolved-Barbarians; hero-Musketeer; evolved-Giant Snowball; Hog Rider; Mortar; Earthquake; Minions; Skeletons,56.8,37,0.2,Card
+272,evolved-Skeleton Army; hero-Giant; evolved-Minion Horde; Sparky; Mini P.E.K.K.A; Arrows; Bats; Zap,56.7,1505,0.6,Card
+273,evolved-Battle Ram; Rune Giant; evolved-Zap; Three Musketeers; Ronin; Royal Ghost; Hunter; Elixir Collector,56.7,30,0.3,Card
+274,evolved-Musketeer; Mighty Miner; evolved-Inferno Dragon; Rune Giant; Berserker; Goblin Curse; Tornado; Zap,56.7,30,0.3,Card
+275,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Barbarian Barrel,56.6,50074,4.6,Card
+276,evolved-Zap; hero-Valkyrie; hero-Berserker; Lava Hound; Spirit Empress; Fireball; Skeleton Dragons; Tombstone,56.6,1560,0.3,Card
+277,evolved-Wall Breakers; hero-Knight; evolved-Bats; Miner; Fireball; Spear Goblins; The Log; Cannon,56.6,1284,0.3,Card
+278,evolved-Skeleton Barrel; hero-Goblins; evolved-Dart Goblin; Suspicious Bush; Rocket; Royal Ghost; Rascals; The Log,56.6,1259,0.4,Card
+279,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Royal Ghost; Hunter; Fisherman; Fireball; Skeletons; Electro Spirit,56.5,61004,8.7,Card
+280,evolved-Goblin Barrel; hero-Knight; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Inferno Tower,56.5,46937,4.4,Card
+281,evolved-Battle Ram; hero-Magic Archer; evolved-Royal Ghost; P.E.K.K.A; Fireball; Electro Wizard; Bandit; Zap,56.5,24259,4,Card
+282,evolved-Baby Dragon; hero-Tombstone; evolved-Knight; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,56.5,15103,1.9,Card
+283,evolved-Lumberjack; hero-Barbarian Barrel; evolved-Electro Dragon; Golem; Battle Healer; Skeleton Dragons; Tornado; Elixir Collector,56.5,12881,1.8,Card
+284,evolved-Goblin Barrel; Rocket; evolved-Valkyrie; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,56.5,9122,0.9,Card
+285,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Skeletons; Ice Spirit; Electro Spirit; The Log; Cannon,56.5,3146,0.4,Card
+286,evolved-Archers; Monk; evolved-Knight; Three Musketeers; Elite Barbarians; Heal Spirit; Rage; Elixir Collector,56.5,2489,0.3,Card
+287,evolved-P.E.K.K.A; hero-Balloon; evolved-Electro Dragon; Lumberjack; Ice Wizard; Tornado; Freeze; Barbarian Barrel,56.5,2041,0.2,Card
+288,evolved-Goblin Drill; hero-Magic Archer; evolved-Giant Snowball; Goblin Demolisher; Knight; Tornado; Skeletons; Bomb Tower,56.5,1842,0.8,Card
+289,evolved-Elite Barbarians; hero-Berserker; evolved-Royal Ghost; Three Musketeers; Hunter; Bandit; Zap; Elixir Collector,56.5,1359,0.9,Card
+290,evolved-P.E.K.K.A; hero-Barbarian Barrel; evolved-Baby Dragon; Ram Rider; Lightning; Electro Wizard; Bandit; Giant Snowball,56.5,1161,0.2,Card
+291,evolved-Musketeer; hero-Giant; evolved-Valkyrie; Mini P.E.K.K.A; Baby Dragon; Witch; Fireball; The Log,56.5,108,0,Card
+292,evolved-Firecracker; hero-Knight; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Royal Delivery; The Log,56.4,7083,0.6,Card
+293,evolved-Barbarians; hero-Mega Minion; evolved-Zap; Lava Hound; Balloon; Fireball; Skeleton Dragons; Tombstone,56.4,1367,0.9,Card
+294,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Fire Spirit; Skeletons; Ice Spirit; The Log; Cannon,56.4,1199,0.1,Card
+295,evolved-Furnace; hero-Barbarian Barrel; evolved-Bats; Graveyard; Giant Skeleton; Berserker; Poison; Goblin Hut,56.4,1141,0.3,Card
+296,evolved-Executioner; hero-Valkyrie; evolved-Inferno Dragon; Graveyard; Bowler; Zappies; Tornado; Freeze,56.4,1029,0.4,Card
+297,evolved-Goblin Barrel; Wall Breakers; evolved-Skeleton Army; Valkyrie; Princess; Dart Goblin; Ice Spirit; Cannon,56.4,1025,0.2,Card
+298,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Skeletons; Ronin; Fireball; Skeleton Dragons; Goblin Hut; Electro Spirit,56.3,5354,0.7,Card
+299,evolved-Musketeer; Hog Rider; evolved-Cannon; Ronin; Fireball; Skeletons; Ice Spirit; The Log,56.3,2071,0.3,Card
+300,evolved-Baby Dragon; hero-Balloon; evolved-Inferno Dragon; Bowler; Knight; Tornado; Freeze; Barbarian Barrel,56.3,1952,0.2,Card
+301,evolved-Inferno Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Mother Witch; Lightning; Tornado; Electro Spirit,56.3,1468,0.2,Card
+302,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Cannon Cart; Mother Witch; Ronin; Electro Wizard; Barbarian Barrel,56.3,1413,0.2,Card
+303,evolved-Goblin Barrel; hero-Knight; evolved-Skeleton Army; Princess; Dart Goblin; Electro Spirit; The Log; Inferno Tower,56.3,1374,0.5,Card
+304,evolved-Elite Barbarians; Monk; evolved-Knight; Three Musketeers; Archers; Heal Spirit; Rage; Elixir Collector,56.3,1322,1.4,Card
+305,evolved-Inferno Dragon; hero-Balloon; evolved-Valkyrie; Lava Hound; Fireball; Skeleton Dragons; Zap; Tombstone,56.3,1191,0.4,Card
+306,evolved-Skeletons; hero-Berserker; Goblinstein; Graveyard; Goblin Demolisher; Poison; Barbarian Barrel; Tesla,56.3,1020,0.3,Card
+307,evolved-Knight; hero-Mega Minion; Little Prince; Ram Rider; P.E.K.K.A; Arrows; Zap; Barbarian Barrel,56.3,552,0.4,Card
+308,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,56.2,11728,2,Card
+309,evolved-Royal Hogs; Goblinstein; evolved-Archers; Lightning; Skeletons; Electro Spirit; Barbarian Barrel; Bomb Tower,56.2,8451,0.8,Card
+310,evolved-Royal Hogs; hero-Berserker; evolved-Furnace; Royal Ghost; Fireball; Goblin Hut; Electro Spirit; Barbarian Barrel,56.2,8283,0.8,Card
+311,evolved-Goblin Cage; Golden Knight; evolved-Royal Recruits; Royal Hogs; Flying Machine; Fireball; Zappies; Barbarian Barrel,56.2,2518,1.6,Card
+312,evolved-Inferno Dragon; hero-Bowler; evolved-Knight; Graveyard; Baby Dragon; Ice Wizard; Tornado; Freeze,56.2,1802,0.4,Card
+313,evolved-Wall Breakers; hero-Berserker; evolved-Goblin Barrel; Valkyrie; Dart Goblin; Fire Spirit; Ice Spirit; Cannon,56.2,379,0.1,Card
+314,evolved-Archers; hero-Knight; evolved-Tesla; X-Bow; Fireball; Skeletons; Electro Spirit; The Log,56.1,104535,9,Card
+315,evolved-Royal Hogs; Monk; evolved-Archers; Fireball; Skeleton Dragons; Goblin Hut; Electro Spirit; Barbarian Barrel,56.1,2452,0.3,Card
+316,evolved-Wall Breakers; hero-Goblins; evolved-Goblin Barrel; Valkyrie; Dart Goblin; Fire Spirit; Ice Spirit; Cannon,56.1,1486,0.3,Card
+317,evolved-Archers; X-Bow; evolved-Tesla; Knight; Fireball; Skeletons; Ice Spirit; The Log,56.1,1057,0.1,Card
+318,evolved-Royal Hogs; hero-Ice Golem; evolved-Elite Barbarians; Firecracker; Fireball; Goblin Gang; Bats; The Log,56.1,289,0.1,Card
+319,evolved-Archers; hero-Knight; evolved-Tesla; X-Bow; Fireball; Skeletons; Ice Spirit; The Log,56,15697,1.9,Card
+320,evolved-Royal Hogs; hero-Berserker; evolved-Royal Ghost; Fireball; Goblin Hut; Furnace; Electro Spirit; Barbarian Barrel,56,12523,0.8,Card
+321,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Hunter; Royal Ghost; Fisherman; Fireball; Skeletons; Electro Spirit,56,4961,0.7,Card
+322,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; The Log,56,2706,0.9,Card
+323,evolved-Witch; hero-Giant; evolved-Giant Snowball; Graveyard; Bowler; Ronin; Minions; Arrows,56,2669,0.6,Card
+324,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Ronin; Earthquake; Ice Spirit; Royal Delivery; The Log,56,1086,0.1,Card
+325,evolved-Mega Knight; Little Prince; evolved-Zap; Ram Rider; Spirit Empress; Royal Ghost; Bandit; Arrows,56,293,0.4,Card
+326,evolved-Electro Dragon; hero-Berserker; evolved-Elite Barbarians; Golem; Skeleton Dragons; Tornado; Barbarian Barrel; Elixir Collector,55.9,23682,2.2,Card
+327,evolved-Musketeer; hero-Balloon; evolved-Giant Snowball; Miner; Ice Golem; Skeletons; Barbarian Barrel; Bomb Tower,55.9,11208,5.8,Card
+328,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Rocket; Goblin Gang; Ice Spirit; The Log; Tesla,55.9,1921,0.2,Card
+329,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Cannon Cart; Fireball; Goblin Gang; Ice Wizard; Barbarian Barrel,55.9,1833,0.6,Card
+330,evolved-Baby Dragon; hero-Bowler; evolved-Goblin Cage; Electro Giant; Lightning; Tornado; Skeletons; Barbarian Barrel,55.9,1411,0.2,Card
+331,evolved-Valkyrie; hero-Tombstone; evolved-Zap; Lava Hound; Spirit Empress; Berserker; Fireball; Skeleton Dragons,55.8,5633,1.1,Card
+332,evolved-Battle Ram; Golden Knight; evolved-Mega Knight; Mother Witch; Royal Ghost; Bandit; Zappies; Arrows,55.8,4863,0.7,Card
+333,evolved-Musketeer; hero-Giant; evolved-Giant Snowball; Graveyard; Night Witch; Bowler; Guards; Arrows,55.8,4127,1.1,Card
+334,evolved-Furnace; hero-Goblins; evolved-Tesla; Hog Rider; Ronin; Lightning; Electro Spirit; Barbarian Barrel,55.8,2544,0.5,Card
+335,evolved-Princess; hero-Knight; evolved-Tesla; Goblin Barrel; Rocket; Skeletons; Electro Spirit; The Log,55.8,2393,0.4,Card
+336,evolved-Princess; Goblin Barrel; evolved-Valkyrie; Rocket; Goblin Gang; Ice Spirit; The Log; Inferno Tower,55.8,1970,0.1,Card
+337,evolved-Musketeer; hero-Knight; evolved-Skeletons; Hog Rider; Fireball; Ice Spirit; The Log; Cannon,55.8,1701,0.3,Card
+338,evolved-Cannon; hero-Ice Golem; evolved-Skeletons; Hog Rider; Musketeer; Fireball; Ice Spirit; The Log,55.7,41544,7.7,Card
+339,evolved-Skeleton Army; hero-Balloon; evolved-Inferno Dragon; Lava Hound; Minions; Bomber; Arrows; Giant Snowball,55.7,5453,0.9,Card
+340,evolved-Archers; hero-Knight; X-Bow; Fireball; Skeletons; Electro Spirit; The Log; Tesla,55.7,3268,0.4,Card
+341,evolved-Goblin Drill; hero-Magic Archer; evolved-Giant Snowball; Goblin Demolisher; Knight; Poison; Skeletons; Tesla,55.7,1513,1,Card
+342,evolved-Royal Giant; Monk; evolved-Hunter; Fisherman; Fireball; Guards; Electro Spirit; The Log,55.7,1464,0.6,Card
+343,evolved-Goblin Barrel; hero-Knight; evolved-Skeletons; Rocket; Princess; Goblin Gang; The Log; Inferno Tower,55.7,1429,0.2,Card
+344,evolved-Furnace; hero-Bowler; evolved-Knight; Graveyard; Poison; Skeletons; Ice Spirit; Tesla,55.7,1303,0.2,Card
+345,evolved-Goblin Barrel; hero-Valkyrie; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Inferno Tower,55.7,1092,0.2,Card
+346,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log,55.6,61933,8,Card
+347,evolved-Barbarians; hero-Tombstone; evolved-Zap; Lava Hound; Miner; Phoenix; Flying Machine; Goblin Curse,55.6,6079,1.1,Card
+348,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Musketeer; Fireball; Goblin Gang; Minions; The Log,55.6,2228,0.2,Card
+349,evolved-Wizard; Skeleton King; evolved-Skeletons; Elixir Golem; Void; Night Witch; Arrows; Rage,55.6,1711,0.8,Card
+350,evolved-Skeletons; hero-Balloon; hero-Ice Golem; Miner; Musketeer; Barbarian Barrel; Giant Snowball; Bomb Tower,55.6,1393,0.1,Card
+351,evolved-Goblin Barrel; Rocket; evolved-Knight; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,55.6,1339,0.4,Card
+352,evolved-Goblin Barrel; Wall Breakers; evolved-Valkyrie; Princess; Goblin Gang; Dart Goblin; Ice Spirit; Cannon,55.6,1294,0.3,Card
+353,evolved-Ice Spirit; hero-Musketeer; Hog Rider; Fireball; Ice Golem; Skeletons; The Log; Cannon,55.6,1008,0.6,Card
+354,evolved-Cannon; Hog Rider; evolved-Skeletons; Musketeer; Fireball; Ice Golem; Ice Spirit; The Log,55.6,1006,0.5,Card
+355,evolved-Musketeer; hero-Knight; evolved-Cannon; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,55.5,4771,0.5,Card
+356,evolved-Baby Dragon; Golem; evolved-Valkyrie; Battle Healer; Ronin; Vines; Zappies; Elixir Collector,55.5,3489,0.4,Card
+357,evolved-Skeletons; hero-Musketeer; evolved-Ice Spirit; Hog Rider; Fireball; Ice Golem; The Log; Cannon,55.5,2252,1.4,Card
+358,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Ice Spirit; Barbarian Barrel,55.5,2168,0.2,Card
+359,evolved-Skeletons; hero-Ice Golem; evolved-Ice Spirit; Hog Rider; Musketeer; Fireball; The Log; Cannon,55.5,2050,0.3,Card
+360,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Fireball; Skeleton Dragons; Dart Goblin; Skeletons; Barbarian Barrel,55.5,1335,0.2,Card
+361,evolved-Wizard; hero-Giant; evolved-Zap; Sparky; Ronin; Tornado; Skeletons; Heal Spirit,55.5,1305,0.4,Card
+362,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; P.E.K.K.A; Lumberjack; Mother Witch; Electro Wizard; Arrows,55.5,1173,0.3,Card
+363,evolved-Knight; hero-Barbarian Barrel; evolved-Goblin Cage; Graveyard; Poison; Skeleton Dragons; Ice Wizard; Skeletons,55.5,1055,0.2,Card
+364,evolved-Royal Hogs; hero-Berserker; evolved-Royal Recruits; Flying Machine; Goblin Cage; Zappies; Arrows; Barbarian Barrel,55.5,622,0.7,Card
+365,evolved-Royal Ghost; hero-Wizard; evolved-Zap; Ram Rider; P.E.K.K.A; Void; Bandit; Electro Spirit,55.5,508,0.3,Card
+366,evolved-Wizard; Boss Bandit; evolved-Giant Snowball; Ram Rider; Ronin; Lightning; Royal Ghost; Barbarian Barrel,55.4,3301,0.7,Card
+367,evolved-Baby Dragon; hero-Barbarian Barrel; evolved-Giant Snowball; Ram Rider; P.E.K.K.A; Lightning; Electro Wizard; Bandit,55.4,2773,0.4,Card
+368,evolved-Elite Barbarians; hero-Giant; evolved-Zap; Sparky; Dark Prince; Mother Witch; Vines; Minions,55.4,2210,0.3,Card
+369,evolved-Furnace; hero-Barbarian Barrel; evolved-Knight; Graveyard; Berserker; Poison; Goblin Hut; Ice Spirit,55.4,1313,0.8,Card
+370,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Fire Spirit; Skeletons; Royal Delivery; Bomb Tower,55.4,1147,0.3,Card
+371,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Ronin; Fireball; Minions; Rascals; Barbarian Barrel,55.3,21032,1.8,Card
+372,evolved-Firecracker; Boss Bandit; evolved-Witch; Ram Rider; Baby Dragon; Valkyrie; Barbarian Barrel; Tombstone,55.3,8306,0.4,Card
+373,evolved-Battle Ram; hero-Magic Archer; evolved-P.E.K.K.A; Royal Ghost; Fireball; Electro Wizard; Bandit; Zap,55.3,7135,1.2,Card
+374,evolved-Musketeer; hero-Ice Golem; evolved-Giant Snowball; Balloon; Miner; Skeletons; Barbarian Barrel; Bomb Tower,55.3,4098,0.8,Card
+375,evolved-Cannon; hero-Musketeer; evolved-Ice Spirit; Hog Rider; Fireball; Ice Golem; Skeletons; The Log,55.3,3064,1.9,Card
+376,evolved-Cannon; hero-Knight; evolved-Skeletons; Hog Rider; Musketeer; Fireball; Ice Spirit; The Log,55.3,1650,0.2,Card
+377,evolved-Royal Hogs; hero-Goblins; evolved-Goblin Cage; Mother Witch; Ronin; Fireball; Skeleton Dragons; The Log,55.2,4371,0.6,Card
+378,evolved-Goblin Barrel; hero-Knight; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Cannon,55.2,3805,0.7,Card
+379,evolved-Cannon; hero-Knight; hero-Musketeer; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,55.2,2603,0.3,Card
+380,evolved-Elite Barbarians; hero-Dark Prince; evolved-Zap; Goblin Giant; Sparky; Electro Wizard; Heal Spirit; Rage,55.2,2334,10.5,Card
+381,evolved-Skeleton Army; hero-Mini P.E.K.K.A; evolved-Executioner; Elixir Golem; Goblin Machine; Night Witch; Vines; Freeze,55.2,1966,0.7,Card
+382,evolved-Wall Breakers; hero-Goblins; evolved-Skeleton Barrel; Rocket; Berserker; Dart Goblin; Fire Spirit; Cannon,55.2,1377,0.3,Card
+383,evolved-Goblin Barrel; hero-Valkyrie; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Cannon,55.2,1085,0.2,Card
+384,evolved-Cannon; hero-Musketeer; evolved-Skeletons; Hog Rider; Lightning; Ice Golem; Ice Spirit; The Log,55.2,1022,0.1,Card
+385,evolved-Skeleton Barrel; hero-Valkyrie; evolved-Dart Goblin; Suspicious Bush; Rocket; Goblins; Rascals; The Log,55.2,536,0.5,Card
+386,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Ronin; Fireball; Dart Goblin; Minions; Barbarian Barrel,55.1,8224,0.7,Card
+387,evolved-Elite Barbarians; hero-Giant; evolved-Zap; Sparky; Dark Prince; Electro Wizard; Heal Spirit; Rage,55.1,6637,1.3,Card
+388,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Goblin Gang; Dart Goblin; Ice Spirit; The Log; Inferno Tower,55.1,3454,0.3,Card
+389,evolved-Goblin Barrel; hero-Knight; evolved-Skeleton Army; Rocket; Princess; Ice Spirit; The Log; Inferno Tower,55.1,2286,0.2,Card
+390,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Rocket; Goblin Gang; Electro Spirit; The Log; Inferno Tower,55.1,2256,0.2,Card
+391,evolved-Mortar; hero-Goblins; evolved-Minion Horde; Miner; Cannon Cart; Skeleton Dragons; Rascals; Arrows,55.1,2165,0.9,Card
+392,evolved-Princess; hero-Knight; evolved-Ice Spirit; Goblin Barrel; Rocket; Goblin Gang; The Log; Inferno Tower,55.1,1469,0.9,Card
+393,evolved-Barbarians; hero-Balloon; evolved-Inferno Dragon; Lava Hound; Miner; Skeleton Dragons; Arrows; Zap,55.1,1442,0.6,Card
+394,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Prince; Bandit; Arrows; Bats; Zap,55.1,1366,0.3,Card
+395,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Mother Witch; Ronin; Skeleton Dragons; Electro Wizard; Arrows,55.1,1311,0.2,Card
+396,evolved-P.E.K.K.A; hero-Magic Archer; evolved-Royal Ghost; Battle Ram; Fireball; Electro Wizard; Bandit; Zap,55.1,868,1.1,Card
+397,evolved-Skeleton Barrel; hero-Bowler; evolved-Mortar; Berserker; Fireball; Minions; Rascals; Electro Spirit,55,6899,4.2,Card
+398,evolved-Witch; hero-Berserker; evolved-Giant Snowball; Graveyard; Giant; Bowler; Zappies; Arrows,55,3805,1.9,Card
+399,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Goblin Gang; Dart Goblin; Ice Spirit; The Log; Cannon,55,3183,0.8,Card
+400,evolved-Bomber; hero-Bowler; evolved-Royal Recruits; Electro Giant; Spirit Empress; Arrows; Tornado; Cannon,55,2626,0.3,Card
+401,evolved-Archers; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Barbarians; Minions; Arrows,55,1475,0.2,Card
+402,evolved-Skeleton Barrel; hero-Berserker; evolved-Royal Ghost; Suspicious Bush; Rocket; Dart Goblin; Rascals; The Log,55,1359,0.4,Card
+403,evolved-Skeletons; hero-Knight; hero-Musketeer; Hog Rider; Fireball; Ice Spirit; The Log; Cannon,55,1201,0.2,Card
+404,evolved-Royal Hogs; hero-Ice Golem; evolved-Bats; Mini P.E.K.K.A; Firecracker; Fireball; Goblin Gang; The Log,55,1028,0.3,Card
+405,evolved-Archers; X-Bow; evolved-Tesla; Ronin; Fireball; Skeletons; Electro Spirit; The Log,54.9,13928,1.7,Card
+406,evolved-Battle Ram; hero-Magic Archer; evolved-P.E.K.K.A; Royal Ghost; Poison; Electro Wizard; Bandit; Zap,54.9,2736,0.5,Card
+407,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Ram Rider; Lightning; Royal Ghost; Guards; Barbarian Barrel,54.9,1740,0.9,Card
+408,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Goblin Demolisher; Poison; Fire Spirit; Skeletons; Cannon,54.9,1641,0.7,Card
+409,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Skeleton Army; Princess; Ice Spirit; The Log; Inferno Tower,54.9,1452,0.2,Card
+410,evolved-Firecracker; Hog Rider; evolved-Minion Horde; Giant Skeleton; Barbarians; Lightning; Guards; The Log,54.9,885,1.1,Card
+411,evolved-Wizard; hero-Mini P.E.K.K.A; evolved-Zap; Giant; Sparky; Vines; Tornado; Heal Spirit,54.8,10115,4.5,Card
+412,evolved-Witch; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Mini P.E.K.K.A; Minions; Arrows,54.8,8165,1.8,Card
+413,evolved-Royal Giant; Hunter; evolved-Royal Ghost; Fisherman; Fireball; Skeletons; Electro Spirit; The Log,54.8,2642,0.6,Card
+414,evolved-Elite Barbarians; hero-Berserker; evolved-Zap; Golem; Phoenix; Night Witch; Bomber; Arrows,54.8,2180,0.7,Card
+415,evolved-Battle Ram; hero-Valkyrie; evolved-Elite Barbarians; Mother Witch; Ronin; Zappies; Arrows; Heal Spirit,54.8,1508,0.2,Card
+416,evolved-Royal Hogs; hero-Wizard; evolved-Skeletons; Ronin; Fireball; Goblin Hut; Electro Spirit; Barbarian Barrel,54.8,1470,0.2,Card
+417,evolved-Royal Giant; Ronin; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; The Log,54.8,1435,0.5,Card
+418,evolved-Barbarians; hero-Balloon; evolved-Inferno Dragon; Lava Hound; Void; Bomber; Arrows; Giant Snowball,54.8,1422,0.2,Card
+419,evolved-Archers; hero-Valkyrie; evolved-Tesla; X-Bow; Fireball; Skeletons; Electro Spirit; The Log,54.8,1229,0.8,Card
+420,evolved-Skeleton Barrel; hero-Mini P.E.K.K.A; evolved-Lumberjack; Dark Prince; Furnace; Zappies; Bats; Zap,54.7,8021,0.3,Card
+421,evolved-Goblin Barrel; hero-Goblins; evolved-Tesla; Rocket; Knight; Princess; Electro Spirit; The Log,54.7,2074,0.2,Card
+422,evolved-Battle Ram; hero-Tombstone; evolved-Musketeer; Royal Ghost; Skeleton Dragons; Bandit; Arrows; Electro Spirit,54.7,1813,0.8,Card
+423,evolved-Valkyrie; Goblin Barrel; Rocket; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,54.7,1773,0.1,Card
+424,evolved-Zap; hero-Giant; hero-Mega Minion; Prince; Dark Prince; Lightning; Bomber; Rage,54.7,1660,0.3,Card
+425,evolved-Baby Dragon; hero-Bowler; evolved-Cannon; Electro Giant; Berserker; Lightning; Tornado; Barbarian Barrel,54.7,1307,0.8,Card
+426,evolved-Musketeer; hero-Ice Golem; evolved-Skeletons; Hog Rider; Fireball; Electro Spirit; The Log; Cannon,54.7,1180,0.2,Card
+427,evolved-Wizard; hero-Giant; evolved-Zap; Sparky; Mini P.E.K.K.A; Vines; Tornado; Heal Spirit,54.7,1062,0.3,Card
+428,evolved-Goblin Barrel; hero-Magic Archer; evolved-Mega Knight; Battle Healer; Witch; Valkyrie; Tornado; Zap,54.7,128,0.1,Card
+429,evolved-Furnace; hero-Berserker; evolved-Knight; Graveyard; Poison; Goblin Hut; Ice Spirit; Barbarian Barrel,54.6,8047,0.7,Card
+430,evolved-Archers; Goblinstein; evolved-Skeletons; Graveyard; Poison; Ice Spirit; Barbarian Barrel; Bomb Tower,54.6,4229,6.1,Card
+431,evolved-Cannon; hero-Musketeer; evolved-Skeletons; Hog Rider; Fireball; Ice Golem; Electro Spirit; The Log,54.6,2255,0.3,Card
+432,evolved-Royal Hogs; Archer Queen; evolved-Ice Spirit; Earthquake; Skeletons; Royal Delivery; The Log; Cannon,54.6,1634,1,Card
+433,evolved-Musketeer; hero-Berserker; evolved-Bats; Balloon; Miner; Barbarian Barrel; Giant Snowball; Bomb Tower,54.6,1582,0.7,Card
+434,evolved-Baby Dragon; hero-Valkyrie; evolved-Zap; Lava Hound; Spirit Empress; Fireball; Skeletons; Tombstone,54.6,1376,0.7,Card
+435,evolved-Inferno Dragon; hero-Balloon; hero-Mega Minion; Miner; Fireball; Goblin Cage; Ice Golem; Zap,54.6,765,0.9,Card
+436,evolved-Electro Dragon; hero-Tombstone; evolved-Baby Dragon; Elixir Golem; Battle Healer; Mirror; Tornado; Barbarian Barrel,54.6,491,0.2,Card
+437,evolved-Royal Hogs; Archer Queen; evolved-Skeletons; Earthquake; Ice Spirit; Royal Delivery; The Log; Cannon,54.5,3609,0.5,Card
+438,evolved-Musketeer; Hog Rider; evolved-Skeletons; Fireball; Ice Golem; Ice Spirit; The Log; Cannon,54.5,2803,0.4,Card
+439,evolved-Firecracker; hero-Knight; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,54.5,1649,0.3,Card
+440,evolved-Battle Ram; hero-Magic Archer; evolved-Zap; P.E.K.K.A; Royal Ghost; Fireball; Electro Wizard; Bandit,54.5,1368,0.7,Card
+441,evolved-Goblin Drill; hero-Knight; hero-Magic Archer; Goblin Demolisher; Tornado; Skeletons; The Log; Bomb Tower,54.5,1157,0.8,Card
+442,evolved-Baby Dragon; hero-Knight; evolved-Goblin Cage; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,54.4,3360,0.4,Card
+443,evolved-Goblin Barrel; Mighty Miner; evolved-Dart Goblin; Wall Breakers; Fire Spirit; Skeletons; Electro Spirit; Cannon,54.4,3341,0.4,Card
+444,evolved-Furnace; hero-Berserker; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,54.4,2602,0.2,Card
+445,evolved-Royal Hogs; hero-Dark Prince; evolved-Archers; Lightning; Skeletons; Electro Spirit; Barbarian Barrel; Tesla,54.4,1827,0.3,Card
+446,evolved-Royal Giant; Royal Ghost; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; The Log,54.4,1137,0.4,Card
+447,evolved-Witch; hero-Valkyrie; hero-Berserker; Golem; Lightning; Skeleton Dragons; Tornado; Tombstone,54.4,1032,0.5,Card
+448,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Rocket; Goblin Gang; Ice Spirit; The Log; Inferno Tower,54.3,28328,2.7,Card
+449,evolved-Archers; hero-Knight; evolved-Tesla; X-Bow; Rocket; Skeletons; Electro Spirit; The Log,54.3,9840,0.8,Card
+450,evolved-Royal Giant; Monk; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; The Log,54.3,4742,1.8,Card
+451,evolved-Skeleton Army; Skeleton King; evolved-Wizard; Elixir Golem; Void; Night Witch; Goblin Curse; Rage,54.3,1996,1,Card
+452,evolved-Wall Breakers; hero-Goblins; evolved-Minion Horde; Miner; Berserker; Princess; The Log; Inferno Tower,54.3,1300,0.8,Card
+453,evolved-Inferno Dragon; hero-Mega Minion; evolved-Goblin Cage; Balloon; Miner; Fireball; Ice Golem; Zap,54.3,1198,0.3,Card
+454,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Furnace; Flying Machine; Ronin; Royal Recruits; Zappies; Arrows,54.3,1146,0.2,Card
+455,evolved-Goblin Barrel; hero-Berserker; evolved-Skeleton Army; Wall Breakers; Princess; Dart Goblin; Ice Spirit; Cannon,54.3,1099,0.6,Card
+456,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,54.2,22895,2,Card
+457,evolved-Goblin Drill; hero-Knight; evolved-Giant Snowball; Poison; Bomber; Fire Spirit; Skeletons; Cannon,54.2,13113,8.9,Card
+458,evolved-Goblin Drill; hero-Knight; evolved-Giant Snowball; Goblin Demolisher; Poison; Fire Spirit; Skeletons; Tesla,54.2,6452,4.4,Card
+459,evolved-Firecracker; Hog Rider; evolved-Tesla; Ronin; Earthquake; Skeletons; Electro Spirit; The Log,54.2,2511,0.2,Card
+460,evolved-Wizard; hero-Giant; evolved-Zap; Sparky; Mini P.E.K.K.A; Dark Prince; Tornado; Heal Spirit,54.2,2344,0.4,Card
+461,evolved-Executioner; hero-Goblins; evolved-Ice Spirit; Hog Rider; Rocket; Ronin; Tornado; The Log,54.2,1646,1,Card
+462,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Rocket; Goblin Gang; Ice Spirit; The Log; Inferno Tower,54.2,1398,0.2,Card
+463,evolved-Valkyrie; Goblin Barrel; evolved-Tesla; Rocket; Princess; Goblin Gang; Ice Spirit; The Log,54.2,1256,0,Card
+464,evolved-Cannon; Archer Queen; evolved-Skeletons; Royal Hogs; Earthquake; Ice Spirit; Royal Delivery; The Log,54.2,1155,0.1,Card
+465,evolved-Inferno Dragon; hero-Balloon; Skeleton King; Giant Skeleton; Skeleton Army; Arrows; Bats; Freeze,54.2,795,0.2,Card
+466,evolved-Musketeer; hero-Ice Golem; evolved-Ice Spirit; Hog Rider; Fireball; Skeletons; The Log; Cannon,54.1,3109,2,Card
+467,evolved-Cannon; hero-Ice Golem; Hog Rider; Musketeer; Fireball; Skeletons; Ice Spirit; The Log,54.1,2689,0.5,Card
+468,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; P.E.K.K.A; Mother Witch; Fireball; Electro Wizard; Zap,54.1,2245,0.6,Card
+469,evolved-Archers; hero-Knight; evolved-Tesla; X-Bow; Rocket; Skeletons; Ice Spirit; The Log,54.1,1474,0.2,Card
+470,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Royal Ghost; Lightning; Hunter; Fisherman; Skeletons; Electro Spirit,54.1,1409,0.3,Card
+471,evolved-Archers; X-Bow; evolved-Tesla; Knight; Fireball; Skeletons; Electro Spirit; The Log,54.1,1219,0.8,Card
+472,evolved-Cannon; Archer Queen; Royal Hogs; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log,54.1,1122,0.1,Card
+473,evolved-Goblin Barrel; hero-Valkyrie; evolved-Skeleton Army; Wall Breakers; Princess; Dart Goblin; Ice Spirit; Cannon,54,21584,4.8,Card
+474,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Earthquake; Fire Spirit; Skeletons; Royal Delivery; The Log,54,15483,2,Card
+475,evolved-Goblin Barrel; hero-Knight; Rocket; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,54,11480,1.1,Card
+476,evolved-Elite Barbarians; Golem; evolved-Zap; Lumberjack; Phoenix; Night Witch; Bomber; Arrows,54,4575,0.6,Card
+477,evolved-Elite Barbarians; hero-Berserker; evolved-Zap; Lava Hound; Rune Giant; Inferno Dragon; Skeleton Dragons; Arrows,54,3239,0.3,Card
+478,evolved-Royal Hogs; hero-Berserker; evolved-Baby Dragon; Lightning; Skeletons; Electro Spirit; The Log; Cannon,54,2075,0.3,Card
+479,evolved-Goblin Cage; hero-Barbarian Barrel; evolved-Royal Recruits; Royal Hogs; Flying Machine; Ronin; Zappies; Arrows,54,1616,0.4,Card
+480,evolved-Archers; hero-Knight; evolved-Skeletons; X-Bow; Fireball; Electro Spirit; The Log; Tesla,54,1477,0.2,Card
+481,evolved-Battle Ram; Valkyrie; evolved-Elite Barbarians; Mother Witch; Bandit; Zappies; Arrows; Heal Spirit,54,272,0.1,Card
+482,evolved-Skeleton Barrel; hero-Knight; evolved-Valkyrie; Mortar; Fireball; Goblin Gang; Dart Goblin; The Log,54,50,0.2,Card
+483,evolved-Goblin Barrel; hero-Goblins; evolved-Valkyrie; Wall Breakers; Rocket; Dart Goblin; Fire Spirit; Ice Spirit,53.9,35016,3.3,Card
+484,evolved-Cannon; hero-Musketeer; evolved-Skeletons; Hog Rider; Fireball; Ice Golem; Ice Spirit; The Log,53.9,26456,1.7,Card
+485,evolved-Royal Giant; Monk; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,53.9,3923,4.2,Card
+486,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Hunter; Ronin; Fisherman; Fireball; Skeletons; Electro Spirit,53.9,2685,0.4,Card
+487,evolved-Elite Barbarians; Boss Bandit; evolved-Minion Horde; Hog Rider; Executioner; Guards; Freeze; Zap,53.9,1950,0.3,Card
+488,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Ronin; Royal Ghost; Hunter; Freeze,53.9,1209,0.2,Card
+489,evolved-Lumberjack; hero-Balloon; evolved-Baby Dragon; Inferno Dragon; Bowler; Tornado; Freeze; Barbarian Barrel,53.9,516,0.3,Card
+490,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Ronin; Fireball; Minions; Rascals; Electro Spirit,53.8,10367,0.9,Card
+491,evolved-Skeleton Army; Skeleton King; evolved-Executioner; Elixir Golem; Void; Night Witch; Goblin Curse; Rage,53.8,3284,0.8,Card
+492,evolved-Battle Ram; hero-Wizard; evolved-Elite Barbarians; Giant Skeleton; Mother Witch; Vines; Zappies; Barbarian Barrel,53.8,3181,0.6,Ultimate Champion
+493,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; P.E.K.K.A; Magic Archer; Fireball; Electro Wizard; Zap,53.8,2468,0.4,Card
+494,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Rocket; Princess; Goblin Gang; The Log; Inferno Tower,53.8,2277,0.3,Card
+495,evolved-Princess; hero-Knight; evolved-Tesla; Goblin Barrel; Rocket; Goblin Gang; Ice Spirit; The Log,53.8,1769,0.1,Card
+496,evolved-Royal Hogs; hero-Berserker; evolved-Goblin Cage; Flying Machine; Royal Recruits; Zappies; Arrows; Barbarian Barrel,53.8,902,1.2,Card
+497,evolved-Elite Barbarians; Boss Bandit; evolved-Giant Snowball; Hog Rider; Lightning; Executioner; Guards; Barbarian Barrel,53.8,355,0.3,Card
+498,evolved-Mortar; Little Prince; evolved-Knight; Rocket; Tornado; Skeletons; Electro Spirit; The Log,53.8,266,0.4,Card
+499,evolved-Skeleton Barrel; Skeleton King; evolved-Minion Horde; Mortar; Cannon Cart; Goblin Gang; Dart Goblin; Arrows,53.8,52,0.2,Card
+500,evolved-Musketeer; hero-Ice Golem; evolved-Cannon; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,53.7,72682,13.5,Card
+501,evolved-Musketeer; hero-Ice Golem; evolved-Skeletons; Hog Rider; Fireball; Ice Spirit; The Log; Cannon,53.7,23440,4.4,Card
+502,evolved-Musketeer; hero-Ice Golem; evolved-Cannon; Hog Rider; Lightning; Skeletons; Ice Spirit; The Log,53.7,2732,0.5,Card
+503,evolved-Royal Hogs; hero-Musketeer; evolved-Cannon; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log,53.7,1381,0.2,Card
+504,evolved-Ice Spirit; hero-Knight; Goblin Barrel; Rocket; Princess; Goblin Gang; The Log; Inferno Tower,53.7,1353,0.9,Card
+505,evolved-Royal Ghost; hero-Barbarian Barrel; evolved-Hunter; Royal Giant; Fisherman; Fireball; Skeletons; Electro Spirit,53.7,1266,0.5,Card
+506,evolved-Wall Breakers; Mighty Miner; evolved-Skeleton Barrel; Royal Recruits; Firecracker; Goblin Gang; Minions; Arrows,53.7,380,0.1,Card
+507,evolved-Battle Ram; hero-Tombstone; evolved-Musketeer; Ronin; Royal Ghost; Skeleton Dragons; Arrows; Electro Spirit,53.6,10056,1.7,Card
+508,evolved-Skeleton Army; Skeleton King; evolved-Executioner; Elixir Golem; Void; Night Witch; Arrows; Rage,53.6,7303,0.6,Card
+509,evolved-Executioner; hero-Valkyrie; evolved-Ice Spirit; Hog Rider; Rocket; Goblins; Tornado; The Log,53.6,4624,1,Card
+510,evolved-Giant Snowball; hero-Knight; evolved-Tesla; Goblin Drill; Goblin Demolisher; Poison; Fire Spirit; Skeletons,53.6,4574,1,Card
+511,evolved-Cannon; hero-Musketeer; Hog Rider; Fireball; Ice Golem; Skeletons; Ice Spirit; The Log,53.6,3631,0.5,Card
+512,evolved-Baby Dragon; Golden Knight; evolved-Inferno Dragon; Balloon; Bowler; Tornado; Freeze; Barbarian Barrel,53.6,1041,0.3,Card
+513,evolved-Goblin Barrel; hero-Berserker; evolved-Skeleton Army; Princess; Dart Goblin; Electro Spirit; The Log; Inferno Tower,53.6,1025,0.2,Card
+514,evolved-Elite Barbarians; Boss Bandit; evolved-Executioner; Hog Rider; Minion Horde; Guards; Freeze; Zap,53.6,459,0.4,Card
+515,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,53.5,20054,1.7,Card
+516,evolved-Furnace; hero-Barbarian Barrel; evolved-Tesla; Graveyard; Knight; Poison; Skeletons; Ice Spirit,53.5,12368,1.8,Card
+517,evolved-Elite Barbarians; hero-Mega Minion; evolved-Baby Dragon; Golem; Night Witch; Bomber; Tornado; Zap,53.5,8179,1.2,Card
+518,evolved-Cannon; hero-Ice Golem; evolved-Skeletons; Hog Rider; Musketeer; Lightning; Ice Spirit; The Log,53.5,3666,0.7,Card
+519,evolved-Goblin Cage; hero-Valkyrie; Goblinstein; Graveyard; Poison; Ice Wizard; Guards; Barbarian Barrel,53.5,3612,1.3,Card
+520,evolved-Furnace; hero-Barbarian Barrel; evolved-Knight; Graveyard; Ronin; Poison; Goblin Hut; Ice Spirit,53.5,2734,0.5,Card
+521,evolved-Barbarians; hero-Balloon; hero-Mega Minion; Lava Hound; Fireball; Skeleton Dragons; Zap; Tombstone,53.5,1056,0.2,Card
+522,evolved-Goblin Cage; Golden Knight; evolved-Royal Recruits; Royal Hogs; Flying Machine; Zappies; Arrows; Barbarian Barrel,53.4,5751,0.5,Card
+523,evolved-Inferno Dragon; Skeleton King; evolved-Witch; Golem; Elixir Golem; Night Witch; Arrows; Rage,53.4,3172,0.9,Card
+524,evolved-Valkyrie; Goblinstein; evolved-Goblin Cage; Graveyard; Poison; Ice Wizard; Guards; Barbarian Barrel,53.4,2972,4.3,Card
+525,evolved-Valkyrie; hero-Wizard; evolved-Skeletons; X-Bow; Fire Spirit; Ice Spirit; Electro Spirit; Elixir Collector,53.4,2436,0.1,Card
+526,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Berserker; Fire Spirit; The Log; Bomb Tower,53.4,1744,0.4,Card
+527,evolved-Goblin Barrel; hero-Knight; evolved-Ice Spirit; Rocket; Princess; Goblin Gang; The Log; Inferno Tower,53.3,13253,1.3,Card
+528,evolved-Goblin Barrel; hero-Knight; evolved-Tesla; Rocket; Princess; Goblin Gang; Ice Spirit; The Log,53.3,5526,0.5,Card
+529,evolved-Royal Hogs; hero-Dark Prince; evolved-Tesla; Lightning; Skeleton Dragons; Skeletons; Electro Spirit; Barbarian Barrel,53.3,1932,0.3,Card
+530,evolved-Electro Dragon; hero-Mini P.E.K.K.A; evolved-Baby Dragon; Golem; Battle Healer; Tornado; Barbarian Barrel; Elixir Collector,53.3,1628,1.6,Card
+531,evolved-Goblin Barrel; hero-Berserker; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Inferno Tower,53.3,1515,0.3,Card
+532,evolved-Wall Breakers; Mighty Miner; evolved-Bats; Miner; Fire Spirit; Spear Goblins; The Log; Bomb Tower,53.3,1027,0.4,Card
+533,evolved-Goblin Cage; Royal Hogs; evolved-Royal Recruits; Flying Machine; Fireball; Zappies; Arrows; Barbarian Barrel,53.3,1026,0.6,Card
+534,evolved-Mega Knight; hero-Berserker; evolved-Elite Barbarians; Battle Ram; Mother Witch; Skeleton Dragons; Arrows; Heal Spirit,53.3,754,1,Card
+535,evolved-Electro Dragon; hero-Berserker; evolved-Elite Barbarians; Golem; Baby Dragon; Tornado; Barbarian Barrel; Elixir Collector,53.3,580,0.3,Card
+536,evolved-Inferno Dragon; Golden Knight; evolved-Giant Snowball; Rune Giant; Magic Archer; Berserker; Fire Spirit; Freeze,53.3,167,1.5,Card
+537,evolved-Baby Dragon; hero-Dark Prince; evolved-Musketeer; Rune Giant; Lightning; Executioner; Vines; Tornado,53.3,30,0.3,Card
+538,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Berserker; Fire Spirit; Ice Spirit; Royal Delivery; Bomb Tower,53.2,16040,6.7,Card
+539,evolved-Baby Dragon; hero-Mega Minion; evolved-Goblin Cage; Golem; Ronin; Lightning; Tornado; Barbarian Barrel,53.2,2571,0.6,Card
+540,evolved-Baby Dragon; hero-Valkyrie; hero-Tombstone; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,53.2,2240,0.9,Card
+541,evolved-Goblin Barrel; Mighty Miner; evolved-Princess; Rocket; Goblins; Ice Spirit; The Log; Cannon,53.2,1343,0.3,Card
+542,evolved-Goblin Drill; hero-Knight; evolved-Giant Snowball; Poison; Bomber; Fire Spirit; Skeletons; Tesla,53.1,3896,2.6,Card
+543,evolved-Goblin Giant; Goblinstein; evolved-P.E.K.K.A; Void; Fisherman; Bomber; Arrows; Rage,53.1,2818,1.6,Card
+544,evolved-Electro Dragon; hero-Barbarian Barrel; evolved-Inferno Dragon; Golem; Lumberjack; Battle Healer; Tornado; Elixir Collector,53.1,1867,0.3,Card
+545,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Royal Ghost; Hunter; Guards; Freeze,53.1,1433,0.7,Card
+546,evolved-Goblin Giant; hero-Berserker; evolved-Elite Barbarians; Cannon Cart; Vines; Minions; Furnace; Rage,53.1,571,0.6,Card
+547,evolved-Executioner; hero-Goblins; evolved-Valkyrie; Hog Rider; Rocket; Tornado; Ice Spirit; The Log,53,35145,1.2,Card
+548,evolved-Skeletons; hero-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Ice Spirit; The Log; Cannon,53,15327,2.9,Card
+549,evolved-Cannon; hero-Musketeer; evolved-Skeletons; Hog Rider; Ronin; Fireball; Ice Spirit; The Log,53,5939,0.7,Card
+550,evolved-Musketeer; hero-Tombstone; evolved-Skeletons; Bowler; Lightning; Mega Minion; Arrows; The Log,53,1045,0.2,Card
+551,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Berserker; Fire Spirit; Royal Delivery; Bomb Tower,52.9,12516,2.6,Card
+552,evolved-Musketeer; hero-Balloon; hero-Ice Golem; Miner; Skeletons; Barbarian Barrel; Giant Snowball; Bomb Tower,52.9,8215,0.8,Card
+553,evolved-Wall Breakers; hero-Magic Archer; evolved-Valkyrie; Miner; Spear Goblins; Tornado; The Log; Bomb Tower,52.9,3094,0.6,Card
+554,evolved-Skeleton Army; hero-Knight; evolved-Princess; Goblin Barrel; Dart Goblin; Ice Spirit; The Log; Inferno Tower,52.9,1103,0.3,Card
+555,evolved-Battle Ram; Giant Skeleton; evolved-Royal Ghost; Mother Witch; Wizard; Vines; Zappies; Barbarian Barrel,52.9,206,0.2,Card
+556,evolved-Firecracker; Skeleton Barrel; evolved-Mega Knight; Arrows; Spear Goblins; Bats; Clone; Tombstone,52.8,8356,0.4,Card
+557,evolved-Firecracker; hero-Barbarian Barrel; evolved-Cannon; Hog Rider; Ronin; Earthquake; Skeletons; Electro Spirit,52.8,7639,1.1,Card
+558,evolved-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log; Cannon,52.8,4599,0.7,Card
+559,evolved-Executioner; Boss Bandit; evolved-Minion Horde; Hog Rider; Elite Barbarians; Guards; Freeze; Zap,52.8,3361,1.7,Card
+560,evolved-Electro Dragon; Elixir Golem; evolved-Skeletons; Battle Healer; Mirror; Tornado; Heal Spirit; Elixir Collector,52.8,3081,0.4,Card
+561,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Lightning; Skeletons; Electro Spirit; The Log,52.8,2251,0.3,Card
+562,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Rocket; Goblin Gang; Ice Spirit; The Log; Cannon,52.8,1472,0.4,Card
+563,evolved-Baby Dragon; hero-Valkyrie; hero-Mini P.E.K.K.A; Golem; Battle Healer; Vines; Zappies; Elixir Collector,52.8,1319,0.3,Card
+564,evolved-Goblin Drill; Ronin; evolved-Giant Snowball; Poison; Bomber; Fire Spirit; Skeletons; Cannon,52.7,5273,3.6,Card
+565,evolved-Wizard; hero-Mini P.E.K.K.A; hero-Giant; Sparky; Vines; Tornado; Zap; Heal Spirit,52.7,2585,1,Card
+566,evolved-Lumberjack; hero-Barbarian Barrel; evolved-Goblin Cage; Royal Giant; Phoenix; Fireball; Electro Spirit; Heal Spirit,52.7,1635,0.7,Card
+567,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Ronin; Fire Spirit; Ice Spirit; Royal Delivery; Bomb Tower,52.7,1182,0.5,Card
+568,evolved-Goblin Cage; Royal Hogs; evolved-Royal Recruits; Flying Machine; Zappies; Arrows; Electro Spirit; Barbarian Barrel,52.7,1019,0.6,Card
+569,evolved-Skeleton Barrel; Golden Knight; evolved-Skeleton Army; Goblin Barrel; Firecracker; Tornado; Royal Delivery; Inferno Tower,52.7,353,0.1,Card
+570,evolved-Knight; hero-Barbarian Barrel; evolved-Goblin Cage; Graveyard; Baby Dragon; Poison; Ice Wizard; Skeletons,52.6,1741,0.9,Card
+571,evolved-Inferno Dragon; hero-Bowler; Golden Knight; Graveyard; Executioner; Zappies; Tornado; Freeze,52.6,464,0.4,Card
+572,evolved-Skeleton Barrel; hero-Bowler; evolved-Dart Goblin; Mortar; Fireball; Rascals; Bats; Barbarian Barrel,52.6,38,0.2,Card
+573,evolved-Cannon; hero-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,52.5,43295,5.4,Card
+574,evolved-Furnace; hero-Barbarian Barrel; evolved-Valkyrie; Graveyard; Poison; Goblin Hut; Skeletons; Ice Spirit,52.5,3769,0.7,Card
+575,evolved-Goblin Drill; hero-Knight; evolved-Giant Snowball; Goblin Demolisher; Poison; Fire Spirit; Skeletons; Cannon,52.5,3231,3.9,Card
+576,evolved-Lumberjack; hero-Mini P.E.K.K.A; evolved-Zap; Golem; Phoenix; Night Witch; Bomber; Arrows,52.5,2943,0.6,Ultimate Champion
+577,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Lightning; Royal Ghost; Guards; Barbarian Barrel,52.5,1470,0.7,Card
+578,evolved-Goblin Barrel; hero-Goblins; evolved-Valkyrie; Wall Breakers; Dart Goblin; Fire Spirit; Ice Spirit; Cannon,52.5,1239,0.3,Card
+579,evolved-Baby Dragon; Golden Knight; evolved-Goblin Cage; Golem; Lightning; Ice Wizard; Tornado; Barbarian Barrel,52.5,1224,0.3,Card
+580,evolved-Witch; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Guards; Zappies; Arrows,52.5,1194,0.3,Card
+581,evolved-Goblin Barrel; hero-Knight; evolved-Princess; Skeleton Army; Dart Goblin; Ice Spirit; The Log; Inferno Tower,52.4,1604,0.4,Card
+582,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Ronin; Earthquake; Skeletons; Royal Delivery; The Log,52.4,1572,0.2,Card
+583,evolved-Minion Horde; Goblin Barrel; evolved-Tesla; Giant Skeleton; Sparky; Skeleton Army; Arrows; Clone,52.4,1467,0.3,Card
+584,evolved-Lumberjack; Giant Skeleton; evolved-Witch; Sparky; Skeleton Army; Firecracker; Bats; Clone,52.3,8413,1.6,Card
+585,Goblin Giant; Sparky; Dark Prince; Lightning; Mega Minion; Electro Wizard; Goblin Cage; Giant Snowball,52.3,3134,0.5,Card
+586,evolved-Elite Barbarians; Skeleton King; evolved-Skeletons; Elixir Golem; Void; Night Witch; Arrows; Rage,52.3,2235,0.3,Card
+587,evolved-Royal Giant; Hunter; evolved-Royal Ghost; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,52.3,1291,0.7,Card
+588,evolved-Musketeer; Hog Rider; evolved-Cannon; Fireball; Ice Golem; Skeletons; Ice Spirit; The Log,52.2,5162,0.6,Card
+589,evolved-Battle Ram; hero-Magic Archer; evolved-Royal Ghost; P.E.K.K.A; Ronin; Fireball; Electro Wizard; Zap,52.2,1421,0.2,Card
+590,evolved-Baby Dragon; hero-Bowler; evolved-Tesla; Electro Giant; Berserker; Lightning; Tornado; Barbarian Barrel,52.2,1223,0.7,Card
+591,evolved-Executioner; Boss Bandit; evolved-Minion Horde; Hog Rider; Ronin; Guards; Freeze; Zap,52.2,1200,0.2,Card
+592,Ram Rider; Rune Giant; Skeleton Barrel; Elite Barbarians; Dark Prince; Flying Machine; Fireball; Arrows,52.2,69,0.6,Card
+593,evolved-Knight; X-Bow; evolved-Tesla; Rocket; Ice Wizard; Tornado; Skeletons; The Log,52.1,5518,1.5,Card
+594,evolved-Royal Giant; hero-Berserker; evolved-Royal Ghost; Hunter; Fisherman; Fireball; Electro Spirit; Barbarian Barrel,52.1,5224,0.5,Card
+595,evolved-Archers; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Ronin; Minions; Arrows,52.1,4494,0.6,Card
+596,evolved-Giant Snowball; hero-Knight; evolved-Cannon; Goblin Drill; Poison; Bomber; Fire Spirit; Skeletons,52.1,2227,0.3,Card
+597,evolved-Royal Giant; hero-Berserker; evolved-Royal Ghost; Hunter; Fisherman; Fireball; Electro Spirit; The Log,52.1,1123,0.8,Card
+598,evolved-Mega Knight; Cannon Cart; evolved-Valkyrie; Mother Witch; Lightning; Executioner; Fisherman; Electro Wizard,52,8339,0.3,Card
+599,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Earthquake; Skeletons; Electro Spirit; Royal Delivery; The Log,52,2530,0.4,Card
+600,evolved-Baby Dragon; hero-Knight; hero-Tombstone; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,52,1973,0.3,Card
+601,evolved-Cannon; hero-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Skeletons; Electro Spirit; The Log,52,1409,0.3,Card
+602,Elixir Golem; Rune Giant; Skeleton Barrel; Rocket; Dark Prince; Hunter; Princess; The Log,52,50,0.5,Card
+603,evolved-Baby Dragon; hero-Knight; evolved-Inferno Dragon; Balloon; Bowler; Tornado; Freeze; Barbarian Barrel,51.9,6090,1.2,Ultimate Champion
+604,evolved-Witch; hero-Bowler; evolved-Giant Snowball; Graveyard; Giant; Ronin; Minions; Arrows,51.9,3138,0.4,Card
+605,evolved-Battle Ram; Golden Knight; evolved-Mega Knight; Mother Witch; Royal Ghost; Bandit; Zappies; Arrows,51.9,2082,0.4,Ultimate Champion
+606,evolved-Battle Ram; hero-Dark Prince; hero-Magic Archer; P.E.K.K.A; Fireball; Electro Wizard; Bandit; Zap,51.9,1254,0.2,Card
+607,evolved-Battle Ram; hero-Wizard; evolved-Royal Ghost; Giant Skeleton; Mother Witch; Vines; Zappies; Barbarian Barrel,51.8,8600,1.7,Ultimate Champion
+608,evolved-Goblin Barrel; Mighty Miner; evolved-Princess; Rocket; Skeletons; Ice Spirit; The Log; Cannon,51.8,3576,0.3,Card
+609,evolved-Zap; hero-Giant; hero-Mega Minion; Prince; Dark Prince; Fireball; Bomber; Rage,51.8,2239,0.4,Ultimate Champion
+610,evolved-Firecracker; hero-Valkyrie; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Ice Spirit; The Log,51.8,1621,0.4,Card
+611,evolved-Wall Breakers; Mighty Miner; evolved-Cannon; Goblin Drill; Fireball; Fire Spirit; Skeletons; The Log,51.8,1505,0.3,Card
+612,evolved-Furnace; hero-Valkyrie; evolved-Baby Dragon; Golem; Lightning; Tornado; Barbarian Barrel; Tombstone,51.8,1119,0.6,Card
+613,evolved-Royal Giant; hero-Berserker; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,51.8,1029,0.6,Card
+614,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Royal Ghost; Ronin; Hunter; Fisherman; Fireball; Electro Spirit,51.7,3689,0.8,Card
+615,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,51.7,2706,0.5,Ultimate Champion
+616,evolved-Archers; hero-Dark Prince; evolved-Tesla; Graveyard; Poison; Skeletons; Ice Spirit; Barbarian Barrel,51.7,2522,0.4,Card
+617,evolved-Skeleton Army; hero-Mini P.E.K.K.A; hero-Giant; Sparky; Minion Horde; Arrows; Bats; Zap,51.7,776,0.7,Card
+618,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Fire Spirit; Skeletons; The Log; Bomb Tower,51.6,11075,2.3,Card
+619,evolved-Wall Breakers; hero-Berserker; evolved-Bats; Miner; Poison; Spear Goblins; The Log; Bomb Tower,51.6,4513,0.4,Card
+620,evolved-Musketeer; hero-Ice Golem; evolved-Cannon; Hog Rider; Fireball; Skeletons; Electro Spirit; The Log,51.5,3224,0.6,Card
+621,evolved-Cannon; hero-Musketeer; evolved-Skeletons; Hog Rider; Fireball; Ice Golem; Ice Spirit; The Log,51.5,2565,0.5,Ultimate Champion
+622,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Ronin; Fire Spirit; Royal Delivery; Bomb Tower,51.5,2128,0.5,Card
+623,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Ram Rider; Lightning; Royal Ghost; Bandit; Barbarian Barrel,51.5,1374,0.7,Card
+624,evolved-Archers; hero-Berserker; evolved-Tesla; X-Bow; Rocket; Skeletons; Electro Spirit; The Log,51.4,1758,0.2,Card
+625,evolved-Royal Hogs; hero-Wizard; hero-Valkyrie; Lightning; Goblin Hut; Skeletons; Electro Spirit; Barbarian Barrel,51.3,1906,0.4,Card
+626,evolved-Firecracker; hero-Barbarian Barrel; evolved-Tesla; Hog Rider; Ronin; Earthquake; Skeletons; Ice Spirit,51.3,1568,0.3,Card
+627,evolved-Wall Breakers; hero-Berserker; evolved-Bats; Miner; Magic Archer; Fire Spirit; The Log; Bomb Tower,51.3,1434,0.4,Card
+628,evolved-Skeleton Barrel; hero-Berserker; evolved-Mortar; Bowler; Fireball; Minions; Rascals; Barbarian Barrel,51.3,1260,0.2,Card
+629,evolved-Furnace; hero-Berserker; evolved-Giant Snowball; Goblin Drill; Poison; Skeletons; Royal Delivery; Cannon,51.2,5757,0.5,Card
+630,evolved-Goblin Barrel; hero-Goblins; evolved-Dart Goblin; Ronin; Fire Spirit; Ice Spirit; The Log; Cannon,51.2,5417,0.5,Card
+631,evolved-Executioner; Golden Knight; evolved-Inferno Dragon; Graveyard; Bowler; Zappies; Tornado; Freeze,51.2,4320,0.8,Ultimate Champion
+632,evolved-Skeletons; hero-Valkyrie; evolved-Tesla; X-Bow; Rocket; Ice Wizard; Tornado; The Log,51.2,2473,0.5,Card
+633,evolved-Musketeer; hero-Balloon; evolved-Giant Snowball; Miner; Ice Golem; Skeletons; Barbarian Barrel; Bomb Tower,51.2,2099,0.4,Ultimate Champion
+634,evolved-Cannon; hero-Musketeer; hero-Ice Golem; Hog Rider; Lightning; Skeletons; Ice Spirit; The Log,51.2,1260,0.2,Card
+635,evolved-Giant Snowball; hero-Valkyrie; hero-Berserker; Goblin Drill; Poison; Furnace; Skeletons; Cannon,51.2,1228,1.2,Card
+636,evolved-Baby Dragon; hero-Mini P.E.K.K.A; evolved-Valkyrie; Golem; Battle Healer; Vines; Zappies; Elixir Collector,51.1,28363,1.1,Card
+637,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Electro Spirit,51.1,4067,0.8,Ultimate Champion
+638,evolved-Wall Breakers; hero-Magic Archer; evolved-Knight; Miner; Spear Goblins; Tornado; The Log; Bomb Tower,51.1,3039,0.6,Card
+639,evolved-Furnace; hero-Berserker; evolved-Valkyrie; Graveyard; Poison; Goblin Hut; Ice Spirit; Barbarian Barrel,51.1,2462,0.2,Card
+640,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Goblin Demolisher; Poison; Fire Spirit; Skeletons; Tesla,51.1,2174,0.2,Card
+641,evolved-Goblin Barrel; hero-Goblins; evolved-Princess; Wall Breakers; Valkyrie; Dart Goblin; Ice Spirit; Cannon,51.1,1256,0.3,Card
+642,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Elite Barbarians; Hunter; Fisherman; Fireball; Skeletons; Electro Spirit,51.1,1046,0.6,Card
+643,evolved-Firecracker; hero-Mini P.E.K.K.A; evolved-Mega Knight; Skeleton Barrel; Inferno Dragon; Spear Goblins; Bats; Zap,51,8298,0.3,Card
+644,hero-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log; Cannon,51,2619,0.5,Card
+645,evolved-Skeleton Army; Goblin Barrel; evolved-Minion Horde; Giant Skeleton; Sparky; Arrows; Clone; Tesla,51,2176,0.4,Card
+646,evolved-Mortar; hero-Berserker; evolved-Minion Horde; Miner; Cannon Cart; Skeleton Dragons; Rascals; Arrows,51,1186,0.4,Card
+647,evolved-Wall Breakers; hero-Berserker; Goblinstein; Miner; Magic Archer; Tornado; The Log; Bomb Tower,51,739,0.8,Card
+648,evolved-Skeleton Barrel; hero-Goblins; evolved-Mortar; Cannon Cart; Fireball; Minions; Rascals; Barbarian Barrel,50.9,13395,2.6,Ultimate Champion
+649,evolved-Archers; hero-Knight; evolved-Tesla; X-Bow; Fireball; Skeletons; Electro Spirit; The Log,50.9,7852,1.5,Ultimate Champion
+650,hero-Knight; Goblin Barrel; Rocket; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,50.9,6801,0.2,Card
+651,evolved-Skeleton Army; Skeleton King; evolved-Inferno Dragon; Golem; Elixir Golem; Night Witch; Arrows; Rage,50.9,3738,1.2,Card
+652,evolved-Goblin Barrel; hero-Knight; evolved-Tesla; Rocket; Princess; Goblin Gang; Electro Spirit; The Log,50.9,1555,0.4,Card
+653,evolved-Princess; hero-Ice Golem; evolved-Bats; Hog Rider; Rocket; Mini P.E.K.K.A; Ice Spirit; The Log,50.9,1284,0.3,Card
+654,evolved-Royal Hogs; hero-Barbarian Barrel; evolved-Goblin Cage; Flying Machine; Royal Recruits; Fireball; Zappies; Electro Spirit,50.9,521,0.7,Card
+655,evolved-Baby Dragon; hero-Giant; evolved-Musketeer; Prince; Witch; Skeleton Army; Furnace; Arrows,50.9,371,0.2,Card
+656,evolved-Elite Barbarians; hero-Barbarian Barrel; evolved-Barbarians; Battle Ram; Lumberjack; Barbarian Hut; Clone; Rage,50.9,108,0.8,Card
+657,evolved-Archers; hero-Berserker; evolved-Tesla; X-Bow; Fireball; Skeletons; Electro Spirit; The Log,50.8,8803,0.8,Card
+658,evolved-Goblin Barrel; hero-Knight; evolved-Skeleton Army; Princess; Dart Goblin; Ice Spirit; The Log; Inferno Tower,50.8,3641,0.7,Ultimate Champion
+659,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,50.8,3093,0.6,Ultimate Champion
+660,evolved-Goblin Cage; hero-Barbarian Barrel; evolved-Royal Recruits; Royal Hogs; Flying Machine; Zappies; Arrows; Electro Spirit,50.8,3086,0.6,Ultimate Champion
+661,evolved-Battle Ram; hero-Magic Archer; evolved-Royal Ghost; P.E.K.K.A; Fireball; Electro Wizard; Bandit; Zap,50.8,3028,0.6,Ultimate Champion
+662,evolved-Royal Hogs; Archer Queen; evolved-Cannon; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log,50.7,4843,0.9,Ultimate Champion
+663,evolved-Cannon; hero-Ice Golem; evolved-Skeletons; Hog Rider; Musketeer; Fireball; Ice Spirit; The Log,50.7,3667,0.7,Ultimate Champion
+664,evolved-Battle Ram; Golden Knight; evolved-Royal Ghost; Mother Witch; Ronin; Bandit; Zappies; Arrows,50.7,2724,0.5,Ultimate Champion
+665,evolved-Wall Breakers; hero-Goblins; evolved-Skeleton Barrel; Ronin; Dart Goblin; Fire Spirit; Ice Spirit; The Log,50.7,2179,0.2,Card
+666,evolved-Archers; Goblinstein; evolved-Skeletons; Graveyard; Poison; Ice Spirit; Barbarian Barrel; Bomb Tower,50.7,1888,0.4,Ultimate Champion
+667,Lava Hound; Rune Giant; Elite Barbarians; Dark Prince; Skeleton Army; Poison; Ice Wizard; Zap,50.7,73,0.7,Card
+668,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Poison; Bomber; Fire Spirit; Skeletons; Cannon,50.6,6171,0.6,Card
+669,evolved-Skeletons; hero-Knight; evolved-Tesla; X-Bow; Rocket; Ice Wizard; Tornado; The Log,50.6,4021,0.6,Card
+670,evolved-Firecracker; hero-Barbarian Barrel; evolved-Tesla; Hog Rider; Ronin; Earthquake; Skeletons; Electro Spirit,50.5,14608,2.1,Card
+671,evolved-Wall Breakers; hero-Goblins; evolved-Cannon; Goblin Drill; Ronin; Fireball; Fire Spirit; The Log,50.5,4194,0.9,Card
+672,evolved-Firecracker; Mighty Miner; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,50.5,4075,0.8,Ultimate Champion
+673,evolved-Goblin Barrel; hero-Goblins; evolved-Valkyrie; Wall Breakers; Rocket; Dart Goblin; Fire Spirit; Ice Spirit,50.5,3019,0.6,Ultimate Champion
+674,evolved-Wall Breakers; hero-Berserker; evolved-Bats; Miner; Magic Archer; Fire Spirit; Royal Delivery; Bomb Tower,50.5,2025,0.6,Card
+675,evolved-Minion Horde; hero-Mini P.E.K.K.A; hero-Giant; Sparky; Skeleton Army; Arrows; Bats; Zap,50.5,858,0.2,Card
+676,evolved-Giant Snowball; hero-Knight; evolved-Cannon; Goblin Drill; Rocket; Bomber; Fire Spirit; Skeletons,50.4,9103,1,Card
+677,evolved-Furnace; hero-Berserker; evolved-Tesla; Graveyard; Knight; Poison; Ice Spirit; Barbarian Barrel,50.4,1835,0.6,Card
+678,evolved-Royal Hogs; Flying Machine; evolved-Goblin Cage; Royal Recruits; Fireball; Zappies; Arrows; Barbarian Barrel,50.4,559,0.8,Card
+679,evolved-Zap; hero-Mini P.E.K.K.A; hero-Giant; Sparky; Minion Horde; Skeleton Army; Arrows; Bats,50.4,335,0.3,Card
+680,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Mother Witch; Dart Goblin; Vines; Fire Spirit,50.3,10122,1.1,Card
+681,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Wall Breakers; Mother Witch; Berserker; Dart Goblin; Vines,50.3,9838,1.1,Card
+682,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Berserker; Fire Spirit; Ice Spirit; Royal Delivery; Bomb Tower,50.3,3695,0.7,Ultimate Champion
+683,evolved-Wall Breakers; hero-Goblins; evolved-Skeleton Barrel; Ronin; Dart Goblin; Goblin Hut; Electro Spirit; The Log,50.3,1852,0.4,Card
+684,evolved-Skeleton Army; hero-Mini P.E.K.K.A; evolved-Wizard; Giant; Sparky; Vines; Zap; Heal Spirit,50.3,1506,0.7,Card
+685,evolved-Firecracker; hero-Valkyrie; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,50.3,1164,0.3,Card
+686,evolved-Skeletons; hero-Musketeer; Hog Rider; Fireball; Ice Golem; Ice Spirit; The Log; Cannon,50.3,1067,0.5,Card
+687,hero-Knight; hero-Barbarian Barrel; Graveyard; Baby Dragon; Poison; Ice Wizard; Tornado; Tombstone,50.3,590,0.3,Card
+688,evolved-Elite Barbarians; hero-Berserker; evolved-Zap; Goblin Giant; Sparky; Electro Wizard; Heal Spirit; Rage,50.3,449,2,Card
+689,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Mega Knight; Hunter; Fisherman; Fireball; Bats; Zap,50.2,1953,0.4,Card
+690,evolved-Wall Breakers; Mighty Miner; evolved-Skeleton Barrel; Royal Recruits; Firecracker; Minions; Guards; Arrows,50.2,321,0.1,Card
+691,evolved-Baby Dragon; hero-Tombstone; hero-Barbarian Barrel; Graveyard; Ronin; Poison; Ice Wizard; Tornado,50.1,2162,0.3,Card
+692,evolved-Goblin Giant; hero-Mini P.E.K.K.A; evolved-Zap; Sparky; Dark Prince; Mega Minion; Electro Wizard; Rage,50,8673,0.3,Card
+693,evolved-Skeleton Barrel; Boss Bandit; evolved-Valkyrie; Wall Breakers; Mini P.E.K.K.A; Mother Witch; Firecracker; Bats,50,8424,0.7,Card
+694,evolved-Baby Dragon; hero-Mini P.E.K.K.A; evolved-Valkyrie; Golem; Battle Healer; Vines; Zappies; Elixir Collector,50,3637,0.7,Ultimate Champion
+695,evolved-Skeleton Army; Goblin Barrel; evolved-Tesla; Giant Skeleton; Sparky; Minion Horde; Arrows; Clone,50,2229,0.4,Card
+696,evolved-Musketeer; hero-Tombstone; Golden Knight; Ram Rider; Ronin; Skeleton Dragons; Arrows; Electro Spirit,50,1751,0.3,Card
+697,evolved-Goblin Barrel; Mighty Miner; evolved-Princess; Rocket; Fire Spirit; Skeletons; The Log; Cannon,50,1741,0.4,Card
+698,evolved-Skeleton Barrel; hero-Goblins; Mortar; Ronin; Fireball; Minions; Rascals; Barbarian Barrel,50,66,0.3,Card
+699,Rune Giant; Ronin; Hunter; Firecracker; Bandit; Rascals; Arrows; Tesla,50,38,0.3,Card
+700,evolved-Royal Giant; hero-Barbarian Barrel; evolved-Royal Ghost; Hunter; Fisherman; Fireball; Skeletons; Electro Spirit,49.9,9520,1.8,Ultimate Champion
+701,evolved-Mega Knight; Mighty Miner; evolved-Witch; Magic Archer; Mini P.E.K.K.A; Freeze; Royal Delivery; Rage,49.9,8447,1,Card
+702,evolved-Giant Snowball; hero-Knight; evolved-Tesla; Goblin Drill; Poison; Bomber; Fire Spirit; Skeletons,49.9,2383,0.5,Card
+703,evolved-Valkyrie; hero-Goblins; evolved-Ice Spirit; Hog Rider; Rocket; Executioner; Tornado; The Log,49.9,717,0.6,Card
+704,evolved-Electro Dragon; hero-Berserker; evolved-Elite Barbarians; Golem; Skeleton Dragons; Tornado; Barbarian Barrel; Elixir Collector,49.8,1954,0.4,Ultimate Champion
+705,evolved-Royal Hogs; Archer Queen; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log; Cannon,49.7,2460,0.3,Card
+706,evolved-Ice Spirit; hero-Musketeer; hero-Ice Golem; Hog Rider; Fireball; Skeletons; The Log; Cannon,49.7,1729,0.3,Card
+707,evolved-Goblin Barrel; hero-Goblins; evolved-Dart Goblin; Ronin; Ice Spirit; Electro Spirit; The Log; Cannon,49.6,2408,0.6,Card
+708,evolved-Elite Barbarians; hero-Berserker; Monk; Three Musketeers; Skeleton Dragons; Ice Golem; Zap; Elixir Collector,49.6,2137,0.2,Card
+709,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Dart Goblin; Vines; Fire Spirit; Ice Spirit,49.6,1806,0.2,Card
+710,evolved-Goblin Giant; hero-Mini P.E.K.K.A; evolved-Zap; Sparky; Dark Prince; Mother Witch; Mega Minion; Rage,49.5,8687,0.3,Card
+711,evolved-Executioner; hero-Valkyrie; hero-Goblins; Hog Rider; Rocket; Tornado; Ice Spirit; The Log,49.5,5553,0.7,Card
+712,evolved-Firecracker; hero-Berserker; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,49.5,2343,0.2,Card
+713,evolved-Elite Barbarians; Golden Knight; evolved-Executioner; Hog Rider; Rocket; Valkyrie; Skeleton Army; Zap,49.5,305,0.1,Card
+714,evolved-Skeleton Barrel; hero-Ice Golem; evolved-Musketeer; Mortar; Ronin; Fireball; Dart Goblin; Barbarian Barrel,49.5,182,0.8,Card
+715,evolved-Archers; hero-Dark Prince; evolved-Bats; Mortar; Miner; Poison; Skeletons; The Log,49.5,111,0.5,Card
+716,evolved-Dart Goblin; Royal Giant; evolved-Mega Knight; Goblin Barrel; Prince; Skeleton Army; Princess; Bats,49.4,429,1,Card
+717,evolved-Mortar; hero-Mini P.E.K.K.A; evolved-Furnace; Skeleton Barrel; Giant Skeleton; Mother Witch; Dart Goblin; Bats,49.3,8267,1.5,Card
+718,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Poison; Bomber; Fire Spirit; Skeletons; Tesla,49.3,2851,0.3,Card
+719,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Ronin; Bandit; Minions; Arrows; Zap,49.3,1401,0.3,Card
+720,evolved-Lumberjack; hero-Bowler; evolved-Inferno Dragon; Rune Giant; Spirit Empress; Lightning; Mirror; Arrows,49.3,71,0.6,Card
+721,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Ronin; Fire Spirit; The Log; Bomb Tower,49.2,2974,0.7,Card
+722,evolved-Giant Snowball; hero-Berserker; evolved-Cannon; Goblin Drill; Poison; Bomber; Fire Spirit; Skeletons,49.2,1287,1.6,Card
+723,evolved-Royal Hogs; Archer Queen; evolved-Tesla; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log,49.2,1178,0.1,Card
+724,evolved-Inferno Dragon; Golden Knight; evolved-Giant Snowball; Rune Giant; Berserker; Dart Goblin; Fire Spirit; Freeze,49.2,65,0.6,Card
+725,evolved-Inferno Dragon; hero-Dark Prince; evolved-Zap; Lava Hound; Rune Giant; Miner; Fireball; Skeleton Dragons,49.2,59,0.5,Card
+726,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Mother Witch; Dart Goblin; Vines; Goblins,49.1,10466,1.2,Card
+727,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Berserker; Fire Spirit; Ice Spirit; Royal Delivery; Tesla,49.1,2871,1.7,Card
+728,evolved-Furnace; hero-Barbarian Barrel; evolved-Tesla; Graveyard; Ronin; Poison; Skeletons; Ice Spirit,49,2978,0.4,Card
+729,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Goblin Demolisher; Poison; Skeletons; Ice Spirit; Tesla,49,1829,0.6,Card
+730,evolved-Witch; hero-Giant; evolved-Giant Snowball; Graveyard; Bowler; Minions; Guards; Arrows,49,1551,0.2,Card
+731,evolved-Mega Knight; Balloon; evolved-Bats; Sparky; Skeleton Army; Executioner; Mirror; Arrows,48.9,8483,1.9,Card
+732,evolved-Furnace; hero-Valkyrie; hero-Berserker; Graveyard; Poison; Goblin Hut; Ice Spirit; Barbarian Barrel,48.9,6914,0.6,Card
+733,evolved-Executioner; hero-Goblins; evolved-Valkyrie; Hog Rider; Rocket; Tornado; Ice Spirit; The Log,48.9,3832,0.7,Ultimate Champion
+734,evolved-Firecracker; Mighty Miner; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,48.9,2066,0.4,Ultimate Champion
+735,evolved-Bats; hero-Berserker; Little Prince; Rune Giant; Miner; Poison; The Log; Cannon,48.9,1737,2.6,Card
+736,evolved-Firecracker; Hog Rider; evolved-Tesla; Ronin; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,48.8,3030,0.5,Card
+737,evolved-Royal Giant; hero-Valkyrie; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,48.8,1878,1.1,Card
+738,evolved-Wall Breakers; hero-Magic Archer; evolved-Bats; Miner; Ronin; Skeletons; The Log; Bomb Tower,48.8,1172,0.2,Card
+739,evolved-Skeleton Barrel; hero-Barbarian Barrel; evolved-Furnace; Ronin; Berserker; Lightning; Goblin Hut; Electro Spirit,48.8,1144,0.2,Card
+740,evolved-Firecracker; Boss Bandit; evolved-Witch; Mini P.E.K.K.A; Baby Dragon; Valkyrie; Ronin; Bats,48.8,615,0.3,Card
+741,evolved-Skeleton Barrel; hero-Goblins; hero-Barbarian Barrel; Mortar; Cannon Cart; Fireball; Minions; Rascals,48.8,84,0.4,Card
+742,evolved-Skeleton Barrel; Little Prince; evolved-Tesla; Mortar; Knight; Fireball; Goblin Gang; The Log,48.8,41,0.2,Card
+743,evolved-P.E.K.K.A; Graveyard; evolved-Inferno Dragon; Rocket; Executioner; Arrows; Tornado; Freeze,48.7,267,0.2,Card
+744,evolved-Goblin Giant; Sparky; evolved-Zap; Elite Barbarians; Dark Prince; Electro Wizard; Heal Spirit; Rage,48.6,8999,1.7,Card
+745,Miner; Skeleton Barrel; Mega Knight; Inferno Dragon; Goblin Gang; Spear Goblins; Bats; Giant Snowball,48.6,3277,0.6,Card
+746,evolved-Royal Hogs; hero-Berserker; Archer Queen; Earthquake; Skeletons; Royal Delivery; The Log; Cannon,48.6,2467,1.7,Card
+747,evolved-Wall Breakers; hero-Berserker; evolved-Goblin Barrel; Magic Archer; Fire Spirit; Ice Spirit; Royal Delivery; Bomb Tower,48.6,1010,1.1,Card
+748,evolved-Skeleton Barrel; Mortar; Cannon Cart; Fireball; Goblins; Minions; Rascals; Barbarian Barrel,48.6,35,0.1,Card
+749,evolved-Skeleton Army; Skeleton King; evolved-Inferno Dragon; Golem; Miner; Night Witch; Goblin Curse; Zap,48.5,14737,1.2,Card
+750,evolved-Goblin Giant; Goblinstein; evolved-P.E.K.K.A; Void; Fisherman; Minions; Arrows; Rage,48.5,1003,1.3,Card
+751,evolved-Musketeer; hero-Berserker; evolved-Cannon; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,48.3,1804,0.2,Card
+752,evolved-Skeleton Barrel; hero-Goblins; Mortar; Cannon Cart; Fireball; Minions; Rascals; Barbarian Barrel,48.3,205,0.9,Card
+753,evolved-Furnace; Prince; evolved-Witch; Barbarians; Minion Horde; Barbarian Hut; Arrows; Spear Goblins,48.3,120,0.9,Card
+754,evolved-Witch; hero-Mini P.E.K.K.A; Golden Knight; Mega Knight; Sparky; Valkyrie; Executioner; Mirror,48.2,9623,0.4,Card
+755,evolved-Witch; hero-Knight; evolved-Goblin Cage; Graveyard; Poison; Vines; Ice Wizard; Barbarian Barrel,48.1,4538,0.6,Card
+756,evolved-Musketeer; Hog Rider; Fireball; Ice Golem; Skeletons; Ice Spirit; The Log; Cannon,48.1,2605,0.4,Card
+757,evolved-Royal Hogs; hero-Berserker; evolved-Tesla; Lightning; Skeleton Dragons; Skeletons; Electro Spirit; Barbarian Barrel,48.1,2321,1,Card
+758,evolved-Firecracker; hero-Valkyrie; evolved-Tesla; Hog Rider; Earthquake; Skeletons; Electro Spirit; The Log,48.1,1741,0.4,Card
+759,evolved-Wall Breakers; Archer Queen; evolved-Mega Knight; Ronin; Bandit; Arrows; Bats; Zap,48.1,1551,0.3,Card
+760,evolved-Goblin Barrel; hero-Valkyrie; evolved-Princess; Rocket; Goblin Gang; Ice Spirit; The Log; Inferno Tower,48.1,1179,0.3,Card
+761,evolved-Elite Barbarians; Mini P.E.K.K.A; Barbarians; Berserker; Wizard; Skeleton Dragons; Archers; Goblin Curse,48.1,264,0.2,Card
+762,hero-Musketeer; Hog Rider; Fireball; Ice Golem; Skeletons; Ice Spirit; The Log; Cannon,48,5391,0.7,Card
+763,evolved-Baby Dragon; hero-Tombstone; hero-Berserker; Graveyard; Poison; Ice Wizard; Tornado; Barbarian Barrel,48,1094,0.5,Card
+764,evolved-Royal Hogs; hero-Berserker; Archer Queen; Earthquake; Ice Spirit; Royal Delivery; The Log; Cannon,47.9,1560,1.1,Card
+765,evolved-Wall Breakers; hero-Berserker; evolved-Skeleton Barrel; Rocket; Dart Goblin; Skeletons; Ice Spirit; The Log,47.9,1514,0.4,Card
+766,evolved-Knight; Goblin Barrel; Rocket; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,47.8,3658,0.8,Card
+767,evolved-Battle Ram; P.E.K.K.A; evolved-Royal Ghost; Magic Archer; Fireball; Electro Wizard; Bandit; Zap,47.7,8841,1.5,Card
+768,evolved-Mega Knight; Boss Bandit; evolved-Witch; Baby Dragon; Skeleton Army; Executioner; Minions; Mirror,47.6,8412,0.9,Card
+769,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Ronin; Fire Spirit; Skeletons; Royal Delivery; Tesla,47.6,4066,0.5,Card
+770,evolved-Furnace; hero-Knight; evolved-Tesla; Graveyard; Poison; Skeletons; Ice Spirit; Barbarian Barrel,47.5,3844,0.7,Card
+771,evolved-Skeleton Barrel; hero-Goblins; evolved-Royal Ghost; Suspicious Bush; Dark Prince; Dart Goblin; Rascals; The Log,47.5,2706,0.2,Card
+772,evolved-Elite Barbarians; hero-Mega Minion; evolved-Baby Dragon; Golem; Void; Goblin Cage; Tornado; Barbarian Barrel,47.5,802,0.9,Card
+773,Golem; Lumberjack; Baby Dragon; Night Witch; Lightning; Mega Minion; Tornado; Zap,47.5,526,0.3,Card
+774,evolved-Baby Dragon; Prince; evolved-Valkyrie; Cannon Cart; Dark Prince; Dart Goblin; Guards; Royal Delivery,47.4,8540,1,Card
+775,evolved-Skeleton Barrel; Boss Bandit; evolved-Mega Knight; Wall Breakers; Mini P.E.K.K.A; Wizard; Arrows; Bats,47.4,8481,0.7,Card
+776,evolved-Wall Breakers; hero-Magic Archer; Goblinstein; Miner; Berserker; Tornado; The Log; Bomb Tower,47.4,1463,2.1,Card
+777,evolved-Princess; hero-Knight; evolved-Cannon; Rocket; Skeletons; Ice Spirit; Royal Delivery; The Log,47.4,1059,0.1,Card
+778,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Dart Goblin; Vines; Goblins; Fire Spirit,47.3,12540,1.4,Card
+779,evolved-Electro Dragon; Skeleton King; evolved-Skeleton Army; Elixir Golem; Night Witch; Lightning; Goblin Curse; Arrows,47.3,9807,0.8,Card
+780,evolved-Furnace; hero-Goblins; hero-Barbarian Barrel; Graveyard; Ronin; Poison; Goblin Hut; Ice Spirit,47.3,2672,0.4,Card
+781,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Rocket; Bomber; Fire Spirit; Skeletons; Cannon,47.3,1066,0.4,Card
+782,evolved-Inferno Dragon; Electro Giant; evolved-Goblin Cage; Dark Prince; Mother Witch; Lightning; Bomber; Tornado,47.2,8417,1.2,Card
+783,evolved-Giant Snowball; hero-Berserker; evolved-Cannon; Goblin Drill; Rocket; Bomber; Fire Spirit; Skeletons,47.2,6428,8.2,Card
+784,evolved-Royal Giant; Ronin; evolved-Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,47.2,1499,0.6,Card
+785,evolved-Tesla; hero-Dark Prince; evolved-Ice Spirit; Miner; Rocket; Skeletons; Royal Delivery; The Log,47.2,1112,0.2,Card
+786,Mortar; Rune Giant; Fisherman; Fireball; Rascals; Electro Spirit; Barbarian Barrel; Inferno Tower,47.2,36,0.3,Card
+787,evolved-Lumberjack; Balloon; evolved-Valkyrie; Ram Rider; Elite Barbarians; Witch; Firecracker; Electro Wizard,47.1,8425,0.3,Card
+788,evolved-Wall Breakers; hero-Magic Archer; evolved-Goblin Barrel; Ronin; Fire Spirit; Skeletons; Ice Spirit; Cannon,47.1,3985,0.8,Card
+789,evolved-Musketeer; Balloon; evolved-Skeletons; Miner; Ice Golem; Barbarian Barrel; Giant Snowball; Bomb Tower,47.1,1054,0.2,Card
+790,evolved-Mega Knight; Miner; evolved-Inferno Dragon; Skeleton Barrel; Goblin Gang; Spear Goblins; Bats; Zap,47.1,401,0.3,Card
+791,evolved-Dart Goblin; Elixir Golem; evolved-Skeleton Army; Goblin Machine; Sparky; Rocket; Night Witch; Arrows,47,100,0.7,Card
+792,evolved-Mega Knight; Battle Ram; evolved-Hunter; Dark Prince; Lightning; Guards; Arrows; Bats,46.9,8362,3.2,Card
+793,evolved-Musketeer; hero-Ice Golem; evolved-Cannon; Hog Rider; Fireball; Skeletons; Ice Spirit; The Log,46.9,2225,0.4,Ultimate Champion
+794,evolved-Mega Knight; hero-Magic Archer; evolved-Giant Snowball; Rune Giant; Rocket; Executioner; Tornado; Electro Spirit,46.9,32,0.3,Card
+795,evolved-Skeletons; hero-Dark Prince; evolved-Tesla; Miner; Rocket; Electro Spirit; Royal Delivery; The Log,46.8,6737,1.8,Card
+796,evolved-Witch; Golden Knight; Mega Knight; Sparky; Mini P.E.K.K.A; Inferno Dragon; Electro Wizard; Freeze,46.7,8610,0.7,Card
+797,evolved-Goblin Barrel; Mighty Miner; evolved-Dart Goblin; Wall Breakers; Fire Spirit; Skeletons; Electro Spirit; Inferno Tower,46.5,2081,0.7,Card
+798,evolved-Barbarians; hero-Mini P.E.K.K.A; evolved-Witch; Golem; Hog Rider; Minion Horde; Bats; Freeze,46.5,254,0.2,Card
+799,evolved-Mega Knight; hero-Musketeer; evolved-Witch; Elixir Golem; Void; Night Witch; Electro Dragon; Furnace,46.5,129,0.5,Card
+800,evolved-Valkyrie; hero-Goblins; evolved-Ice Spirit; Mortar; Rocket; Ice Wizard; Tornado; The Log,46.5,43,0.2,Card
+801,evolved-Firecracker; hero-Valkyrie; evolved-Cannon; Hog Rider; Earthquake; Skeletons; Electro Spirit; Barbarian Barrel,46.4,1574,0.3,Card
+802,evolved-Firecracker; Hog Rider; evolved-Valkyrie; Skeleton Barrel; Skeleton Army; Fisherman; Goblin Gang; Royal Delivery,46.2,416,0.3,Card
+803,evolved-Executioner; Hog Rider; evolved-Valkyrie; Rocket; Goblins; Tornado; Ice Spirit; The Log,46,858,0.8,Card
+804,evolved-Inferno Dragon; Little Prince; evolved-Goblin Cage; Rune Giant; Miner; Berserker; Vines; Arrows,46,50,0.5,Card
+805,evolved-Executioner; Boss Bandit; evolved-Minion Horde; Hog Rider; Elite Barbarians; Bandit; Freeze; Zap,45.8,1302,0.5,Card
+806,evolved-Wall Breakers; hero-Knight; hero-Magic Archer; Miner; Spear Goblins; Tornado; The Log; Bomb Tower,45.6,3726,0.8,Card
+807,Lava Hound; Balloon; Barbarians; Fireball; Mega Minion; Minions; Zap; Tombstone,45.6,551,0.7,Card
+808,evolved-Executioner; hero-Balloon; evolved-Zap; Miner; Ronin; Berserker; Tornado; Bomb Tower,45.5,1508,0.1,Card
+809,evolved-Archers; hero-Dark Prince; evolved-Bats; Mortar; Miner; Poison; Skeletons; Barbarian Barrel,45.5,44,0.2,Card
+810,evolved-Inferno Dragon; Mighty Miner; evolved-Witch; Elite Barbarians; Mini P.E.K.K.A; Skeleton Army; Bats; Zap,45.3,8644,0.3,Card
+811,evolved-Mega Knight; hero-Mini P.E.K.K.A; evolved-Inferno Dragon; Rune Giant; Baby Dragon; Lightning; Minions; Arrows,45.3,64,0.6,Card
+812,evolved-Lumberjack; hero-Magic Archer; evolved-Inferno Dragon; Rune Giant; Bandit; Archers; The Log; Giant Snowball,45.3,53,0.5,Card
+813,Electro Giant; Goblin Drill; Inferno Dragon; Dark Prince; Mother Witch; Lightning; Bomber; Tornado,45.2,526,0.3,Card
+814,evolved-Mega Knight; hero-Giant; evolved-Valkyrie; Balloon; Witch; Skeleton Army; Furnace; Freeze,45.1,8571,2.3,Card
+815,evolved-Inferno Dragon; Skeleton King; evolved-Witch; Golem; Miner; Night Witch; Goblin Curse; Zap,45,11901,3.1,Card
+816,evolved-Dart Goblin; Skeleton Barrel; evolved-Skeleton Army; Giant Skeleton; Cannon Cart; Mirror; Bats; Clone,45,8041,0.9,Card
+817,evolved-Goblin Barrel; Ronin; evolved-Dart Goblin; Goblins; Ice Spirit; Electro Spirit; The Log; Cannon,45,2090,0.2,Card
+818,evolved-Goblin Barrel; hero-Knight; evolved-Dart Goblin; Princess; Fire Spirit; Ice Spirit; The Log; Cannon,45,1676,0.2,Card
+819,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Mother Witch; Dart Goblin; Vines; Guards,44.9,13738,1.6,Card
+820,evolved-Skeleton Barrel; Skeleton King; evolved-Skeleton Army; Wall Breakers; Minion Horde; Dart Goblin; Vines; Fire Spirit,44.9,8510,1,Card
+821,evolved-Firecracker; Royal Hogs; evolved-Wizard; Mini P.E.K.K.A; Bowler; Skeleton Army; Bats; Freeze,44.9,8353,0.7,Card
+822,evolved-Goblin Drill; hero-Knight; evolved-Giant Snowball; Rocket; Bomber; Fire Spirit; Skeletons; Cannon,44.9,1273,0.3,Card
+823,evolved-Giant Snowball; hero-Berserker; evolved-Tesla; Goblin Drill; Poison; Bomber; Fire Spirit; Skeletons,44.9,1038,0.4,Card
+824,evolved-Skeleton Barrel; Skeleton King; evolved-Mortar; Cannon Cart; Goblin Gang; Ice Wizard; Arrows; Spear Goblins,44.8,1544,0.6,Card
+825,evolved-Battle Ram; Giant Skeleton; evolved-Valkyrie; Sparky; Inferno Dragon; Battle Healer; Hunter; Furnace,44.7,8582,1.4,Card
+826,evolved-Skeletons; hero-Dark Prince; evolved-Tesla; Miner; Rocket; Ice Spirit; Royal Delivery; The Log,44.5,2195,0.3,Card
+827,evolved-Goblin Giant; Goblin Machine; evolved-P.E.K.K.A; Electro Wizard; Goblin Curse; Bomber; Arrows; Rage,44.4,8622,2.2,Card
+828,evolved-Skeleton Army; Boss Bandit; evolved-Witch; Royal Hogs; Mini P.E.K.K.A; Valkyrie; Bats; Rage,44.4,8396,0.7,Card
+829,evolved-Mega Knight; Golden Knight; evolved-Witch; Royal Hogs; Bowler; Minions; Guards; Rage,44.4,4953,0.2,Card
+830,evolved-Skeleton Barrel; Wall Breakers; evolved-Royal Ghost; Dart Goblin; Vines; Rascals; Barbarian Barrel; Bomb Tower,44.2,16324,1.8,Card
+831,evolved-Giant Snowball; hero-Berserker; evolved-Tesla; X-Bow; Rocket; Ice Wizard; Skeletons; The Log,44.1,3698,2.5,Card
+832,evolved-Electro Dragon; Elixir Golem; evolved-Valkyrie; Battle Healer; Night Witch; Mega Minion; Arrows; Rage,44,8229,0.3,Card
+833,evolved-Furnace; Graveyard; evolved-Giant Snowball; Giant Skeleton; Berserker; Goblin Curse; Goblin Hut; Zappies,43.9,9206,2.4,Card
+834,evolved-Goblin Drill; hero-Berserker; evolved-Giant Snowball; Poison; Bomber; Ice Spirit; Royal Delivery; Tesla,43.9,1464,0.5,Card
+835,evolved-Skeleton Barrel; Miner; evolved-Mega Knight; Inferno Dragon; Goblin Gang; Spear Goblins; Bats; Zap,43.9,1171,0.2,Card
+836,evolved-Mega Knight; Ram Rider; evolved-Wizard; Baby Dragon; Inferno Dragon; Witch; Berserker; Vines,43.8,8620,1,Card
+837,evolved-Hunter; Mega Knight; evolved-Giant Snowball; Prince; Mini P.E.K.K.A; Valkyrie; Zap; Heal Spirit,43.7,8552,1.9,Card
+838,evolved-Electro Dragon; Golem; evolved-Inferno Dragon; Lumberjack; Battle Healer; Barbarians; Tornado; Elixir Collector,43.6,10467,0.7,Card
+839,evolved-Mega Knight; Elixir Golem; evolved-Valkyrie; Witch; Wizard; Firecracker; Arrows; Bats,43.6,8452,0.3,Card
+840,evolved-Skeleton Army; Prince; evolved-Valkyrie; Elite Barbarians; Mini P.E.K.K.A; Minion Horde; Executioner; Rage,43.6,8354,0.7,Card
+841,evolved-Baby Dragon; Prince; evolved-Barbarians; Mini P.E.K.K.A; Skeleton Army; Electro Wizard; Spear Goblins; Zap,43.5,8683,1.6,Card
+842,evolved-Skeleton Army; Skeleton King; evolved-Witch; Elixir Golem; Night Witch; Lightning; Arrows; Rage,43.5,8389,0.7,Card
+843,evolved-Wall Breakers; hero-Magic Archer; hero-Berserker; Miner; Fire Spirit; Bats; Royal Delivery; Bomb Tower,43.3,723,0.2,Card
+844,evolved-Skeleton Barrel; hero-Berserker; evolved-Mega Knight; Firecracker; Bandit; Spear Goblins; Bats; Electro Spirit,42.7,274,0.1,Card
+845,evolved-Royal Hogs; Boss Bandit; evolved-Witch; Mega Knight; Sparky; Barbarians; Wizard; Mirror,42.6,8411,1.1,Card
+846,evolved-Firecracker; hero-Mini P.E.K.K.A; evolved-Valkyrie; Royal Giant; Skeleton Barrel; Skeleton Army; Arrows; Bats,42.4,8712,0.3,Card
+847,evolved-Wizard; Balloon; Mega Knight; Mini P.E.K.K.A; Inferno Dragon; Skeleton Army; Arrows; Bats,42.4,8490,0.7,Card
+848,evolved-Inferno Dragon; hero-Dark Prince; evolved-Goblin Cage; Electro Giant; Mother Witch; Lightning; Bomber; Tornado,42.4,2409,1.7,Card
+849,evolved-Mega Knight; Balloon; evolved-Wizard; Giant Skeleton; Minion Horde; Skeleton Army; Freeze; Zap,42.3,8622,0.8,Card
+850,evolved-Mega Knight; Royal Hogs; evolved-Skeleton Army; Mini P.E.K.K.A; Valkyrie; Lightning; Firecracker; Dart Goblin,42.3,8449,0.7,Card
+851,evolved-Mega Knight; hero-Mini P.E.K.K.A; evolved-Executioner; Royal Hogs; Poison; Electro Wizard; Guards; Tornado,42.3,8431,0.3,Card
+852,evolved-Wizard; Royal Hogs; evolved-Witch; Mega Knight; Prince; Inferno Dragon; Skeleton Army; Mirror,42.2,8496,0.7,Card
+853,evolved-Mega Knight; Goblinstein; evolved-Valkyrie; Elixir Golem; Sparky; Mini P.E.K.K.A; Witch; Firecracker,42.2,8438,0.3,Card
+854,evolved-Wizard; Balloon; evolved-Witch; Giant Skeleton; Dark Prince; Minion Horde; Valkyrie; Clone,42.2,8273,1.5,Card
+855,evolved-Inferno Dragon; hero-Goblins; Skeleton King; Golem; Miner; Night Witch; Goblin Curse; Zap,42.1,8540,2.2,Card
+856,evolved-Bomber; hero-Mini P.E.K.K.A; evolved-Bats; Electro Giant; Lumberjack; Electro Wizard; Vines; Furnace,42.1,8249,0.9,Card
+857,evolved-Firecracker; Golden Knight; evolved-Mega Knight; Elite Barbarians; Mini P.E.K.K.A; Witch; Valkyrie; Hunter,41.9,8558,0.4,Card
+858,evolved-Wizard; Golden Knight; evolved-Inferno Dragon; Prince; Skeleton Army; Firecracker; Royal Delivery; Zap,41.9,8385,1,Card
+859,hero-Wizard; hero-Mini P.E.K.K.A; Mega Knight; Elite Barbarians; Magic Archer; Dark Prince; Firecracker; Goblins,41.8,8090,0.4,Card
+860,Graveyard; Giant; Witch; Bowler; Minions; Guards; Arrows; Giant Snowball,41.8,158,0.1,Card
+861,evolved-Wizard; Mega Knight; evolved-Witch; Mini P.E.K.K.A; Minion Horde; Valkyrie; Lightning; Arrows,41.6,8419,0.6,Card
+862,evolved-Mega Knight; Royal Hogs; evolved-Witch; Minion Horde; Valkyrie; Skeleton Army; Wizard; Mirror,41.5,8283,0.9,Card
+863,evolved-Mega Knight; hero-Goblins; evolved-Bats; Goblin Drill; Wall Breakers; Skeleton Barrel; Inferno Dragon; Arrows,41.3,8461,1.9,Card
+864,evolved-Firecracker; Golem; evolved-Executioner; Inferno Dragon; Night Witch; Skeleton Army; Zap; Elixir Collector,41,8365,0.4,Card
+865,evolved-Elite Barbarians; hero-Berserker; Boss Bandit; Hog Rider; Minion Horde; Executioner; Freeze; Zap,41,853,0.7,Card
+866,evolved-Electro Dragon; Monk; evolved-Barbarians; Elixir Golem; Battle Healer; Night Witch; Arrows; Rage,40.8,8831,1.6,Card
+867,evolved-Witch; Goblin Barrel; Giant Skeleton; Sparky; Skeleton Army; Arrows; Clone; Tesla,40.7,2199,0.4,Card
+868,evolved-Royal Ghost; hero-Ice Golem; evolved-Zap; Three Musketeers; Elite Barbarians; Bandit; Heal Spirit; Elixir Collector,40.7,523,0.3,Card
+869,evolved-Dart Goblin; hero-Goblins; evolved-Royal Ghost; Suspicious Bush; Skeleton Barrel; Rocket; Rascals; The Log,40.7,393,0.3,Card
+870,evolved-Elite Barbarians; hero-Valkyrie; hero-Berserker; Golem; Electro Dragon; Skeleton Dragons; Tornado; Heal Spirit,40.7,209,0.8,Card
+871,Mega Knight; P.E.K.K.A; Musketeer; Dark Prince; Fireball; Electro Wizard; Zap; Inferno Tower,40.6,7348,0.2,Card
+872,Archer Queen; Royal Hogs; Earthquake; Skeletons; Ice Spirit; Royal Delivery; The Log; Cannon,40.6,1016,0.1,Card
+873,evolved-Firecracker; hero-Balloon; Boss Bandit; Mega Knight; Mini P.E.K.K.A; Wizard; Giant Snowball; Tombstone,40.6,635,0.3,Card
+874,evolved-Baby Dragon; Golden Knight; evolved-Giant Snowball; Rune Giant; Inferno Dragon; Bowler; Lightning; Tornado,40.6,32,0.3,Card
+875,evolved-Lumberjack; Balloon; evolved-Electro Dragon; Inferno Dragon; Bowler; Tornado; Freeze; Barbarian Barrel,40.5,9945,0.8,Card
+876,evolved-Skeletons; hero-Berserker; evolved-Tesla; Miner; Rocket; Electro Spirit; Royal Delivery; The Log,40.5,2247,0.3,Card
+877,evolved-Skeleton Barrel; Mortar; Cannon Cart; Fireball; Goblins; Minions; Rascals; Electro Spirit,40.5,37,0.2,Card
+878,evolved-Witch; Goblin Barrel; Prince; Mini P.E.K.K.A; Baby Dragon; Valkyrie; Skeleton Army; Wizard,40.4,1377,0,Card
+879,evolved-Royal Hogs; hero-Dark Prince; evolved-Archers; Berserker; Lightning; Ice Spirit; The Log; Tesla,40.3,1437,0.9,Card
+880,evolved-Electro Dragon; Golem; evolved-Baby Dragon; Mini P.E.K.K.A; Battle Healer; Tornado; Barbarian Barrel; Elixir Collector,40.2,10208,1.3,Card
+881,Balloon; Three Musketeers; Lumberjack; Elite Barbarians; Rocket; Minion Horde; Barbarian Hut; Princess,40.2,102,0.7,Card
+882,evolved-Wizard; P.E.K.K.A; evolved-Witch; Three Musketeers; Sparky; Elite Barbarians; Bats; Rage,40.1,8336,0.7,Card
+883,evolved-Skeletons; Miner; evolved-Tesla; Rocket; Dark Prince; Electro Spirit; Royal Delivery; The Log,40.1,1111,0.1,Card
+884,evolved-Firecracker; Mega Knight; evolved-Wizard; Prince; Barbarians; Witch; Barbarian Hut; Freeze,40.1,324,0.1,Card
+885,evolved-Valkyrie; hero-Wizard; evolved-Witch; Elixir Golem; Poison; Firecracker; Mirror; Bats,40.1,272,0.1,Card
+886,evolved-Skeleton Army; Ram Rider; evolved-Witch; Royal Hogs; Inferno Dragon; Valkyrie; Mirror; Freeze,40,8508,0.9,Card
+887,evolved-Wizard; Miner; evolved-Witch; Mega Knight; Magic Archer; Baby Dragon; Barbarian Hut; Elixir Collector,40,8343,0.7,Card
+888,evolved-Baby Dragon; P.E.K.K.A; evolved-Valkyrie; Prince; Void; Inferno Dragon; Skeleton Army; Rage,40,8327,1.1,Card
+889,evolved-Electro Dragon; Golem; evolved-Barbarians; Lumberjack; Baby Dragon; Battle Healer; Tornado; Elixir Collector,39.9,9879,1.8,Card
+890,evolved-Firecracker; Skeleton King; evolved-Witch; Elixir Golem; Barbarians; Skeleton Army; Ice Wizard; Arrows,39.9,8642,0.4,Card
+891,evolved-Electro Dragon; Boss Bandit; evolved-Furnace; Golem; Spirit Empress; Berserker; Arrows; Tornado,39.9,8586,5.1,Card
+892,evolved-Mega Knight; Ram Rider; evolved-Valkyrie; Prince; Mini P.E.K.K.A; Baby Dragon; Skeleton Army; Electro Wizard,39.9,8362,0.3,Card
+893,evolved-Wizard; Miner; evolved-Bats; Mega Knight; Prince; Inferno Dragon; Dark Prince; Skeleton Army,39.9,8348,1.8,Card
+894,evolved-Royal Hogs; Archer Queen; evolved-Mega Knight; Prince; Valkyrie; Skeleton Army; Hunter; Arrows,39.6,8294,1.1,Card
+895,evolved-Bomber; Mortar; evolved-Baby Dragon; Mega Knight; Giant Skeleton; Witch; Electro Wizard; Clone,39.5,86,0.4,Card
+896,evolved-Firecracker; hero-Goblins; evolved-Mega Knight; Elixir Golem; Witch; Valkyrie; Dart Goblin; Minions,39.4,8365,0.4,Card
+897,evolved-Lumberjack; Golem; evolved-Electro Dragon; Battle Healer; Skeleton Dragons; Tornado; Barbarian Barrel; Elixir Collector,39.3,12321,0.8,Card
+898,hero-Mini P.E.K.K.A; Giant; Sparky; Minion Horde; Skeleton Army; Arrows; Bats; Zap,39.3,8668,0.3,Card
+899,evolved-Barbarians; Lava Hound; evolved-Zap; Miner; Phoenix; Flying Machine; Goblin Curse; Tombstone,39.2,8712,1.6,Card
+900,evolved-Mortar; Goblinstein; evolved-Wizard; Ram Rider; Valkyrie; Skeleton Army; Minions; Arrows,39.2,8584,0.8,Card
+901,evolved-Firecracker; Elixir Golem; evolved-Electro Dragon; Elite Barbarians; Inferno Dragon; Battle Healer; Arrows; Rage,39.1,8428,0.4,Card
+902,evolved-Electro Dragon; Elixir Golem; evolved-Barbarians; Battle Healer; Night Witch; Arrows; Tornado; Rage,39,10009,1.8,Card
+903,evolved-Skeleton Army; Skeleton King; evolved-Inferno Dragon; Mega Knight; Sparky; Barbarians; Witch; Clone,39,8445,1.6,Card
+904,evolved-Firecracker; Elixir Golem; evolved-Mega Knight; Elite Barbarians; Witch; Valkyrie; Dart Goblin; Freeze,39,8265,0.4,Card
+905,evolved-Wizard; Golden Knight; evolved-Valkyrie; Giant; Prince; Mini P.E.K.K.A; Skeleton Army; Arrows,39,8249,0.3,Card
+906,evolved-Witch; hero-Mini P.E.K.K.A; evolved-Giant Snowball; Graveyard; Giant; Bowler; Vines; Minions,38.9,10777,0.4,Card
+907,evolved-Battle Ram; Royal Ghost; evolved-P.E.K.K.A; Poison; Electro Wizard; Bandit; Minions; Zap,38.8,1591,0.3,Card
+908,evolved-Valkyrie; hero-Wizard; evolved-Witch; Ram Rider; Sparky; Firecracker; Electro Wizard; Goblin Hut,38.8,1033,0.1,Card
+909,evolved-Inferno Dragon; Mega Knight; evolved-Goblin Cage; Mother Witch; Firecracker; Goblin Curse; Freeze; Rage,38.8,1028,0.3,Card
+910,Giant; Mini P.E.K.K.A; Musketeer; Knight; Fireball; Archers; Minions; Arrows,38.7,93395,5.6,Card
+911,evolved-Wizard; Giant Skeleton; evolved-Barbarians; Baby Dragon; Dark Prince; Skeleton Army; Arrows; Clone,38.7,8278,0.7,Card
+912,evolved-Furnace; Mighty Miner; evolved-Witch; Elite Barbarians; Void; Minion Horde; Mother Witch; Electro Wizard,38.7,587,0.6,Card
+913,evolved-Wizard; Balloon; Mega Knight; P.E.K.K.A; Phoenix; Witch; Mirror; Rage,38.6,8582,0.8,Card
+914,evolved-Executioner; Boss Bandit; evolved-Giant Snowball; Hog Rider; Royal Ghost; Furnace; Guards; Freeze,38.6,516,0.5,Card
+915,evolved-Baby Dragon; hero-Mini P.E.K.K.A; evolved-Valkyrie; Golem; Dark Prince; Lightning; Ice Wizard; Tornado,38.5,8434,0.6,Card
+916,Royal Giant; Hunter; Fisherman; Fireball; Skeleton Dragons; Skeletons; The Log; Heal Spirit,38.5,564,1.3,Card
+917,evolved-Skeleton Barrel; hero-Goblins; Mortar; Cannon Cart; Fireball; Minions; Rascals; Electro Spirit,38.5,52,0.2,Card
+918,evolved-P.E.K.K.A; Electro Giant; evolved-Wizard; Mega Knight; Elite Barbarians; Inferno Dragon; Witch; Firecracker,38.4,8418,0.7,Card
+919,evolved-Wizard; Elixir Golem; evolved-Valkyrie; Mini P.E.K.K.A; Witch; Lightning; Poison; Furnace,38.4,8305,0.7,Card
+920,evolved-Witch; Skeleton King; Golem; Miner; Inferno Dragon; Night Witch; Goblin Curse; Zap,38.4,2142,0.6,Card
+921,Goblin Giant; Sparky; Elite Barbarians; Dark Prince; Electro Wizard; Zap; Heal Spirit; Rage,38.4,388,1.7,Card
+922,evolved-P.E.K.K.A; Golden Knight; evolved-Wizard; Giant; Sparky; Barbarians; Freeze; Rage,38.3,8485,0.7,Card
+923,evolved-Skeleton Army; Balloon; evolved-Witch; Prince; Minion Horde; Wizard; Arrows; Rage,38.3,8426,0.7,Card
+924,Wall Breakers; Mega Knight; Prince; Firecracker; Bandit; Arrows; Bats; Zap,38.3,7177,0.2,Card
+925,evolved-Executioner; hero-Magic Archer; evolved-Goblin Cage; Rune Giant; Miner; Goblin Demolisher; Berserker; Tornado,38.2,34,0.3,Card
+926,evolved-Skeleton Barrel; Void; evolved-P.E.K.K.A; Witch; Minion Horde; Wizard; Electro Wizard; Clone,38.1,8462,0.7,Card
+927,evolved-Mega Knight; Lumberjack; evolved-Witch; Minion Horde; Royal Recruits; Firecracker; Freeze; Clone,38,1070,0.2,Card
+928,evolved-Mega Knight; Monk; evolved-Witch; Electro Giant; Mini P.E.K.K.A; Lightning; Arrows; Tornado,37.9,8379,0.6,Card
+929,evolved-Wizard; Balloon; evolved-Valkyrie; Ram Rider; Mega Knight; Prince; Minion Horde; Skeleton Army,37.9,8308,0.7,Card
+930,evolved-P.E.K.K.A; Ram Rider; evolved-Royal Recruits; Mini P.E.K.K.A; Witch; Valkyrie; Wizard; Dart Goblin,37.9,1039,0.3,Card
+931,evolved-Wizard; Ram Rider; evolved-Barbarians; X-Bow; Mega Knight; Dark Prince; Lightning; Firecracker,37.9,293,0.1,Card
+932,evolved-Mega Knight; Balloon; evolved-Wizard; Elite Barbarians; Inferno Dragon; Minion Horde; Executioner; Rage,37.8,8651,0.8,Card
+933,evolved-Mega Knight; Elite Barbarians; evolved-Wizard; Night Witch; Minion Horde; Mother Witch; Vines; Mirror,37.8,8397,0.9,Card
+934,evolved-Royal Hogs; hero-Wizard; evolved-Valkyrie; Inferno Dragon; Barbarians; Skeleton Army; Executioner; Electro Wizard,37.7,8586,0.4,Card
+935,evolved-P.E.K.K.A; Skeleton King; evolved-Witch; Sparky; Valkyrie; Firecracker; Skeleton Dragons; Rage,37.7,4817,0.2,Card
+936,evolved-Royal Ghost; Boss Bandit; evolved-Executioner; Ram Rider; Lightning; Guards; Barbarian Barrel; Giant Snowball,37.7,1683,0.3,Card
+937,evolved-Skeleton Army; Mighty Miner; evolved-Wizard; Balloon; Sparky; Minion Horde; Arrows; Clone,37.6,8259,1.5,Card
+938,Mortar; Rune Giant; Rocket; Mother Witch; Knight; Skeleton Army; Barbarian Barrel; Inferno Tower,37.6,85,0.8,Card
+939,evolved-Mega Knight; Balloon; evolved-Executioner; Giant Skeleton; Witch; Lightning; Arrows; Clone,37.5,8401,1.6,Card
+940,evolved-Valkyrie; hero-Mini P.E.K.K.A; evolved-Witch; Elixir Golem; Mega Knight; Phoenix; Earthquake; Rage,37.5,8322,0.3,Card
+941,evolved-Knight; Graveyard; evolved-Goblin Cage; Baby Dragon; Poison; Ice Wizard; Tornado; Barbarian Barrel,37.5,1041,0.2,Card
+942,evolved-Executioner; Monk; evolved-Wizard; Elixir Golem; P.E.K.K.A; Sparky; Lightning; Electro Wizard,37.4,8213,0.6,Card
+943,evolved-Royal Hogs; Archer Queen; evolved-Skeleton Army; Void; Baby Dragon; Witch; Wizard; Goblins,37.2,8356,0.7,Card
+944,evolved-Goblin Cage; Goblin Barrel; Skeleton Barrel; Mega Knight; Goblin Gang; Dart Goblin; Bats; Zap,37.2,4445,0.1,Card
+945,evolved-Baby Dragon; Golem; evolved-Witch; Mini P.E.K.K.A; Berserker; Vines; Barbarian Barrel; Elixir Collector,37.1,3028,0.4,Card
+946,evolved-Firecracker; P.E.K.K.A; evolved-Witch; Prince; Inferno Dragon; Minion Horde; Executioner; Dart Goblin,37,8195,0.4,Card
+947,evolved-Skeleton Army; hero-Wizard; hero-Mini P.E.K.K.A; Sparky; Magic Archer; Dark Prince; Minion Horde; Bats,37,7894,0.7,Card
+948,evolved-Mega Knight; Golden Knight; evolved-Barbarians; Mini P.E.K.K.A; Inferno Dragon; Witch; Zap; Tombstone,36.9,1066,0.2,Card
+949,evolved-Wizard; Skeleton King; evolved-Barbarians; Sparky; Bowler; Electro Wizard; Vines; Giant Snowball,36.9,1052,0.2,Card
+950,Balloon; Giant; P.E.K.K.A; Sparky; Witch; Skeleton Army; Wizard; Freeze,36.8,8439,0.7,Card
+951,evolved-Wizard; Ram Rider; Royal Hogs; Giant Skeleton; Sparky; Witch; Lightning; Mirror,36.8,8355,0.7,Card
+952,evolved-Mega Knight; Little Prince; evolved-Furnace; Ram Rider; Lightning; Royal Ghost; Goblins; Giant Snowball,36.8,1414,0.2,Card
+953,evolved-Mega Knight; Boss Bandit; evolved-Royal Recruits; Giant Skeleton; Prince; Mini P.E.K.K.A; Firecracker; Archers,36.7,1020,0.3,Card
+954,evolved-Wizard; hero-Mini P.E.K.K.A; evolved-Witch; Elixir Golem; Spirit Empress; Poison; Bats; Freeze,36.6,8180,0.3,Card
+955,evolved-Dart Goblin; Skeleton King; evolved-Skeleton Army; Suspicious Bush; Skeleton Barrel; Mother Witch; Vines; Goblins,36.5,1765,0.2,Card
+956,evolved-Mortar; Ram Rider; evolved-Mega Knight; Minion Horde; Mother Witch; Firecracker; Goblin Curse; Rage,36.4,8312,2.1,Card
+957,evolved-Archers; hero-Mega Minion; evolved-Zap; Rune Giant; Void; Dark Prince; Ronin; Electro Wizard,36.4,55,0.5,Card
+958,evolved-Firecracker; Electro Giant; evolved-Valkyrie; Inferno Dragon; Witch; Earthquake; Tornado; Zap,36.3,8479,1.4,Card
+959,evolved-Valkyrie; Elixir Golem; evolved-Witch; P.E.K.K.A; Sparky; Inferno Dragon; Barbarians; Wizard,36.3,8212,0.3,Card
+960,evolved-Baby Dragon; Lumberjack; evolved-Valkyrie; Inferno Dragon; Witch; Minion Horde; Skeleton Army; Goblin Hut,36.3,8168,1.1,Card
+961,evolved-Lumberjack; hero-Giant; evolved-Wizard; Balloon; Sparky; Minion Horde; Freeze; Zap,36.3,8117,2.2,Card
+962,evolved-Mega Knight; Golden Knight; evolved-Witch; Royal Hogs; Elite Barbarians; Mini P.E.K.K.A; Mother Witch; Skeleton Army,36.3,4840,0.2,Card
+963,evolved-Knight; Valkyrie; Archers; Goblins; Minions; Spear Goblins; Skeletons; Tombstone,36.3,1550,0.3,Card
+964,evolved-Lumberjack; Balloon; evolved-Wizard; Prince; Lightning; Guards; Mirror; Arrows,36.1,8273,0.7,Card
+965,evolved-Goblin Giant; Goblinstein; evolved-P.E.K.K.A; Fisherman; Bomber; Guards; Arrows; Rage,36.1,1098,1.4,Card
+966,evolved-Witch; Goblin Barrel; Prince; Mini P.E.K.K.A; Baby Dragon; Valkyrie; Skeleton Army; Arrows,36,1605,0,Card
+967,evolved-Battle Ram; Magic Archer; evolved-P.E.K.K.A; Dark Prince; Poison; Electro Wizard; Bandit; Zap,36,1379,0.2,Card
+968,evolved-Battle Ram; Archer Queen; evolved-Witch; Mega Knight; Elite Barbarians; Barbarians; Skeleton Dragons; Bomb Tower,35.9,8191,1.3,Card
+969,evolved-Royal Giant; hero-Goblins; evolved-Royal Ghost; Hunter; Fisherman; Fireball; Electro Spirit; Barbarian Barrel,35.8,2458,0.5,Card
+970,evolved-Mega Knight; hero-Mini P.E.K.K.A; evolved-Witch; Elixir Golem; Three Musketeers; Executioner; Mirror; Arrows,35.7,8446,0.3,Card
+971,Hog Rider; Musketeer; Fireball; Ice Golem; Skeletons; Ice Spirit; The Log; Cannon,35.7,3440,0.8,Card
+972,evolved-Firecracker; Golden Knight; evolved-Mega Knight; Golem; Witch; Minion Horde; Mother Witch; Poison,35.6,8475,0.4,Card
+973,evolved-Zap; Elixir Golem; Flying Machine; Witch; Mother Witch; Poison; Mirror; Tombstone,35.2,8266,0.9,Card
+974,evolved-Witch; Graveyard; Giant; Mini P.E.K.K.A; Bowler; Minions; Arrows; Giant Snowball,35.1,3043,0.5,Card
+975,evolved-Tesla; Goblin Barrel; Giant Skeleton; Sparky; Minion Horde; Skeleton Army; Arrows; Clone,35.1,2133,0.4,Card
+976,evolved-Witch; hero-Magic Archer; Boss Bandit; Royal Giant; Ram Rider; Giant Skeleton; Lumberjack; Dart Goblin,35.1,305,0.7,Card
+977,evolved-Skeleton Army; Goblin Barrel; Giant Skeleton; Sparky; Minion Horde; Arrows; Clone; Tesla,34.9,395,0.4,Card
+978,evolved-Valkyrie; Graveyard; evolved-Witch; Poison; Vines; Ice Wizard; Goblin Hut; Barbarian Barrel,34.8,14744,1.7,Card
+979,evolved-Skeleton Army; Elixir Golem; evolved-Wizard; Sparky; Minion Horde; Firecracker; Mirror; Tornado,34.8,8427,0.9,Card
+980,evolved-Firecracker; Balloon; evolved-Witch; Elixir Golem; Battle Healer; Royal Ghost; Poison; Elixir Collector,34.8,8209,0.4,Card
+981,evolved-Bomber; Electro Giant; evolved-Goblin Cage; Inferno Dragon; Dark Prince; Mother Witch; Lightning; Tornado,34.7,1088,0.6,Card
+982,Balloon; Lumberjack; Inferno Dragon; Bowler; Electro Dragon; Tornado; Freeze; Barbarian Barrel,34.6,133,0.5,Card
+983,Skeleton King; Battle Ram; Prince; Mini P.E.K.K.A; Dark Prince; Minion Horde; Mother Witch; Wizard,34.6,104,0.1,Card
+984,evolved-Inferno Dragon; hero-Goblins; evolved-Valkyrie; Lava Hound; Balloon; Void; Bomber; Arrows,34.5,8268,4.4,Card
+985,Golem; Lumberjack; Baby Dragon; Night Witch; Lightning; Mega Minion; Tornado; Barbarian Barrel,34.5,4726,0.4,Card
+986,evolved-Skeletons; Hog Rider; Musketeer; Fireball; Ice Golem; Ice Spirit; The Log; Cannon,34.5,3610,0.5,Card
+987,Goblin Barrel; Giant Skeleton; Sparky; Minion Horde; Skeleton Army; Arrows; Clone; Tesla,34.3,499,0.5,Card
+988,evolved-Electro Dragon; Elixir Golem; evolved-Baby Dragon; Flying Machine; Battle Healer; Bandit; Dart Goblin; Bomber,34.2,8341,1.1,Card
+989,evolved-Witch; Graveyard; evolved-Goblin Cage; Valkyrie; Poison; Vines; Ice Wizard; Barbarian Barrel,34.2,4453,0.6,Card
+990,evolved-P.E.K.K.A; Prince; Baby Dragon; Lightning; Dart Goblin; Mirror; Arrows; Rage,33.9,8036,0.6,Card
+991,evolved-Wizard; Miner; evolved-Valkyrie; Giant Skeleton; Royal Ghost; Skeleton Army; Bats; Clone,33.8,8532,0.7,Card
+992,evolved-Baby Dragon; Golem; Prince; Lightning; Mega Minion; Goblin Curse; Guards; Barbarian Barrel,33.8,1028,0.3,Card
+993,evolved-Royal Recruits; hero-Mini P.E.K.K.A; Monk; Three Musketeers; Arrows; Heal Spirit; Rage; Elixir Collector,33.7,8800,2.2,Card
+994,evolved-Witch; Graveyard; Giant; Bowler; Minions; Guards; Arrows; Giant Snowball,33.7,8791,1.5,Card
+995,evolved-P.E.K.K.A; Balloon; evolved-Electro Dragon; Lumberjack; Ice Wizard; Tornado; Freeze; Barbarian Barrel,33.7,3091,0.3,Card
+996,evolved-Mega Knight; Balloon; evolved-Wizard; Royal Hogs; Prince; Witch; Minion Horde; Valkyrie,33.6,8302,0.7,Card
+997,evolved-Bomber; Skeleton King; evolved-Electro Dragon; Golem; Night Witch; Lightning; Tornado; Tombstone,33.6,1644,0.9,Card
+998,evolved-Electro Dragon; Elixir Golem; evolved-Barbarians; Battle Healer; Night Witch; Arrows; Heal Spirit; Rage,33.6,1517,0.3,Card
+999,evolved-Knight; Graveyard; Baby Dragon; Poison; Ice Wizard; Tornado; Barbarian Barrel; Tombstone,33.6,1210,0.3,Card
+1000,evolved-Firecracker; Lava Hound; evolved-Witch; Giant Skeleton; Mini P.E.K.K.A; Baby Dragon; Mirror; Clone,33.5,8348,1.6,Card
+1001,evolved-Mega Knight; hero-Mini P.E.K.K.A; evolved-Executioner; Electro Giant; Lightning; Goblin Cage; Mirror; Tornado,33.3,8320,0.6,Card
+1002,evolved-Mortar; Goblinstein; evolved-Valkyrie; Giant Skeleton; Sparky; Mini P.E.K.K.A; Witch; Bats,33.3,123,0.1,Card
+1003,evolved-Witch; Graveyard; Giant; Mini P.E.K.K.A; Bowler; Vines; Minions; Giant Snowball,33.2,3231,0.4,Card
+1004,evolved-Witch; hero-Mini P.E.K.K.A; hero-Giant; Dark Prince; Zap; Heal Spirit; Rage; Elixir Collector,33.2,1587,0.4,Card
+1005,evolved-Barbarians; Golem; evolved-Witch; Balloon; Sparky; Electro Dragon; Wizard; Firecracker,33.2,1015,0.2,Card
+1006,evolved-Witch; Monk; Elixir Golem; Royal Hogs; Mega Knight; Sparky; Baby Dragon; Goblin Curse,33.1,1080,0.3,Card
+1007,evolved-Wizard; hero-Mini P.E.K.K.A; Electro Giant; Elixir Golem; Firecracker; Electro Wizard; Arrows; Bats,32.9,8462,0.7,Card
+1008,evolved-Witch; hero-Giant; Graveyard; Bowler; Minions; Guards; Arrows; Giant Snowball,32.9,3069,0.8,Card
+1009,evolved-Skeleton Army; Skeleton King; Golem; Miner; Inferno Dragon; Night Witch; Goblin Curse; Zap,32.9,1404,0.4,Card
+1010,evolved-Mega Knight; Royal Giant; evolved-Bats; Prince; Witch; Valkyrie; Firecracker; Dart Goblin,32.9,216,0.1,Card
+1011,evolved-Goblin Giant; hero-Balloon; evolved-Royal Recruits; Battle Ram; Three Musketeers; Sparky; Furnace; Rage,32.6,466,0.6,Card
+1012,evolved-Wizard; P.E.K.K.A; Giant Skeleton; Elite Barbarians; Minion Horde; Zap; Clone; Rage,32.5,8221,1.5,Card
+1013,evolved-Bats; hero-Goblins; Baby Dragon; Valkyrie; Skeleton Army; Bandit; Minions; Fire Spirit,32.5,8035,1.8,Card
+1014,Goblin Giant; Sparky; Mini P.E.K.K.A; Dark Prince; Mega Minion; Electro Wizard; Zap; Rage,32.5,6223,0.2,Card
+1015,evolved-Dart Goblin; Skeleton King; Suspicious Bush; Skeleton Barrel; Mother Witch; Skeleton Army; Vines; Goblins,32.4,1526,0.2,Card
+1016,evolved-Goblin Cage; Golden Knight; Royal Hogs; Flying Machine; Royal Recruits; Zappies; Arrows; Barbarian Barrel,32.3,4099,0.6,Card
+1017,evolved-Furnace; Graveyard; Giant Skeleton; Berserker; Goblin Curse; Goblin Hut; Zappies; Giant Snowball,32.2,8695,1.5,Card
+1018,evolved-Royal Giant; hero-Wizard; evolved-Barbarians; Rocket; Witch; Minion Horde; Barbarian Hut; Poison,32.2,115,0.8,Card
+1019,Skeleton King; Golem; Miner; Inferno Dragon; Night Witch; Skeleton Army; Goblin Curse; Zap,32,8354,2.1,Card
+1020,Royal Giant; Goblin Barrel; Mega Knight; Prince; Skeleton Army; Princess; Dart Goblin; Bats,31.9,1264,0,Card
+1021,evolved-Hunter; Miner; Skeleton Barrel; Giant Skeleton; Fisherman; Bats; Giant Snowball; Clone,31.8,8464,3.2,Card
+1022,evolved-Barbarians; Boss Bandit; evolved-Witch; Mini P.E.K.K.A; Mother Witch; Royal Ghost; Skeleton Army; Wizard,31.8,1020,0.2,Card
+1023,evolved-Baby Dragon; Golem; Prince; Dark Prince; Mega Minion; Tornado; Zap; Elixir Collector,31.7,8394,1.1,Card
+1024,evolved-P.E.K.K.A; Balloon; evolved-Witch; Inferno Dragon; Barbarians; Minion Horde; Wizard; Clone,31.6,8147,1.5,Card
+1025,evolved-Witch; Graveyard; Giant; Bowler; Vines; Minions; Guards; Giant Snowball,31.6,1166,0.2,Card
+1026,evolved-P.E.K.K.A; Battle Ram; Magic Archer; Royal Ghost; Poison; Electro Wizard; Bandit; Zap,31.5,6000,0.5,Card
+1027,evolved-Witch; Graveyard; evolved-Goblin Cage; Knight; Poison; Vines; Ice Wizard; Barbarian Barrel,31.5,3143,0.4,Card
+1028,evolved-Witch; Graveyard; Valkyrie; Poison; Vines; Ice Wizard; Goblin Hut; Barbarian Barrel,31.3,6295,0.7,Card
+1029,evolved-Skeleton Army; Lava Hound; Balloon; Lightning; Mega Minion; Minions; Arrows; Tombstone,31,13289,1.1,Card
+1030,Balloon; Royal Hogs; Sparky; Lumberjack; Magic Archer; Valkyrie; Firecracker; Clone,31,8604,1.6,Card
+1031,evolved-Furnace; Golden Knight; evolved-Royal Ghost; Golem; Mini P.E.K.K.A; Vines; Minions; Zappies,31,1016,0.2,Card
+1032,evolved-Wizard; Royal Giant; evolved-Valkyrie; P.E.K.K.A; Elite Barbarians; Minion Horde; Lightning; Skeleton Army,30.9,8193,0.3,Card
+1033,evolved-Goblin Cage; Royal Hogs; Flying Machine; Royal Recruits; Zappies; Arrows; Electro Spirit; Barbarian Barrel,30.8,13200,1.9,Card
+1034,evolved-Royal Giant; Miner; evolved-Zap; Elite Barbarians; Bowler; Minions; Ice Wizard; Rage,30.7,8703,1.9,Card
+1035,evolved-Witch; hero-Giant; Graveyard; Mini P.E.K.K.A; Bowler; Vines; Minions; Giant Snowball,30.7,2973,0.5,Card
+1036,evolved-Furnace; Battle Ram; evolved-Giant Snowball; P.E.K.K.A; Poison; Electro Wizard; Zap; Tombstone,30.7,1044,0.2,Card
+1037,evolved-Royal Giant; Golden Knight; evolved-Mega Knight; Balloon; Goblin Demolisher; Inferno Dragon; Barbarians; Witch,30.7,140,0.1,Card
+1038,evolved-Firecracker; hero-Mini P.E.K.K.A; Elixir Golem; Inferno Dragon; Dark Prince; Lightning; Minions; Arrows,30.5,8291,0.3,Card
+1039,evolved-Barbarians; Golden Knight; evolved-Witch; Mother Witch; Mega Minion; Royal Delivery; Heal Spirit; Rage,30.5,1018,0.2,Card
+1040,evolved-Electro Dragon; Elixir Golem; Battle Healer; Firecracker; Goblin Curse; Mirror; Arrows; Rage,30.4,8241,2.1,Card
+1041,evolved-Executioner; Boss Bandit; evolved-Wizard; Electro Giant; Ram Rider; Minion Horde; Lightning; Royal Recruits,30.2,8322,0.7,Card
+1042,evolved-Lumberjack; Golem; evolved-Electro Dragon; Firecracker; Skeleton Dragons; Tornado; Freeze; Elixir Collector,30.2,8316,0.6,Card
+1043,Battle Ram; P.E.K.K.A; Magic Archer; Royal Ghost; Poison; Electro Wizard; Bandit; Zap,30.2,8262,0.6,Card
+1044,evolved-Baby Dragon; Skeleton King; evolved-Archers; Mega Knight; Mini P.E.K.K.A; Mother Witch; Skeleton Army; Bomber,30.2,1000,0.1,Card
+1045,evolved-Hunter; hero-Giant; evolved-Goblin Cage; Dark Prince; Poison; Electro Wizard; Minions; Rascals,29.9,1057,0.3,Card
+1046,evolved-Electro Dragon; Boss Bandit; evolved-Furnace; Golem; Spirit Empress; Berserker; Vines; Tornado,29.9,1045,0.6,Card
+1047,Elixir Golem; Elite Barbarians; Inferno Dragon; Battle Healer; Electro Dragon; Arrows; Heal Spirit; Rage,29.9,174,0.7,Card
+1048,evolved-Firecracker; Goblinstein; evolved-Skeleton Army; Ram Rider; Elixir Golem; Inferno Dragon; Barbarians; Rage,29.8,8142,0.7,Card
+1049,evolved-Skeleton Army; Giant; Miner; Mini P.E.K.K.A; Minion Horde; Valkyrie; Wizard; Arrows,29.7,8484,0.7,Card
+1050,evolved-Goblin Giant; Skeleton King; evolved-Royal Hogs; Ram Rider; Goblin Machine; Phoenix; Firecracker; Furnace,29.7,8387,1.1,Card
+1051,evolved-Barbarians; Boss Bandit; evolved-Witch; Mega Knight; Baby Dragon; Mother Witch; Royal Recruits; Tombstone,29.7,1004,0.2,Card
+1052,evolved-Royal Recruits; hero-Balloon; Little Prince; Lumberjack; Fisherman; Archers; Arrows; Giant Snowball,29.7,273,0.4,Card
+1053,Balloon; Lumberjack; Baby Dragon; Inferno Dragon; Bowler; Tornado; Freeze; Barbarian Barrel,29.6,12470,0.8,Card
+1054,evolved-Furnace; Graveyard; evolved-Valkyrie; Berserker; Poison; Vines; Goblin Hut; Barbarian Barrel,29.6,11544,1.3,Card
+1055,Battle Ram; P.E.K.K.A; Royal Ghost; Poison; Electro Wizard; Bandit; Minions; Zap,29.6,6727,0.5,Card
+1056,evolved-Wizard; Giant; Prince; Goblins; Fire Spirit; Spear Goblins; Skeletons; Electro Spirit,29.5,616,0.6,Card
+1057,evolved-Mega Knight; Electro Giant; evolved-Witch; Graveyard; P.E.K.K.A; Lightning; Wizard; Mirror,29.4,8383,0.9,Card
+1058,evolved-Hunter; Goblin Giant; Royal Hogs; Valkyrie; Earthquake; Firecracker; Rascals; Mirror,29.4,8319,3.2,Card
+1059,Ram Rider; Mega Knight; Inferno Dragon; Poison; Electro Wizard; Bandit; Barbarian Barrel; Giant Snowball,29.4,1883,0.3,Card
+1060,evolved-Executioner; Boss Bandit; evolved-Wizard; Elixir Golem; Mega Minion; Minions; Furnace; Freeze,29.2,8111,0.7,Card
+1061,evolved-Firecracker; Lava Hound; evolved-Inferno Dragon; Miner; Baby Dragon; Lightning; Guards; Arrows,29.1,8589,0.4,Card
+1062,evolved-Inferno Dragon; Elixir Golem; evolved-Witch; Miner; Barbarians; Mirror; Arrows; Bomb Tower,29.1,8209,0.9,Card
+1063,evolved-Lumberjack; hero-Giant; evolved-Skeleton Army; Royal Hogs; Inferno Dragon; Mother Witch; Electro Dragon; Mirror,29,8412,2.3,Card
+1064,evolved-Electro Dragon; hero-Wizard; evolved-Baby Dragon; Elixir Golem; Firecracker; Dart Goblin; Minions; Arrows,28.9,8603,0.4,Card
+1065,Battle Ram; P.E.K.K.A; Magic Archer; Royal Ghost; Fireball; Electro Wizard; Bandit; Zap,28.9,318,0.4,Card
+1066,evolved-Valkyrie; Archer Queen; Royal Giant; Ram Rider; Inferno Dragon; Barbarians; Witch; Firecracker,28.9,173,0.1,Card
+1067,Giant; P.E.K.K.A; Giant Skeleton; Witch; Wizard; Minions; Freeze; Clone,28.8,8604,1.6,Card
+1068,evolved-Skeleton Barrel; Elixir Golem; evolved-Furnace; Miner; Night Witch; Lightning; Poison; Tombstone,28.8,8588,1.5,Card
+1069,evolved-Royal Giant; hero-Wizard; Little Prince; Prince; Elite Barbarians; Rocket; Minion Horde; Bomber,28.8,420,0.4,Card
+1070,evolved-Archers; Goblin Barrel; evolved-Valkyrie; Mega Knight; P.E.K.K.A; Musketeer; Wizard; Bomber,28.6,1150,0.1,Card
+1071,Mortar; Mega Knight; Rocket; Fisherman; Zappies; Arrows; Electro Spirit; Tesla,28.6,42,0.2,Card
+1072,Skeleton King; Suspicious Bush; Skeleton Barrel; Mother Witch; Skeleton Army; Dart Goblin; Vines; Goblins,28.1,5453,0.6,Card
+1073,Miner; Skeleton Barrel; Mega Knight; Inferno Dragon; Goblin Gang; Spear Goblins; Bats; Zap,27.9,512,0.4,Card
+1074,evolved-Wizard; Electro Giant; evolved-Witch; Graveyard; Royal Hogs; Minion Horde; Valkyrie; Poison,27.8,8516,0.7,Card
+1075,evolved-Lumberjack; Balloon; Inferno Dragon; Bowler; Electro Dragon; Tornado; Freeze; Barbarian Barrel,27.5,2046,0.2,Card
+1076,Goblinstein; Electro Giant; Ram Rider; Mega Knight; Witch; Valkyrie; Lightning; Dart Goblin,27.4,190,0.1,Card
+1077,evolved-Goblin Cage; Royal Hogs; Flying Machine; Royal Recruits; Fireball; Zappies; Arrows; Barbarian Barrel,27.2,2854,0.4,Card
+1078,evolved-Barbarians; Boss Bandit; Golden Knight; X-Bow; Minion Horde; Mother Witch; Barbarian Hut; Mirror,27.1,210,1.5,Card
+1079,evolved-Mega Knight; Golem; evolved-Electro Dragon; Electro Giant; Sparky; Executioner; Mirror; Tornado,26.9,9247,1,Card
+1080,Hog Rider; Goblin Barrel; Mini P.E.K.K.A; Witch; Valkyrie; Skeleton Army; Wizard; Arrows,26.8,1379,0,Card
+1081,evolved-Skeleton Army; Balloon; evolved-Inferno Dragon; Poison; Bandit; Mirror; Fire Spirit; Rage,26.7,8585,0.9,Card
+1082,Goblin Barrel; Skeleton Barrel; Mega Knight; Goblin Gang; Dart Goblin; Goblin Cage; Bats; Zap,26.7,326,0.2,Card
+1083,evolved-Royal Giant; Monk; evolved-Hunter; Lightning; Fisherman; Guards; Electro Spirit; The Log,26.5,1675,1,Card
+1084,Skeleton King; Suspicious Bush; Skeleton Barrel; Skeleton Army; Dart Goblin; Vines; Goblins; Fire Spirit,26.4,5544,0.6,Card
+1085,evolved-Royal Ghost; hero-Wizard; Royal Hogs; Lightning; Goblins; Goblin Hut; Electro Spirit; Barbarian Barrel,26.4,1211,0.1,Card
+1086,Lava Hound; Balloon; Lightning; Mega Minion; Minions; Guards; Arrows; Tombstone,25.6,11813,0.9,Card
+1087,hero-Wizard; Royal Hogs; Lightning; Royal Ghost; Goblins; Goblin Hut; Electro Spirit; Barbarian Barrel,25.6,1629,0.1,Card
+1088,Goblin Barrel; Rocket; Knight; Princess; Goblin Gang; Ice Spirit; The Log; Inferno Tower,25.6,1268,0.4,Card
+1089,evolved-Wizard; hero-Mini P.E.K.K.A; Ram Rider; Royal Hogs; Minion Horde; Dart Goblin; Goblin Hut; Mirror,25.4,8634,0.3,Card
+1090,evolved-Lumberjack; Golden Knight; evolved-Barbarians; Royal Hogs; Baby Dragon; Inferno Dragon; Poison; Minions,25.4,8622,1.6,Card
+1091,Wall Breakers; Skeleton Barrel; Royal Ghost; Dart Goblin; Vines; Rascals; Barbarian Barrel; Bomb Tower,25.4,6267,0.7,Card
+1092,evolved-Mega Knight; Mighty Miner; evolved-Executioner; Prince; Inferno Dragon; Minion Horde; Wizard; Dart Goblin,25.4,568,0.3,Card
+1093,evolved-Lumberjack; Elixir Golem; Mega Knight; Firecracker; Minions; Mirror; Fire Spirit; Freeze,25.3,8737,0.9,Card
+1094,evolved-Witch; Little Prince; Electro Giant; Prince; Mini P.E.K.K.A; Minion Horde; Lightning; Goblin Gang,25.2,349,0.3,Card
+1095,Wall Breakers; Miner; Mega Knight; Mini P.E.K.K.A; Dart Goblin; Fire Spirit; Bats; Giant Snowball,25.1,1084,0.2,Card
+1096,evolved-Furnace; hero-Magic Archer; evolved-Witch; Elixir Golem; Mega Knight; Battle Healer; Barbarian Hut; Electro Wizard,25,200,1.4,Card
+1097,evolved-Goblin Giant; Mighty Miner; evolved-Inferno Dragon; Giant Skeleton; Mini P.E.K.K.A; Wizard; Goblin Curse; Zap,24.8,117,0.1,Card
+1098,hero-Knight; Mortar; Fireball; Archers; Skeletons; Electro Spirit; The Log; Tesla,24.6,61,0.3,Card
+1099,evolved-Wall Breakers; Ram Rider; evolved-Mega Knight; Royal Hogs; Baby Dragon; Mother Witch; Mirror; Clone,24.5,9005,1.8,Card
+1100,evolved-Bomber; Elixir Golem; evolved-Bats; Battle Healer; Mother Witch; Skeleton Army; Mirror; Rage,24.5,8764,1.9,Card
+1101,Royal Giant; Royal Ghost; Hunter; Fisherman; Fireball; Skeletons; Electro Spirit; Barbarian Barrel,24.5,290,0.6,Card
+1102,evolved-Lumberjack; Lava Hound; Three Musketeers; Skeleton Army; Bats; Zap; Heal Spirit; Clone,24.3,9600,1.8,Card
+1103,Balloon; Giant Skeleton; Inferno Dragon; Skeleton Army; Ice Wizard; Arrows; Bats; Freeze,24.1,1928,0.2,Card
+1104,Golem; Lumberjack; Battle Healer; Electro Dragon; Skeleton Dragons; Tornado; Barbarian Barrel; Elixir Collector,24.1,216,0.8,Card
+1105,evolved-Firecracker; Archer Queen; evolved-Goblin Cage; Rune Giant; Miner; Lumberjack; Bandit; Elixir Collector,23.9,88,0.8,Card
+1106,evolved-Valkyrie; Lava Hound; evolved-Goblin Cage; Lightning; Mega Minion; Minions; Guards; Arrows,23.8,3355,0.5,Card
+1107,evolved-Witch; Lava Hound; Graveyard; Flying Machine; Night Witch; Poison; Furnace; Clone,23.7,9528,1.8,Card
+1108,evolved-Electro Dragon; hero-Mini P.E.K.K.A; Elixir Golem; Giant Skeleton; Battle Healer; Mirror; Tornado; Clone,23.3,9291,0.4,Card
+1109,evolved-Lumberjack; Golden Knight; evolved-Bats; Elixir Golem; Magic Archer; Skeleton Army; Firecracker; Mirror,23,1019,0.2,Card
+1110,evolved-Royal Hogs; Golden Knight; evolved-Barbarians; Inferno Dragon; Electro Dragon; Skeleton Army; Bandit; Mirror,22.8,1015,0.2,Card
+1111,evolved-Zap; Golem; Prince; Dark Prince; Minion Horde; Poison; Mirror; Elixir Collector,22.6,9895,1.1,Card
+1112,hero-Wizard; Boss Bandit; Mega Knight; Three Musketeers; Elite Barbarians; Rocket; Barbarian Hut; Mirror,22.6,394,2.9,Card
+1113,evolved-Lumberjack; hero-Mini P.E.K.K.A; Giant Skeleton; Mirror; Arrows; Freeze; Clone; Rage,22.4,10693,0.4,Card
+1114,evolved-Witch; Boss Bandit; Golden Knight; Royal Giant; Prince; Minion Horde; Valkyrie; Hunter,22.1,385,0.4,Card
+1115,evolved-Mega Knight; hero-Wizard; evolved-Executioner; Elite Barbarians; Barbarians; Witch; Minion Horde; Poison,22.1,154,0.1,Card
+1116,Archer Queen; X-Bow; Goblin Machine; Hunter; Electro Wizard; Vines; Goblin Curse; Tombstone,21.9,1048,0.3,Card
+1117,evolved-Royal Giant; Little Prince; Hog Rider; Prince; Barbarians; Bomber; Fire Spirit; Arrows,21.1,289,0.4,Card
+1118,evolved-Wizard; Golden Knight; evolved-Barbarians; Minion Horde; Mother Witch; Barbarian Hut; Skeleton Army; Mirror,20.9,1185,0.2,Card
+1119,evolved-Firecracker; hero-Dark Prince; Boss Bandit; Lightning; Wizard; Bandit; Mirror; Elixir Collector,20.6,214,0.2,Card
+1120,evolved-Valkyrie; Lava Hound; Balloon; Void; Inferno Dragon; Goblins; Bomber; Arrows,20.2,2968,1.6,Card
+1121,evolved-Musketeer; Goblin Barrel; evolved-Valkyrie; Mega Knight; Baby Dragon; Knight; Firecracker; Goblin Hut,20.1,2266,0.3,Card
+1122,Goblins; Minions; Bomber; Goblin Cage; Arrows; Spear Goblins; Skeletons; Tombstone,19.6,648,0.7,Card
+1123,Golem; Prince; Baby Dragon; Lightning; Mega Minion; Guards; Barbarian Barrel; Giant Snowball,19.4,1726,0.3,Card
+1124,evolved-Royal Hogs; hero-Giant; evolved-Mega Knight; Graveyard; Elite Barbarians; Mini P.E.K.K.A; Minion Horde; Wizard,19.3,1035,0.3,Card
+1125,evolved-Executioner; Monk; Giant Skeleton; Sparky; Prince; Rocket; Barbarian Hut; Clone,19.3,181,1.3,Card
+1126,evolved-Firecracker; Goblinstein; evolved-Mega Knight; P.E.K.K.A; Elite Barbarians; Rocket; Minion Horde; Wizard,18.7,139,0.1,Card
+1127,evolved-Furnace; Graveyard; Valkyrie; Berserker; Poison; Vines; Goblin Hut; Barbarian Barrel,18.2,2752,0.5,Card
+1128,evolved-P.E.K.K.A; Battle Healer; evolved-Mega Knight; Mother Witch; Electro Dragon; Mirror; Freeze; Elixir Collector,18,133,0.5,Card
+1129,hero-Giant; Wizard; Goblins; Minions; Bomber; Spear Goblins; Bats; Rage,17.9,1028,0.3,Card
+1130,evolved-Witch; Lava Hound; Giant Skeleton; Minion Horde; Barbarian Hut; Poison; Goblin Hut; Spear Goblins,17.8,118,0.9,Card
+1131,evolved-Mega Knight; Mighty Miner; evolved-Barbarians; Elixir Golem; Royal Hogs; Lumberjack; Inferno Dragon; Vines,17.6,1196,0.2,Card
+1132,evolved-Goblin Giant; hero-Mega Minion; evolved-Witch; Barbarian Hut; Fisherman; Fireball; Vines; Rage,17.4,190,1.4,Card
+1133,evolved-Mega Knight; Monk; evolved-Executioner; Elite Barbarians; Flying Machine; Mother Witch; Electro Dragon; Inferno Tower,17,147,0.6,Card
+1134,evolved-Mega Knight; Little Prince; evolved-Giant Snowball; X-Bow; Fire Spirit; Skeletons; Electro Spirit; Elixir Collector,16.5,345,0.5,Card
+1135,evolved-Barbarians; Golden Knight; evolved-Valkyrie; Royal Hogs; Baby Dragon; Inferno Dragon; Skeleton Army; Freeze,16.2,1341,0.2,Card
+1136,evolved-Archers; X-Bow; evolved-Skeletons; Knight; Fireball; Electro Spirit; Barbarian Barrel; Tesla,15.4,1186,0.1,Card
+1137,evolved-Dart Goblin; Elixir Golem; evolved-Bats; Three Musketeers; Vines; Tornado; Rage; Elixir Collector,15,25537,2.9,Card
+1138,evolved-Royal Giant; Balloon; Graveyard; Goblin Demolisher; Void; Battle Healer; Arrows; Royal Delivery,14.5,27723,5.9,Card
+1139,Balloon; Royal Giant; Vines; Bomber; Fire Spirit; Spear Goblins; Bats; Rage,13.4,34495,3.9,Card
+1140,evolved-Goblin Cage; Goblin Giant; Goblin Barrel; Goblin Gang; Dart Goblin; Goblins; Goblin Hut; Spear Goblins,13.2,1659,0.1,Card
+1141,evolved-Mega Knight; hero-Wizard; hero-Balloon; Lava Hound; Electro Dragon; Barbarian Hut; Mirror; Clone,13.1,175,0.7,Card
+1142,Hog Rider; Prince; Musketeer; Barbarians; Barbarian Hut; Skeleton Army; Goblin Hut; Arrows,13,169,1.2,Card
+1143,Little Prince; Graveyard; Battle Healer; Earthquake; Electro Wizard; Vines; Goblin Curse; Fire Spirit,11.8,2465,0.4,Card
+1144,Giant; Fireball; Goblins; Goblin Hut; Goblin Cage; Arrows; Spear Goblins; Tombstone,8.5,800,0.9,Card

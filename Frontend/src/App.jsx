@@ -229,22 +229,36 @@ function App() {
     return true
   }
 
-  // Helper function to filter decks by featured card
-  const getDecksForFeature = (featureCardName, limit = null, featureType = null) => {
-    let filtered = decks.filter(deck => {
-      const matchingCards = (deck.cards || []).filter(card =>
-        card?.name && card.name.toLowerCase() === featureCardName.toLowerCase()
-      )
-      if (matchingCards.length === 0) return false
+  // Helper function to filter decks for a feature category.
+  // search_field "Card" (default): match filter_options against cards (+ featured_type for hero/evo).
+  // search_field "Tag": match filter_options against each deck's tag.
+  const getDecksForFeature = (feature, limit = null) => {
+    const filterOptions = feature?.filter_options || ''
+    const searchField = (feature?.search_field || 'Card').trim().toLowerCase()
+    const featureType = feature?.featured_type || null
 
-      if (featureType && featureType.toLowerCase() === 'hero') {
-        return matchingCards.some(card => Boolean(card.isHero))
-      }
-      if (featureType && featureType.toLowerCase() === 'evolution') {
-        return matchingCards.some(card => Boolean(card.isEvolution))
-      }
-      return true
-    })
+    let filtered
+    if (searchField === 'tag') {
+      filtered = decks.filter(deck =>
+        (deck.tag || '').toLowerCase() === filterOptions.toLowerCase()
+      )
+    } else {
+      filtered = decks.filter(deck => {
+        const matchingCards = (deck.cards || []).filter(card =>
+          card?.name && card.name.toLowerCase() === filterOptions.toLowerCase()
+        )
+        if (matchingCards.length === 0) return false
+
+        if (featureType && featureType.toLowerCase() === 'hero') {
+          return matchingCards.some(card => Boolean(card.isHero))
+        }
+        if (featureType && featureType.toLowerCase() === 'evolution') {
+          return matchingCards.some(card => Boolean(card.isEvolution))
+        }
+        return true
+      })
+    }
+
     // Apply card filter if any cards are selected or excluded
     if (selectedFilterCards.length > 0 || excludedFilterCards.length > 0) {
       filtered = filtered.filter(deckMatchesFilter)
@@ -399,7 +413,8 @@ function App() {
           elixirCost: elixirCost,
           cycle: cycle,
           winRate: 0,
-          numBattles: 0
+          numBattles: 0,
+          usage: 0
         }
         
         transformedDecks.push(transformedDeck)
@@ -845,7 +860,8 @@ function App() {
           elixirCost: elixirCost,
           cycle: cycle,
           winRate: 0,
-          numBattles: 0
+          numBattles: 0,
+          usage: 0
         }
         
         // Add to decks array
@@ -1167,7 +1183,8 @@ function App() {
       elixirCost: 0,
       cycle: 0,
       winRate: 0,
-      numBattles: 0
+      numBattles: 0,
+      usage: 0
     }
     setEditingDeck({ 
       deck: emptyDeck, 
@@ -1186,7 +1203,7 @@ function App() {
       if (!feature.filter_options || feature.filter_options === '') return false
       
       // Check if this feature has any decks after applying filters
-      const featureDecks = getDecksForFeature(feature.filter_options, null, feature.featured_type)
+      const featureDecks = getDecksForFeature(feature)
       return featureDecks.length > 0
     })
   }, [features, decks, selectedFilterCards, excludedFilterCards])
@@ -1372,6 +1389,8 @@ function App() {
             cycle: calculateFourCardCycle(cardNames),
             winRate: parseFloat(deck.win_rate || 0),
             numBattles: parseInt(deck.num_battles || 0, 10),
+            usage: parseFloat(deck.usage || 0),
+            tag: (deck.tag || 'Card').trim(),
             cards: deckCards.slice(0, 8),
             cardNames: cardNames // Keep for filtering
           }
@@ -1676,8 +1695,8 @@ function App() {
                     </button>
           {!loading && !error && (() => {
             const currentDeckCount = expandedFeature
-              ? (expandedFeature.filter_options 
-                  ? getDecksForFeature(expandedFeature.filter_options, null, expandedFeature.featured_type).length
+              ? (expandedFeature.filter_options
+                  ? getDecksForFeature(expandedFeature).length
                             : getFilteredDecks().length)
                         : getFilteredDecks().length
             return (
@@ -1701,8 +1720,8 @@ function App() {
           <>
             {/* Expanded feature view */}
             {expandedFeature && (() => {
-              const allDecks = expandedFeature.filter_options 
-                ? getDecksForFeature(expandedFeature.filter_options, null, expandedFeature.featured_type)
+              const allDecks = expandedFeature.filter_options
+                ? getDecksForFeature(expandedFeature)
                     : getFilteredDecks()
               return (
                 <div className="category-section category-section-expanded" ref={expandedFeatureRef}>
@@ -1750,8 +1769,8 @@ function App() {
                         <div key={pairIndex} className={`category-pair-row ${shouldSpanFullWidth ? 'category-pair-row-single' : ''}`}>
                     {featurePair.map((feature, index) => {
                             const maxDecks = shouldSpanFullWidth ? 4 : 2
-                            const featureDecks = getDecksForFeature(feature.filter_options, maxDecks, feature.featured_type)
-                            const allFeatureDecks = getDecksForFeature(feature.filter_options, null, feature.featured_type)
+                            const featureDecks = getDecksForFeature(feature, maxDecks)
+                            const allFeatureDecks = getDecksForFeature(feature)
                             const hasMoreDecks = allFeatureDecks.length > maxDecks
                       return (
                               <div key={index} className={`category-section ${shouldSpanFullWidth ? 'category-section-single' : ''}`}>
