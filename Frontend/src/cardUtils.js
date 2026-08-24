@@ -51,6 +51,20 @@ export function parseDeckCardLabel(rawName) {
 }
 
 /**
+ * Format a deck card into a catalog-style label with evolved-/hero- prefixes.
+ * Examples:
+ *   { name: "Mega Knight", isEvolution: true } -> "evolved-Mega Knight"
+ *   { name: "Berserker", isHero: true } -> "hero-Berserker"
+ *   { name: "Fireball" } -> "Fireball"
+ */
+export function formatDeckCardLabel(card) {
+  if (!card?.name) return ''
+  if (card.isEvolution) return `evolved-${card.name}`
+  if (card.isHero) return `hero-${card.name}`
+  return card.name
+}
+
+/**
  * Gets the card image URL from RoyaleAPI CDN
  */
 export function getCardImageUrl(cardName) {

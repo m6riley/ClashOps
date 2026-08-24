@@ -718,8 +718,13 @@ function AnalysisView({ deck, onClose, allCards, analysisResults }) {
               <div className="analysis-grid-item">
                 <div className="analysis-deck-cards">
                   {deck.cards.map((card, index) => {
-                    const isEvolution = index < 2 && card.name !== null
-                    const isHero = index >= 2 && index < 4 && card.name !== null
+                    // Slot 1: evo; Slot 2: hero; Slot 3: flags; Slots 4+: normal
+                    const isEvolution =
+                      card.name !== null &&
+                      (index === 0 || (index === 2 && Boolean(card.isEvolution)))
+                    const isHero =
+                      card.name !== null &&
+                      (index === 1 || (index === 2 && Boolean(card.isHero)))
                     
                     let imageUrl = card.name ? getCardImageUrl(card.name) : null
                     if (isEvolution && card.name) {

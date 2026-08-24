@@ -1,13 +1,11 @@
 import csv
 import json
-import re
 import time
 from pathlib import Path
 
 import requests
 
 CARD_DECKS_BASE_URL = "https://royaletracker.gg/best-decks/with"
-TAG_DECKS_BASE_URL = "https://royaletracker.gg/decks"
 CARDS_CSV_PATH = Path(__file__).with_name("cards.csv")
 FEATURES_CSV_PATH = Path(__file__).with_name("features.csv")
 JSON_OUTPUT_PATH = Path(__file__).with_name("royale-tracker-decks.json")
@@ -36,13 +34,6 @@ RSC_HEADERS = {
 
 def _truthy(value: str | None) -> bool:
     return (value or "").strip().lower() in {"yes", "y", "true", "1"}
-
-
-def slugify(value: str) -> str:
-    """Turn filter_options into a RoyaleTracker path slug (e.g. Ultimate Champion → ultimate-champion)."""
-    slug = value.strip().lower()
-    slug = re.sub(r"[^a-z0-9]+", "-", slug)
-    return slug.strip("-")
 
 
 def _extract_json_array(text: str, key: str) -> list[dict]:
@@ -109,26 +100,27 @@ def load_scrape_slugs(cards_path: Path) -> list[str]:
 def load_tag_scrape_targets(features_path: Path) -> list[tuple[str, str]]:
     """
     Build (tag, url) pairs from features.csv rows where search_field is Tag.
-    Tag is the exact filter_options value (for frontend matching); URL uses a slugified path.
+    URL is base_url + filter_options. Tag is the exact filter_options value.
     """
     targets: list[tuple[str, str]] = []
-    seen_slugs: set[str] = set()
+    seen_urls: set[str] = set()
 
     with features_path.open(encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):
             if (row.get("search_field") or "").strip().lower() != "tag":
                 continue
 
-            filter_options = (row.get("filter_options") or "").strip()
-            if not filter_options:
+            filter_options = (row.get("filter_options") or "").strip().strip("/")
+            base_url = (row.get("base_url") or "").strip()
+            if not filter_options or not base_url:
                 continue
 
-            slug = slugify(filter_options)
-            if not slug or slug in seen_slugs:
+            url = f"{base_url.rstrip('/')}/{filter_options}"
+            if url in seen_urls:
                 continue
 
-            seen_slugs.add(slug)
-            targets.append((filter_options, f"{TAG_DECKS_BASE_URL}/{slug}"))
+            seen_urls.add(url)
+            targets.append((filter_options, url))
 
     return targets
 
@@ -177,25 +169,48 @@ def deck_rank_key(deck: dict) -> tuple[float, int]:
     )
 
 
+def parse_tags(tag_value: str | None) -> list[str]:
+    return [part.strip() for part in (tag_value or "").split(";") if part.strip()]
+
+
+def format_tags(tags: list[str]) -> str:
+    return "; ".join(tags)
+
+
+def append_tag(existing_tag: str | None, new_tag: str) -> str:
+    """Append new_tag if not already present (case-insensitive). Preserves first-seen casing."""
+    tags = parse_tags(existing_tag)
+    if not any(tag.lower() == new_tag.lower() for tag in tags):
+        tags.append(new_tag)
+    return format_tags(tags)
+
+
 def merge_unique_decks(
-    existing: dict[tuple[str, frozenset[str]], dict],
+    existing: dict[frozenset[str], dict],
     new_decks: list[dict],
     tag: str,
 ) -> int:
-    """Merge decks into existing map keyed by (tag, cards); keep stronger stats. Returns added count."""
+    """
+    Merge decks keyed by card identity. If the same deck is seen again with a new tag,
+    append that tag ('; "-separated). Keeps the stronger win_rate/battles stats.
+    Returns count of newly added deck identities.
+    """
     added = 0
     for deck in new_decks:
         identity = deck_identity(deck)
         if not identity:
             continue
-        tagged = {**deck, "tag": tag}
-        key = (tag, identity)
-        if key not in existing:
-            existing[key] = tagged
+        if identity not in existing:
+            existing[identity] = {**deck, "tag": tag}
             added += 1
             continue
-        if deck_rank_key(tagged) > deck_rank_key(existing[key]):
-            existing[key] = tagged
+
+        current = existing[identity]
+        merged_tag = append_tag(current.get("tag"), tag)
+        if deck_rank_key(deck) > deck_rank_key(current):
+            existing[identity] = {**deck, "tag": merged_tag}
+        else:
+            current["tag"] = merged_tag
     return added
 
 
@@ -239,7 +254,7 @@ def main() -> None:
     session = requests.Session()
     session.trust_env = False
 
-    unique_decks: dict[tuple[str, frozenset[str]], dict] = {}
+    unique_decks: dict[frozenset[str], dict] = {}
     pages_with_decks = 0
     pages_failed = 0
 
@@ -301,8 +316,12 @@ def main() -> None:
 
     tag_counts: dict[str, int] = {}
     for deck in sorted_decks:
-        tag = deck.get("tag") or "unknown"
-        tag_counts[tag] = tag_counts.get(tag, 0) + 1
+        tags = parse_tags(deck.get("tag"))
+        if not tags:
+            tag_counts["unknown"] = tag_counts.get("unknown", 0) + 1
+            continue
+        for tag in tags:
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
     tag_summary = " ".join(f"{name}={count}" for name, count in sorted(tag_counts.items()))
 
     print(

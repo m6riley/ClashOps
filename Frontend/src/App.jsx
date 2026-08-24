@@ -20,7 +20,7 @@ import AnalyzeLoading from './AnalyzeLoading'
 import AnalysisView from './AnalysisView'
 import InitialLoading from './InitialLoading'
 import CountUpAnimation from './CountUpAnimation'
-import { parseDeckCardLabel } from './cardUtils'
+import { parseDeckCardLabel, formatDeckCardLabel } from './cardUtils'
 import {
   getGetPlayerDecksUrl,
   getGetCategoriesUrl,
@@ -239,8 +239,13 @@ function App() {
 
     let filtered
     if (searchField === 'tag') {
+      const targetTag = filterOptions.toLowerCase()
       filtered = decks.filter(deck =>
-        (deck.tag || '').toLowerCase() === filterOptions.toLowerCase()
+        (deck.tag || '')
+          .split(';')
+          .map(part => part.trim().toLowerCase())
+          .filter(Boolean)
+          .includes(targetTag)
       )
     } else {
       filtered = decks.filter(deck => {
@@ -609,7 +614,15 @@ function App() {
     // Save to backend and get the actual UUID
     const categoryId = deckCategories[deckId] || null
     const deckName = 'My Favourite Deck' // Default name when adding to favorites
-    const backendDeckId = await saveDeckToBackend(originalDeck.cardNames, categoryId, deckName)
+    // Save labeled names so evolution/hero choices persist
+    const labeledCardNames = (originalDeck.cards || [])
+      .filter(card => card?.name)
+      .map(card => formatDeckCardLabel(card))
+    const backendDeckId = await saveDeckToBackend(
+      labeledCardNames.length > 0 ? labeledCardNames : originalDeck.cardNames,
+      categoryId,
+      deckName
+    )
     
     // Update the deck ID with the actual backend UUID if we got one
     if (backendDeckId) {
@@ -806,7 +819,7 @@ function App() {
     })
     
     const costs = cardNames
-      .map(name => cardElixirMap[name] || 0)
+      .map(name => cardElixirMap[parseDeckCardLabel(name).baseName] || 0)
       .filter(cost => cost > 0)
     
     if (costs.length === 0) return 0
@@ -826,7 +839,7 @@ function App() {
     })
     
     const costs = cardNames
-      .map(name => cardElixirMap[name] || 0)
+      .map(name => cardElixirMap[parseDeckCardLabel(name).baseName] || 0)
       .filter(cost => cost > 0)
       .sort((a, b) => a - b)
       .slice(0, 4)
@@ -844,9 +857,13 @@ function App() {
   // Handle save edited deck
   const handleSaveEditedDeck = async (updatedDeck, savedDeckName) => {
     if (editingDeck) {
-      const cardNames = updatedDeck.cardNames
-      const elixirCost = calculateAverageElixirCostForDeck(cardNames)
-      const cycle = calculateFourCardCycleForDeck(cardNames)
+      // Labeled names (evolved-/hero-) for backend; base names for in-memory cardNames
+      const labeledCardNames = updatedDeck.cardNames
+      const baseCardNames = updatedDeck.cards
+        .map(card => card.name)
+        .filter(Boolean)
+      const elixirCost = calculateAverageElixirCostForDeck(labeledCardNames)
+      const cycle = calculateFourCardCycleForDeck(labeledCardNames)
       const deckName = savedDeckName || editingDeck.deckName || 'My Favourite Deck'
       const categoryId = editingDeck.categoryId || (editingDeck.isNew ? null : deckCategories[editingDeck.deck.id] || null)
       
@@ -856,7 +873,7 @@ function App() {
         const newDeck = {
           id: newDeckId,
           cards: updatedDeck.cards,
-          cardNames: cardNames,
+          cardNames: baseCardNames,
           elixirCost: elixirCost,
           cycle: cycle,
           winRate: 0,
@@ -895,7 +912,7 @@ function App() {
         }
         
         // Save to backend and get the actual UUID
-        const backendDeckId = await saveDeckToBackend(cardNames, categoryId, deckName)
+        const backendDeckId = await saveDeckToBackend(labeledCardNames, categoryId, deckName)
         
         // Update the deck ID with the actual backend UUID if we got one
         if (backendDeckId) {
@@ -955,7 +972,7 @@ function App() {
               newFavourites[favouriteIndex] = {
                 ...newFavourites[favouriteIndex],
                 cards: updatedDeck.cards,
-                cardNames: cardNames,
+                cardNames: baseCardNames,
                 elixirCost: elixirCost,
                 cycle: cycle
               }
@@ -965,7 +982,7 @@ function App() {
           })
           
           // Update deck in backend
-          await editDeckInBackend(deckId, cardNames, categoryId, deckName)
+          await editDeckInBackend(deckId, labeledCardNames, categoryId, deckName)
         } else {
           // Update the deck data in the main decks array (for catalog decks)
           setDecks(prevDecks => {
@@ -975,7 +992,7 @@ function App() {
               newDecks[deckIndex] = {
                 ...newDecks[deckIndex],
                 cards: updatedDeck.cards,
-                cardNames: cardNames,
+                cardNames: baseCardNames,
                 elixirCost: elixirCost,
                 cycle: cycle
               }
@@ -1940,9 +1957,12 @@ function App() {
                         const deck = favouriteDecks.find(d => d.id === deckId)
                         if (deck && deck.cardNames) {
                           const deckName = favouriteDeckNames[`${deckId}-${favouriteDecks.findIndex(d => d.id === deckId)}`] || 'My Favourite Deck'
+                          const labeledCardNames = (deck.cards || [])
+                            .filter(card => card?.name)
+                            .map(card => formatDeckCardLabel(card))
                           decksToUpdate.push({
                             deckId: deckId,
-                            cardNames: deck.cardNames,
+                            cardNames: labeledCardNames.length > 0 ? labeledCardNames : deck.cardNames,
                             deckName: deckName
                           })
                         }

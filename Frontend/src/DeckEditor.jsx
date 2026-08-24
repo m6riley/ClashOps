@@ -1,45 +1,47 @@
 import React, { useState, useEffect } from 'react'
 import './DeckEditor.css'
-import { getCardImageUrl, getCardEvolutionImageUrl, getCardHeroImageUrl } from './cardUtils'
+import {
+  getCardImageUrl,
+  getCardEvolutionImageUrl,
+  getCardHeroImageUrl,
+  formatDeckCardLabel,
+} from './cardUtils'
 
 function DeckSlotCardImage({ card, index }) {
-  // Determine which variant to try based on card position
-  const isEvolution = index < 2 // First two cards (slots 1-2)
-  const isHero = index >= 2 && index < 4 // Third and fourth cards (slots 3-4)
-  
+  // Slot 1: evo art; Slot 2: hero art; Slot 3: flags; Slots 4–8: normal
+  const isEvolution = index === 0 || (index === 2 && Boolean(card.isEvolution))
+  const isHero = index === 1 || (index === 2 && Boolean(card.isHero))
+
   const [variantFailed, setVariantFailed] = useState(false)
-  
+
   const evolutionUrl = getCardEvolutionImageUrl(card.name)
   const heroUrl = getCardHeroImageUrl(card.name)
   const normalUrl = getCardImageUrl(card.name)
-  
-  // Reset variantFailed when card name changes
+
+  // Reset variantFailed when card name or variant flags change
   useEffect(() => {
     setVariantFailed(false)
-  }, [card.name])
-  
-  // Determine initial image URL
+  }, [card.name, card.isEvolution, card.isHero, index])
+
   let imageUrl = normalUrl
   if (isEvolution && !variantFailed) {
     imageUrl = evolutionUrl
   } else if (isHero && !variantFailed) {
     imageUrl = heroUrl
   }
-  
+
   const handleError = (e) => {
     if (!variantFailed) {
-      // Variant image failed, try normal image
       setVariantFailed(true)
       e.target.src = normalUrl
     } else {
-      // Normal image also failed, show placeholder
       e.target.style.display = 'none'
       if (e.target.nextSibling) {
         e.target.nextSibling.style.display = 'flex'
       }
     }
   }
-  
+
   return (
     <>
       <img
@@ -47,7 +49,7 @@ function DeckSlotCardImage({ card, index }) {
         alt={card.name}
         className="deck-slot-card-image"
         onError={handleError}
-        key={`${card.name}-${index}`}
+        key={`${card.name}-${index}-${card.isEvolution ? 'evo' : ''}-${card.isHero ? 'hero' : ''}`}
       />
       <div className="deck-slot-card-placeholder" style={{ display: 'none' }}>
         {card.name}
@@ -57,18 +59,20 @@ function DeckSlotCardImage({ card, index }) {
 }
 
 function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, categories = [], selectedCategory, onCategoryChange, onCreateCategory, onEditCategory, onDeleteCategory }) {
+  const emptySlot = () => ({ name: null, rarity: 'common', isEvolution: false, isHero: false })
+
   const initializeDeckCards = () => {
-    // Handle empty deck (new deck creation)
     if (!deck.cards || deck.cards.length === 0) {
-      return Array(8).fill(null).map(() => ({ name: null, rarity: 'common' }))
+      return Array(8).fill(null).map(() => emptySlot())
     }
-    const cards = deck.cards.map(card => ({ 
-      name: card && card.name ? card.name : null, 
-      rarity: (card && card.rarity) ? card.rarity : 'common' 
+    const cards = deck.cards.map(card => ({
+      name: card && card.name ? card.name : null,
+      rarity: (card && card.rarity) ? card.rarity : 'common',
+      isEvolution: Boolean(card && card.isEvolution),
+      isHero: Boolean(card && card.isHero),
     }))
-    // Fill deck slots to 8
     while (cards.length < 8) {
-      cards.push({ name: null, rarity: 'common' })
+      cards.push(emptySlot())
     }
     return cards
   }
@@ -83,29 +87,88 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
   const [isInitialMount, setIsInitialMount] = useState(true)
   const [mountKey, setMountKey] = useState(0)
 
-  // Track initial mount - always animate cards on view open
   useEffect(() => {
-    // Always enable animation when view opens
     setIsInitialMount(true)
-    setMountKey(prev => prev + 1) // Force new key to ensure cards are treated as new elements
-    
-    // Disable animation after animations complete
+    setMountKey(prev => prev + 1)
+
     const timer = setTimeout(() => {
       setIsInitialMount(false)
-    }, 1000) // Disable after animations complete
+    }, 1000)
     return () => clearTimeout(timer)
-  }, []) // Empty dependency array means this runs only on mount
+  }, [])
 
-  // Helper function to check if a card is a champion (rarity 5)
+  const getCardMeta = (cardName) => {
+    if (!cardName) return null
+    return allCards.find(c => c.card_name === cardName) || null
+  }
+
   const isChampion = (cardName) => {
-    if (!cardName) return false
-    const card = allCards.find(c => c.card_name === cardName)
+    const card = getCardMeta(cardName)
     return card && parseFloat(card.rarity) === 5
   }
 
-  // Helper function to count champions in deck
+  const hasEvo = (cardName) => {
+    const card = getCardMeta(cardName)
+    return card && String(card.hasEvo).toLowerCase() === 'yes'
+  }
+
+  const hasHero = (cardName) => {
+    const card = getCardMeta(cardName)
+    return card && String(card.hasHero).toLowerCase() === 'yes'
+  }
+
+  const canToggleVariant = (cardName) => hasEvo(cardName) && hasHero(cardName)
+
   const countChampions = (cards) => {
     return cards.filter(card => card.name && isChampion(card.name)).length
+  }
+
+  // Champions share hero slots: slots 2 and 3 (0-indexed 1, 2)
+  const championSlots = [1, 2]
+
+  const assignSlotFlags = (card, slotIndex) => {
+    if (!card || !card.name) {
+      return emptySlot()
+    }
+
+    const champion = isChampion(card.name)
+    let isEvolution = false
+    let isHero = false
+
+    if (slotIndex === 0) {
+      isEvolution = true
+      isHero = false
+    } else if (slotIndex === 1) {
+      isEvolution = false
+      isHero = !champion
+    } else if (slotIndex === 2) {
+      if (champion) {
+        isEvolution = false
+        isHero = false
+      } else if (hasEvo(card.name) && hasHero(card.name)) {
+        // Prefer preserving an existing choice when moving within slot 3; default to evolution
+        if (card.isHero && !card.isEvolution) {
+          isEvolution = false
+          isHero = true
+        } else {
+          isEvolution = true
+          isHero = false
+        }
+      } else if (hasEvo(card.name)) {
+        isEvolution = true
+        isHero = false
+      } else if (hasHero(card.name)) {
+        isEvolution = false
+        isHero = true
+      }
+    }
+
+    return {
+      name: card.name,
+      rarity: card.rarity || 'common',
+      isEvolution,
+      isHero,
+    }
   }
 
   const handleCardDragStart = (e, card, index, isFromDeck = false) => {
@@ -121,56 +184,51 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
 
   const handleCardDrop = (e, targetIndex) => {
     e.preventDefault()
-    
+
     if (!draggedCard || draggedCard.name === null) return
 
     const newDeckCards = [...deckCards]
     const isDraggedCardChampion = isChampion(draggedCard.name)
-    const championSlots = [2, 3] // Slots 3 and 4 (0-indexed: 2, 3)
-    
+
     if (draggedFromIndex.isFromDeck) {
-      // Moving from deck slot to deck slot
       if (draggedFromIndex.index === targetIndex) return
-      
+
       const sourceCard = newDeckCards[draggedFromIndex.index]
       const targetCard = newDeckCards[targetIndex]
       const isSourceChampion = isChampion(sourceCard.name)
       const isTargetChampion = isChampion(targetCard.name)
-      
-      // Validation: Champions can only be in slots 2-3
+
       if (isSourceChampion && !championSlots.includes(targetIndex)) {
-        return // Prevent moving champion to non-champion slot
+        return
       }
       if (isTargetChampion && !championSlots.includes(draggedFromIndex.index)) {
-        return // Prevent moving non-champion to champion slot if target already has champion
+        return
       }
-      
-      // Swap cards
-      newDeckCards[draggedFromIndex.index] = targetCard
-      newDeckCards[targetIndex] = sourceCard
+
+      newDeckCards[draggedFromIndex.index] = assignSlotFlags(targetCard, draggedFromIndex.index)
+      newDeckCards[targetIndex] = assignSlotFlags(sourceCard, targetIndex)
     } else {
-      // Adding card from card grid to deck slot
       if (newDeckCards[targetIndex].name === draggedCard.name) return
-      
-      // Validation: Champions can only be added to slots 2-3
+
       if (isDraggedCardChampion && !championSlots.includes(targetIndex)) {
-        return // Prevent adding champion to non-champion slot
+        return
       }
-      
-      // Validation: Check champion count
+
       const currentChampions = countChampions(newDeckCards)
       const targetSlotHasChampion = isChampion(newDeckCards[targetIndex].name)
-      
-      // If adding a champion and we're at max (2), only allow if replacing an existing champion
+
       if (isDraggedCardChampion) {
         if (currentChampions >= 2 && !targetSlotHasChampion) {
-          return // Already have 2 champions and not replacing one
+          return
         }
       }
-      
-      newDeckCards[targetIndex] = { ...draggedCard }
+
+      newDeckCards[targetIndex] = assignSlotFlags(
+        { name: draggedCard.name, rarity: draggedCard.rarity || 'common' },
+        targetIndex
+      )
     }
-    
+
     setDeckCards(newDeckCards)
     setDraggedCard(null)
     setDraggedFromIndex(null)
@@ -178,7 +236,26 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
 
   const handleRemoveCard = (index) => {
     const newDeckCards = [...deckCards]
-    newDeckCards[index] = { name: null, rarity: 'common' }
+    newDeckCards[index] = emptySlot()
+    setDeckCards(newDeckCards)
+  }
+
+  const handleSlotCardClick = (index) => {
+    if (index !== 2) return
+    const card = deckCards[index]
+    if (!card?.name || !canToggleVariant(card.name)) return
+
+    const newDeckCards = [...deckCards]
+    newDeckCards[index] = {
+      ...card,
+      isEvolution: !card.isEvolution,
+      isHero: !card.isHero,
+    }
+    // Ensure exactly one of the two is true after toggle
+    if (newDeckCards[index].isEvolution === newDeckCards[index].isHero) {
+      newDeckCards[index].isEvolution = true
+      newDeckCards[index].isHero = false
+    }
     setDeckCards(newDeckCards)
   }
 
@@ -187,62 +264,53 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
     if (validCards.length !== 8) {
       return
     }
-    
+
     const updatedDeck = {
       ...deck,
       cards: validCards,
-      cardNames: validCards.map(card => card.name)
+      // Labeled names for backend persistence (evolved-/hero- prefixes)
+      cardNames: validCards.map(card => formatDeckCardLabel(card)),
     }
-    
-    // Update deck name if changed
+
     const finalDeckName = editedDeckName.trim() || 'My Favourite Deck'
     if (onNameChange) {
       onNameChange(finalDeckName)
     }
-    
+
     onSave(updatedDeck, finalDeckName)
   }
 
   const validCardCount = deckCards.filter(card => card.name !== null).length
   const isDeckComplete = validCardCount === 8
 
-  // Get available cards (filter out cards already in deck)
   const availableCards = allCards.filter(card => {
     return !deckCards.some(dc => dc.name === card.card_name)
   })
 
-  // Filter available cards by search term
-  const filteredAvailableCards = availableCards.filter(card => 
+  const filteredAvailableCards = availableCards.filter(card =>
     card.card_name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  // Sort the filtered available cards
   const sortedAvailableCards = [...filteredAvailableCards].sort((a, b) => {
     let comparison = 0
-    
+
     switch (sortMode) {
       case 'name':
         comparison = a.card_name.localeCompare(b.card_name)
         break
       case 'elixir':
-        const elixirA = parseFloat(a.elixer_cost) || 0
-        const elixirB = parseFloat(b.elixer_cost) || 0
-        comparison = elixirA - elixirB
+        comparison = (parseFloat(a.elixer_cost) || 0) - (parseFloat(b.elixer_cost) || 0)
         break
       case 'rarity':
-        const rarityA = parseFloat(a.rarity) || 0
-        const rarityB = parseFloat(b.rarity) || 0
-        comparison = rarityA - rarityB
+        comparison = (parseFloat(a.rarity) || 0) - (parseFloat(b.rarity) || 0)
         break
       case 'arena':
-        const arenaA = parseFloat(a.arena) || 0
-        const arenaB = parseFloat(b.arena) || 0
-        comparison = arenaA - arenaB
+        comparison = (parseFloat(a.arena) || 0) - (parseFloat(b.arena) || 0)
         break
       default:
         comparison = 0
     }
-    
+
     return sortDirection === 'asc' ? comparison : -comparison
   })
 
@@ -275,8 +343,8 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
           <button className="deck-editor-button deck-editor-cancel" onClick={onCancel}>
             Cancel
           </button>
-          <button 
-            className="deck-editor-button deck-editor-save" 
+          <button
+            className="deck-editor-button deck-editor-save"
             onClick={handleSave}
             disabled={!isDeckComplete}
           >
@@ -302,7 +370,7 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
               </svg>
             </div>
           </div>
-          
+
           <div className="deck-editor-category-section">
             <div className="deck-editor-category-select-wrapper">
               <select
@@ -354,41 +422,46 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
             </button>
           </div>
           <div className={`deck-slots-grid ${isInitialMount ? 'initial-load' : ''}`} key={`slots-grid-${mountKey}`}>
-            {deckCards.map((card, index) => (
-              <div
-                key={`slot-${index}-${mountKey}`}
-                className={`deck-slot ${card.name ? 'filled' : 'empty'} ${isInitialMount ? 'animate-in' : ''}`}
-                onDragOver={handleCardDragOver}
-                onDrop={(e) => handleCardDrop(e, index)}
-              >
-                {card.name ? (
-                  <>
-                    <div
-                      className="deck-slot-card"
-                      draggable
-                      onDragStart={(e) => handleCardDragStart(e, card, index, true)}
-                    >
-                      <DeckSlotCardImage card={card} index={index} />
+            {deckCards.map((card, index) => {
+              const toggleable = index === 2 && card.name && canToggleVariant(card.name)
+              return (
+                <div
+                  key={`slot-${index}-${mountKey}`}
+                  className={`deck-slot ${card.name ? 'filled' : 'empty'} ${isInitialMount ? 'animate-in' : ''}`}
+                  onDragOver={handleCardDragOver}
+                  onDrop={(e) => handleCardDrop(e, index)}
+                >
+                  {card.name ? (
+                    <>
+                      <div
+                        className={`deck-slot-card ${toggleable ? 'deck-slot-card-toggleable' : ''}`}
+                        draggable
+                        onDragStart={(e) => handleCardDragStart(e, card, index, true)}
+                        onClick={() => handleSlotCardClick(index)}
+                        title={toggleable ? 'Click to toggle evolution / hero' : undefined}
+                      >
+                        <DeckSlotCardImage card={card} index={index} />
+                      </div>
+                      <button
+                        className="deck-slot-remove"
+                        onClick={() => handleRemoveCard(index)}
+                        title="Remove card"
+                      >
+                        ×
+                      </button>
+                      <div className="deck-slot-number">{index + 1}</div>
+                    </>
+                  ) : (
+                    <div className="deck-slot-empty-content">
+                      <div className="deck-slot-number">{index + 1}</div>
+                      <svg className="deck-slot-plus-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4v16m8-8H4" stroke="#ffd700" strokeWidth="3" strokeLinecap="round"/>
+                      </svg>
                     </div>
-                    <button
-                      className="deck-slot-remove"
-                      onClick={() => handleRemoveCard(index)}
-                      title="Remove card"
-                    >
-                      ×
-                    </button>
-                    <div className="deck-slot-number">{index + 1}</div>
-                  </>
-                ) : (
-                  <div className="deck-slot-empty-content">
-                    <div className="deck-slot-number">{index + 1}</div>
-                    <svg className="deck-slot-plus-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 4v16m8-8H4" stroke="#ffd700" strokeWidth="3" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 
@@ -406,7 +479,7 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
             </div>
             <div className="deck-editor-sort">
               <div className="sort-controls">
-                <button 
+                <button
                   className="sort-mode-button"
                   onClick={toggleSortMode}
                   title={`Sort by: ${getSortModeLabel()}`}
@@ -414,7 +487,7 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
                   <span className="sort-label">Sort by:</span>
                   <span className="sort-mode-value">{getSortModeLabel()}</span>
                 </button>
-                <button 
+                <button
                   className="sort-direction-button"
                   onClick={toggleSortDirection}
                   title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
@@ -433,7 +506,7 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
             </div>
           </div>
           <div className={`deck-editor-cards-grid ${isInitialMount ? 'initial-load' : ''}`} key={`cards-grid-${mountKey}`}>
-            {sortedAvailableCards.map((card, index) => (
+            {sortedAvailableCards.map((card) => (
                 <div
                   key={`${card.card_name}-${mountKey}`}
                   className={`editor-card-item ${isInitialMount ? 'animate-in' : ''}`}
@@ -467,4 +540,3 @@ function DeckEditor({ deck, allCards, onSave, onCancel, deckName, onNameChange, 
 }
 
 export default DeckEditor
-
